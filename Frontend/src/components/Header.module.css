@@ -1,0 +1,150 @@
+.appBar {
+  background-color: #ffffff !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+  color: #333 !important;
+  height: 64px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 24px !important;
+  height: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.5px;
+  cursor: pointer;
+}
+
+.manage {
+  color: #0084ff;
+}
+
+.bug {
+  color: #6c757d;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navButton {
+  color: #6c757d !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+}
+
+.navButton:hover {
+  background-color: rgba(0, 132, 255, 0.08) !important;
+  color: #0084ff !important;
+}
+
+.active {
+  color: #0084ff !important;
+  background-color: rgba(0, 132, 255, 0.08) !important;
+}
+
+.navIcon {
+  font-size: 1.2rem;
+  margin-right: 4px;
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.badge {
+  cursor: pointer;
+}
+
+.icon {
+  color: #6c757d;
+  font-size: 1.3rem !important;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 24px;
+  transition: background-color 0.2s;
+}
+
+.userInfo:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.avatar {
+  width: 32px !important;
+  height: 32px !important;
+  background-color: #0084ff !important;
+  font-size: 0.9rem !important;
+}
+
+.userName {
+  font-weight: 600 !important;
+  color: #333;
+}
+
+.dropdownIcon {
+  color: #6c757d;
+  font-size: 1.2rem !important;
+}
+
+.userMenu {
+  margin-top: 8px;
+}
+
+.menuItem {
+  min-width: 180px;
+  padding: 8px 16px;
+}
+
+.logoutMenuItem {
+  min-width: 180px;
+  padding: 8px 16px;
+  color: #dc3545;
+}
+
+.logoutIcon {
+  margin-right: 8px;
+  color: #dc3545;
+}
+
+@media (max-width: 768px) {
+  .navLinks {
+    display: none;
+  }
+
+  .userSection {
+    gap: 8px;
+  }
+
+  .userName {
+    display: none;
+  }
+}

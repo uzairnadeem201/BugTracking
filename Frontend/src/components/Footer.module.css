@@ -1,0 +1,74 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    padding: 16px 24px;
+    z-index: 1000;
+  }
+  
+  .footerContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .entriesInfo {
+    color: #6c757d;
+    font-size: 0.875rem;
+  }
+  
+  .paginationContainer {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  
+  .displayOptions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .displayLabel {
+    color: #6c757d;
+    font-size: 0.875rem;
+  }
+  
+  .entriesSelect {
+    min-width: 70px !important;
+    height: 32px;
+  }
+  
+  .pagination {
+    display: flex;
+    align-items: center;
+  }
+  
+  .pagination .MuiPaginationItem-root {
+    color: #6c757d;
+    min-width: 32px;
+    height: 32px;
+  }
+  
+  .pagination .Mui-selected {
+    background-color: #0084ff !important;
+    color: white !important;
+  }
+  
+  @media (max-width: 768px) {
+    .footerContent {
+      flex-direction: column;
+      gap: 16px;
+    }
+  
+    .paginationContainer {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }

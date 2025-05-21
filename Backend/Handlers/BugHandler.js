@@ -1,0 +1,119 @@
+import { Bug, Project, sequelize } from '../Models/index.js';
+
+const getBugsByManager = async (managerId, projectId) => {
+  const project = await Project.findOne({
+    where: { id: projectId, created_by: managerId }
+  });
+  if (!project) return [];
+
+  return await Bug.findAll({
+    where: { project_id: projectId }
+  });
+};
+const getBugsByQA = async (userId, projectId) => {
+  const userProject = await sequelize.query(
+    'SELECT 1 FROM users_projects WHERE user_id = :userId AND project_id = :projectId',
+    {
+      replacements: { userId, projectId },
+      type: sequelize.QueryTypes.SELECT
+    }
+  );
+
+  if (userProject.length === 0) return [];
+
+  return await Bug.findAll({
+    where: {
+      project_id: projectId,
+      created_by: userId
+    }
+  });
+};
+
+const getBugsByDeveloper = async (userId, projectId) => {
+  const userProject = await sequelize.query(
+    'SELECT 1 FROM users_projects WHERE user_id = :userId AND project_id = :projectId',
+    {
+      replacements: { userId, projectId },
+      type: sequelize.QueryTypes.SELECT
+    }
+  );
+
+  if (userProject.length === 0) return [];
+
+  return await Bug.findAll({
+    where: {
+      project_id: projectId,
+      assigned_to: userId
+    }
+  });
+};
+const isProjectAssignedToUser = async (userId, projectId) => {
+  const result = await sequelize.query(
+    'SELECT 1 FROM users_projects WHERE user_id = :userId AND project_id = :projectId LIMIT 1',
+    {
+      replacements: { userId, projectId },
+      type: sequelize.QueryTypes.SELECT,
+    }
+  );
+  return result.length > 0;
+};
+
+const createBug = async (bug) => {
+  return await Bug.create(bug);
+};
+const isUserAssignedToProject = async (userId, projectId) => {
+  const result = await sequelize.query(
+    'SELECT * FROM users_projects WHERE user_id = :userId AND project_id = :projectId',
+    {
+      replacements: { userId, projectId },
+      type: sequelize.QueryTypes.SELECT,
+    }
+  );
+  return result.length > 0;
+};
+
+const updateBugStatus = async (userId, projectId, bugId, newStatus) => {
+  const bug = await Bug.findOne({
+    where: {
+      id: bugId,
+      project_id: projectId,
+      assigned_to: userId
+    }
+  });
+
+  if (!bug) return null;
+
+  bug.status = newStatus;
+  await bug.save();
+
+  return bug;
+};
+const deleteBug = async (userId, projectId, bugId) => {
+  const bug = await Bug.findOne({
+    where: {
+      id: bugId,
+      project_id: projectId,
+      created_by: userId
+    }
+  });
+
+  if (!bug) return null;
+
+  await bug.destroy(); 
+
+  return bug; 
+};
+
+
+export default {
+  getBugsByManager,
+  getBugsByQA,
+  getBugsByDeveloper,
+  createBug,
+  isProjectAssignedToUser,
+  updateBugStatus,isUserAssignedToProject,deleteBug
+};
+
+
+
+

@@ -1,0 +1,148 @@
+.bugsContainer {
+    padding: 16px;
+    background-color: #f8f9fa;
+  }
+  
+  .tableContainer {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+    border-radius: 8px !important;
+    overflow: hidden;
+  }
+  
+  .bugRow:hover {
+    background-color: #f1f3f5;
+  }
+  
+  .detailsCell {
+    min-width: 300px;
+  }
+  
+  .bugDetails {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  
+  .bugTitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 280px;
+  }
+  
+  .typeCell {
+    min-width: 100px;
+  }
+  
+  .statusCell {
+    min-width: 120px;
+  }
+  
+  .statusChip {
+    font-size: 0.75rem !important;
+    height: 24px !important;
+    font-weight: 500 !important;
+  }
+  
+  .dateCell {
+    min-width: 100px;
+  }
+  
+  .assignedCell {
+    min-width: 120px;
+  }
+  
+  .avatarGroup {
+    justify-content: flex-start;
+  }
+  
+  .avatar {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.75rem !important;
+  }
+  
+  .actionCell {
+    width: 60px;
+  }
+  
+  .actionButton {
+    color: #6c757d;
+  }
+  
+  .loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 64px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin: 24px;
+  }
+  
+  .loadingText {
+    margin-top: 24px;
+    color: #6c757d;
+    font-size: 1.1rem;
+  }
+  
+  .errorAlert {
+    margin: 24px;
+  }
+  
+  .emptyContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 64px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    margin: 24px;
+  }
+  
+  .emptyText {
+    color: #333;
+    margin-bottom: 12px !important;
+    font-size: 1.4rem !important;
+  }
+  
+  .emptySubtext {
+    color: #6c757d;
+    font-size: 1.1rem !important;
+  }
+  
+  .statusMenu {
+    margin-top: 8px;
+  }
+  
+  .menuTitle {
+    padding: 8px 16px;
+    color: #6c757d;
+    font-weight: 500 !important;
+  }
+  
+  .menuItem {
+    min-width: 150px;
+  }
+  
+  @media (max-width: 768px) {
+    .tableContainer {
+      overflow-x: auto;
+    }
+  
+    .bugTitle {
+      max-width: 150px;
+    }
+  }

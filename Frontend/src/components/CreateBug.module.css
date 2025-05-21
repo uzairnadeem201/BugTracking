@@ -1,0 +1,143 @@
+.dialog {
+  border-radius: 12px;
+}
+
+.dialogTitle {
+  padding: 16px 24px !important;
+  font-weight: 600 !important;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.closeButton {
+  position: absolute !important;
+  right: 16px !important;
+  top: 12px !important;
+  color: #333 !important;
+}
+
+.moreButton {
+  position: absolute !important;
+  right: 48px !important;
+  top: 12px !important;
+  color: #666 !important;
+}
+
+.dialogContent {
+  padding: 16px 24px 24px 24px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.assignSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.assignTo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.assignLabel {
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.userIdInput {
+  width: 150px;
+  background-color: #f8f9fa;
+}
+
+.dueDateButton {
+  display: flex;
+  align-items: center;
+}
+
+.dateButton {
+  color: #666 !important;
+  border-color: #ddd !important;
+  text-transform: none !important;
+  padding: 4px 12px !important;
+  border-radius: 20px !important;
+  font-size: 0.875rem !important;
+}
+
+.titleInput {
+  font-size: 1.25rem !important;
+  margin-top: 16px !important;
+}
+
+.titleInput input::placeholder {
+  color: #ccc;
+  font-weight: 500;
+}
+
+.detailsLabel {
+  color: #333;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.detailsInput {
+  margin-top: 4px !important;
+}
+
+.detailsInput textarea::placeholder {
+  color: #ccc;
+}
+
+.uploadArea {
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-height: 120px;
+  background-color: #fafafa;
+  margin-top: 8px;
+}
+
+.uploadIcon {
+  color: #999;
+  font-size: 2rem !important;
+  margin-bottom: 8px;
+}
+
+.uploadText {
+  color: #666;
+  text-align: center;
+}
+
+.browseLink {
+  color: #0d6efd;
+  cursor: pointer;
+}
+
+.actionContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.addButton {
+  background-color: #0d6efd !important;
+  color: white !important;
+  text-transform: none !important;
+  padding: 6px 24px !important;
+  border-radius: 4px !important;
+  font-weight: 500 !important;
+  min-width: 80px;
+}
+
+.buttonProgress {
+  color: white;
+}

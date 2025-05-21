@@ -1,0 +1,101 @@
+.container {
+    width: 70%;
+    margin-left: 30%;
+    padding: 2rem;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .formContainer {
+    max-width: 500px;
+    width: 100%;
+    padding: 2rem 0;
+  }
+  
+  .title {
+    color: #1e3a8a;
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .subtitle {
+    color: #64748b;
+    margin-bottom: 2rem !important;
+  }
+  
+  .formField {
+    margin-bottom: 1rem;
+  }
+  
+  .input {
+    background-color: #f8fafc;
+  }
+  
+  .fieldIcon {
+    color: #94a3b8;
+  }
+  
+  .rememberForgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .rememberMe {
+    margin-left: -11px;
+  }
+  
+  .checkbox {
+    color: #0284c7 !important;
+  }
+  
+  .forgotPassword {
+    color: #0284c7;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .loginButton {
+    background-color: #0284c7 !important;
+    color: white !important;
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 8px !important;
+    text-transform: none !important;
+    font-size: 1rem !important;
+    width: 100% !important;
+    margin-bottom: 2rem !important;
+  }
+  
+  .signupContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .accountText {
+    color: #64748b;
+  }
+  
+  .signupLink {
+    color: #0284c7;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .errorAlert {
+    margin-bottom: 1rem !important;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      width: 100%;
+      margin-left: 0;
+      padding: 1.5rem;
+      margin-top: 30vh;
+    }
+  }

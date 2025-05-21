@@ -1,0 +1,103 @@
+.projectBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e9ecef;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 80px;
+}
+
+.titleSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-weight: 600 !important;
+  color: #333;
+  margin-bottom: 4px !important;
+}
+
+.subtitle {
+  color: #6c757d;
+  font-size: 0.875rem !important;
+}
+
+.actionsSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.searchField {
+  width: 240px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.searchIcon {
+  color: #6c757d;
+}
+
+.addButton {
+  background-color: #0084ff !important;
+  color: white !important;
+  text-transform: none !important;
+  padding: 8px 16px !important;
+  font-weight: 500 !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+
+.dropdownsContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sortButton,
+.projectButton {
+  color: #6c757d !important;
+  text-transform: none !important;
+  background-color: #f8f9fa !important;
+  border: 1px solid #e9ecef !important;
+  padding: 6px 12px !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  border-radius: 4px !important;
+}
+
+.refreshButton {
+  background-color: #0084ff !important;
+  color: white !important;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+}
+
+@media (max-width: 768px) {
+  .projectBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actionsSection {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .searchField {
+    width: 100%;
+  }
+
+  .dropdownsContainer {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

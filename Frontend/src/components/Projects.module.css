@@ -1,0 +1,117 @@
+.projectsGrid {
+    margin-top: 24px;
+    padding: 16px;
+  }
+  
+  .projectCard {
+    padding: 32px;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    background-color: white;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .projectCard:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  }
+  
+  .projectIcon {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin-bottom: 24px;
+  }
+  
+  .projectIconContainer {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  
+  .projectIconImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .projectTitle {
+    font-weight: 600 !important;
+    margin-bottom: 12px !important;
+    color: #333;
+    font-size: 1.4rem !important;
+  }
+  
+  .projectDescription {
+    color: #6c757d;
+    margin-bottom: 24px !important;
+    max-height: 4.5em;
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1rem !important;
+    flex-grow: 1;
+  }
+  
+  .projectTasks {
+    color: #6c757d;
+    font-weight: 500 !important;
+    font-size: 0.95rem !important;
+    margin-top: auto;
+  }
+  
+  .loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 64px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin: 24px;
+  }
+  
+  .loadingText {
+    margin-top: 24px;
+    color: #6c757d;
+    font-size: 1.1rem;
+  }
+  
+  .errorAlert {
+    margin: 24px;
+  }
+  
+  .emptyContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 64px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    margin: 24px;
+  }
+  
+  .emptyText {
+    color: #333;
+    margin-bottom: 12px !important;
+    font-size: 1.4rem !important;
+  }
+  
+  .emptySubtext {
+    color: #6c757d;
+    font-size: 1.1rem !important;
+  }
