@@ -9,16 +9,12 @@ function Projects({ newProject }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const navigate = useNavigate()
-
-  // Default icon and color for projects without a picture
   const defaultIcon = "📋"
   const defaultColor = "#4ECDC4"
 
   useEffect(() => {
     fetchProjects()
   }, [])
-
-  // Effect to add new project when it's created
   useEffect(() => {
     if (newProject) {
       setProjects((prevProjects) => [newProject, ...prevProjects])
@@ -28,14 +24,11 @@ function Projects({ newProject }) {
   const fetchProjects = async () => {
     setLoading(true)
     try {
-      // Get token from localStorage
       const token = localStorage.getItem("token")
 
       if (!token) {
         throw new Error("Authentication token not found")
       }
-
-      // Make API request with token in header
       const response = await axios.get("http://localhost:3000/api/projects", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,8 +51,6 @@ function Projects({ newProject }) {
   const handleProjectClick = (projectId) => {
     navigate(`/projects/${projectId}/bugs`)
   }
-
-  // Render loading state
   if (loading) {
     return (
       <Box className={styles.loadingContainer}>
@@ -70,8 +61,6 @@ function Projects({ newProject }) {
       </Box>
     )
   }
-
-  // Render error state
   if (error) {
     return (
       <Alert severity="error" className={styles.errorAlert}>
@@ -79,8 +68,6 @@ function Projects({ newProject }) {
       </Alert>
     )
   }
-
-  // Render empty state
   if (projects.length === 0) {
     return (
       <Box className={styles.emptyContainer}>
@@ -94,13 +81,10 @@ function Projects({ newProject }) {
     )
   }
 
-  // Render projects grid
   return (
     <Container maxWidth="xl" disableGutters>
       <Grid container spacing={4} className={styles.projectsGrid}>
         {projects.map((project) => {
-          // Generate random task completion numbers for demo
-          // In a real app, this would come from the API
           const tasksDone = Math.floor(Math.random() * 30) + 1
           const tasksTotal = Math.floor(Math.random() * 50) + 30
 

@@ -23,6 +23,7 @@ function BugsPage() {
         console.error("Error fetching project details", err)
       }
     }
+    console.log(projectId)
 
     if (projectId) fetchProjectDetails()
   }, [projectId])

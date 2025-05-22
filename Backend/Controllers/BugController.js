@@ -54,6 +54,7 @@ const createBug = catchAsync(async (req, res) => {
 const updateBugStatus = catchAsync(async (req, res) => {
   const user = req.user;
   const { projectId , bugId , status } = req.body;
+  console.log(projectId);
 
   const result = await BugManager.updateBugStatus(user, projectId,bugId, status);
 

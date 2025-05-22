@@ -1,25 +1,7 @@
 import { useState, useEffect, useRef } from "react"
-import {
-  Box,
-  Typography,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Checkbox,
-  IconButton,
-  Avatar,
-  AvatarGroup,
-  Chip,
-  CircularProgress,
-  Alert,
-  Menu,
-  MenuItem,
-  ListItemText,
-  Divider,
+import {Box,Typography,Paper,Table,TableBody,TableCell,TableContainer,
+  TableHead,TableRow,Checkbox,IconButton,Avatar,AvatarGroup,Chip,CircularProgress,
+  Alert,Menu,MenuItem,
 } from "@mui/material"
 import MoreVertIcon from "@mui/icons-material/MoreVert"
 import axios from "axios"
@@ -32,8 +14,6 @@ function Bugs({ projectId, newBug }) {
   const [statusLoading, setStatusLoading] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const [selectedBug, setSelectedBug] = useState(null)
-
-  // Get user role from localStorage (basic safe parse)
   const userRole = (() => {
     try {
       const user = JSON.parse(localStorage.getItem("user"))
@@ -42,8 +22,6 @@ function Bugs({ projectId, newBug }) {
       return ""
     }
   })()
-
-  // Ref to track which bug is being updated
   const updatingBugRef = useRef(null)
 
   useEffect(() => {
@@ -51,8 +29,6 @@ function Bugs({ projectId, newBug }) {
       fetchBugs(projectId)
     }
   }, [projectId])
-
-  // Effect to add new bug when it's created
   useEffect(() => {
     if (newBug) {
       setBugs((prevBugs) => [newBug, ...prevBugs])
@@ -341,6 +317,8 @@ function Bugs({ projectId, newBug }) {
 }
 
 export default Bugs
+
+
 
 
 

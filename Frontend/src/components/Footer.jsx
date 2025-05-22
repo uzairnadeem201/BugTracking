@@ -5,19 +5,6 @@ function Footer({ totalEntries = 50, entriesPerPage = 10, currentPage = 1, onPag
   const totalPages = Math.ceil(totalEntries / entriesPerPage)
   const startEntry = (currentPage - 1) * entriesPerPage + 1
   const endEntry = Math.min(currentPage * entriesPerPage, totalEntries)
-
-  const handlePageChange = (event, value) => {
-    if (onPageChange) {
-      onPageChange(value)
-    }
-  }
-
-  const handleEntriesChange = (event) => {
-    if (onEntriesPerPageChange) {
-      onEntriesPerPageChange(event.target.value)
-    }
-  }
-
   return (
     <Box className={styles.footer}>
       <div className={styles.footerContent}>
@@ -32,7 +19,6 @@ function Footer({ totalEntries = 50, entriesPerPage = 10, currentPage = 1, onPag
             </Typography>
             <Select
               value={entriesPerPage}
-              onChange={handleEntriesChange}
               className={styles.entriesSelect}
               size="small"
               variant="outlined"
@@ -47,7 +33,6 @@ function Footer({ totalEntries = 50, entriesPerPage = 10, currentPage = 1, onPag
           <Pagination
             count={totalPages}
             page={currentPage}
-            onChange={handlePageChange}
             variant="outlined"
             shape="rounded"
             className={styles.pagination}

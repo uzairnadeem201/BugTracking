@@ -22,14 +22,9 @@ function Header() {
   }
 
   const handleLogout = () => {
-    // Clear localStorage
     localStorage.removeItem("token")
     localStorage.removeItem("user")
-
-    // Close the menu
     handleUserMenuClose()
-
-    // Redirect to login page
     navigate("/login")
   }
 
@@ -53,24 +48,18 @@ function Header() {
             Projects
           </Button>
           <Button
-            component={Link}
-            to="/tasks"
             className={styles.navButton}
             startIcon={<span className={styles.navIcon}>📋</span>}
           >
             Tasks
           </Button>
           <Button
-            component={Link}
-            to="/manage"
             className={styles.navButton}
             startIcon={<span className={styles.navIcon}>🔧</span>}
           >
             Manage
           </Button>
           <Button
-            component={Link}
-            to="/users"
             className={styles.navButton}
             startIcon={<span className={styles.navIcon}>👥</span>}
           >
@@ -92,8 +81,6 @@ function Header() {
             </Typography>
             <KeyboardArrowDownIcon className={styles.dropdownIcon} />
           </Box>
-
-          {/* User Menu */}
           <Menu
             anchorEl={userMenuAnchorEl}
             open={Boolean(userMenuAnchorEl)}
@@ -108,12 +95,6 @@ function Header() {
               horizontal: "right",
             }}
           >
-            <MenuItem className={styles.menuItem}>
-              <Typography variant="body2">Profile</Typography>
-            </MenuItem>
-            <MenuItem className={styles.menuItem}>
-              <Typography variant="body2">Settings</Typography>
-            </MenuItem>
             <Divider />
             <MenuItem onClick={handleLogout} className={styles.logoutMenuItem}>
               <LogoutIcon fontSize="small" className={styles.logoutIcon} />

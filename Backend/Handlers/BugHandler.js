@@ -1,4 +1,5 @@
 import { Bug, Project, sequelize } from '../Models/index.js';
+import { Op, fn, col, where } from 'sequelize';
 
 const getBugsByManager = async (managerId, projectId) => {
   const project = await Project.findOne({
@@ -10,6 +11,7 @@ const getBugsByManager = async (managerId, projectId) => {
     where: { project_id: projectId }
   });
 };
+
 const getBugsByQA = async (userId, projectId) => {
   const userProject = await sequelize.query(
     'SELECT 1 FROM users_projects WHERE user_id = :userId AND project_id = :projectId',
@@ -47,6 +49,7 @@ const getBugsByDeveloper = async (userId, projectId) => {
     }
   });
 };
+
 const isProjectAssignedToUser = async (userId, projectId) => {
   const result = await sequelize.query(
     'SELECT 1 FROM users_projects WHERE user_id = :userId AND project_id = :projectId LIMIT 1',
@@ -58,9 +61,6 @@ const isProjectAssignedToUser = async (userId, projectId) => {
   return result.length > 0;
 };
 
-const createBug = async (bug) => {
-  return await Bug.create(bug);
-};
 const isUserAssignedToProject = async (userId, projectId) => {
   const result = await sequelize.query(
     'SELECT * FROM users_projects WHERE user_id = :userId AND project_id = :projectId',
@@ -70,6 +70,21 @@ const isUserAssignedToProject = async (userId, projectId) => {
     }
   );
   return result.length > 0;
+};
+
+const createBug = async (bug) => {
+  const existingBug = await Bug.findOne({
+    where: {
+      title: bug.title,
+      project_id: bug.project_id
+    }
+  });
+
+  if (existingBug) {
+    throw new Error('Bug title must be unique within the same project.');
+  }
+
+  return await Bug.create(bug);
 };
 
 const updateBugStatus = async (userId, projectId, bugId, newStatus) => {
@@ -88,6 +103,7 @@ const updateBugStatus = async (userId, projectId, bugId, newStatus) => {
 
   return bug;
 };
+
 const deleteBug = async (userId, projectId, bugId) => {
   const bug = await Bug.findOne({
     where: {
@@ -99,11 +115,23 @@ const deleteBug = async (userId, projectId, bugId) => {
 
   if (!bug) return null;
 
-  await bug.destroy(); 
-
-  return bug; 
+  await bug.destroy();
+  return bug;
 };
 
+const doesBugTitleExist = async (title, projectId) => {
+  const trimmedTitle = typeof title === 'string' ? title.trim().toLowerCase() : '';
+  const result = await Bug.findOne({
+    where: {
+      project_id: projectId,
+      [Op.and]: [
+        where(fn('LOWER', fn('TRIM', col('title'))), trimmedTitle)
+      ]
+    }
+  });
+
+  return result !== null;
+};
 
 export default {
   getBugsByManager,
@@ -111,7 +139,10 @@ export default {
   getBugsByDeveloper,
   createBug,
   isProjectAssignedToUser,
-  updateBugStatus,isUserAssignedToProject,deleteBug
+  updateBugStatus,
+  isUserAssignedToProject,
+  deleteBug,
+  doesBugTitleExist
 };
 
 

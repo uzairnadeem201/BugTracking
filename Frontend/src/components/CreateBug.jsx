@@ -49,9 +49,9 @@ function CreateBug({ open, onClose, projectId, onBugCreated }) {
             type: "Feature",
             status: "Open",
             description: values.description,
-            deadline: "2025-06-01", // you can add UI later to change this
+            deadline: "2025-06-01", 
             screenshot: null,
-            assigned_to: Number.parseInt(values.user_id), // Use the user_id from the form
+            assigned_to: Number.parseInt(values.user_id),
           },
         }
 

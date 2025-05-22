@@ -5,7 +5,6 @@ import LoginRoute from './Routes/LoginRoute.js';
 import ProjectRoute from './Routes/ProjectRoute.js';
 import Jwt from './Utils/JwtVerification.js';
 import BugRoute from './Routes/BugRoutes.js';
-import JwtVerification from './Utils/JwtVerification.js';
 import UserRoute from './Routes/UserRoute.js';
 
 const app = express();

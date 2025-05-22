@@ -47,7 +47,7 @@ const getOneProject = async (user, projectId) => {
 const createProject = async (projectData, userId) => {
   const { title } = projectData;
 
-  if (!title) {
+  if (!title || title.trim() === "") {
     throw new AppError('Title is required', 400);
   }
 
@@ -56,15 +56,19 @@ const createProject = async (projectData, userId) => {
   return { data: createdProject };
 };
 const assignProject = async (user, userId) => {
-  const {userToAssign , projectId} = user;
-  console.log(userToAssign,projectId);
+  const { userToAssign, projectId } = user;
+  console.log(userToAssign, projectId);
 
-  if (!userToAssign) {
-    throw new AppError('user is required', 400);
+  if (!userToAssign || userToAssign.toString().trim() === '') {
+    throw new AppError('User to assign is required and cannot be empty.', 400);
   }
 
-  const assignedUser = await ProjectHandler.assignProject(userToAssign,projectId, userId);
-  
+  if (!projectId || projectId.toString().trim() === '') {
+    throw new AppError('Project ID is required and cannot be empty.', 400);
+  }
+
+  const assignedUser = await ProjectHandler.assignProject(userToAssign, projectId, userId);
+
   return { data: assignedUser };
 };
 

@@ -1,20 +1,17 @@
 import BugHandler from '../Handlers/BugHandler.js';
 import AppError from '../Utils/AppError.js';
 
-const getBugsByProject = async (user, projectId) => {
+const getBugsByProject = async (user, projectIdRaw) => {
   const { id: userId, role } = user;
-  console.log(userId,role,projectId);
-
-  if (!userId || !role) {
-    throw new AppError('Invalid User data.', 400);
+  const projectId = parseInt(projectIdRaw, 10);
+  if (!userId || !role || isNaN(projectId)) {
+    throw new AppError('Invalid User or Project ID.', 400);
   }
 
   let bugs;
-
   if (role === 'Manager') {
     bugs = await BugHandler.getBugsByManager(userId, projectId);
   } else if (role === 'QA') {
-    console.log(projectId);
     bugs = await BugHandler.getBugsByQA(userId, projectId);
   } else if (role === 'Developer') {
     bugs = await BugHandler.getBugsByDeveloper(userId, projectId);
@@ -24,56 +21,114 @@ const getBugsByProject = async (user, projectId) => {
 
   return { data: bugs };
 };
-const createBug = async (userId, projectId, bugData) => {
+
+const createBug = async (userId, projectIdRaw, bugData) => {
+  const projectId = parseInt(projectIdRaw, 10);
+  if (isNaN(projectId)) {
+    throw new AppError('Invalid project ID', 400);
+  }
+
   const isAssigned = await BugHandler.isProjectAssignedToUser(userId, projectId);
   if (!isAssigned) {
     throw new AppError('You are not assigned to this project', 403);
   }
+
+  const titleExists = await BugHandler.doesBugTitleExist(bugData.title, projectId);
+  if (titleExists) {
+    throw new AppError('Bug title must be unique within the project.', 400);
+  }
+
+  const allowedTypes = ['Bug', 'Feature'];
+  if (!bugData.type || !allowedTypes.includes(bugData.type)) {
+    throw new AppError(`Type must be one of: ${allowedTypes.join(', ')}`, 400);
+  }
+
+  if (!bugData.status || typeof bugData.status !== 'string' || bugData.status.trim() === '') {
+    throw new AppError('Status is required.', 400);
+  }
+
+  const status = bugData.status.trim();
+  if (status.length > 11) {
+    throw new AppError('Status must not exceed 11 characters.', 400);
+  }
+
+  const allowedStatuses = ['Open', 'In Progress', 'Resolved'];
+  if (!allowedStatuses.includes(status)) {
+    throw new AppError(`Status must be one of: ${allowedStatuses.join(', ')}`, 400);
+  }
+
   const bug = {
     ...bugData,
+    status,
     project_id: projectId,
     created_by: userId,
   };
 
-  const createdBug = await BugHandler.createBug(bug);
-
-  return createdBug;
+  return await BugHandler.createBug(bug);
 };
-const updateBugStatus = async (user, projectId, bugId, status) => {
+
+const updateBugStatus = async (user, projectIdRaw, bugIdRaw, statusRaw) => {
   const { id: userId, role } = user;
+  const projectId = parseInt(projectIdRaw, 10);
+  const bugId = parseInt(bugIdRaw, 10);
 
   if (role !== 'Developer') {
     throw new AppError('Only developers can update bug status', 403);
   }
 
+  if (isNaN(projectId)) {
+    throw new AppError('Invalid Project ID', 400);
+  }
+  if (isNaN(bugId)) {
+    throw new AppError('Invalid Bug ID', 400);
+  }
+
   const isAssigned = await BugHandler.isUserAssignedToProject(userId, projectId);
   if (!isAssigned) {
     throw new AppError('You are not assigned to this project', 403);
+  }
+
+  const status = statusRaw?.trim();
+  const allowedStatuses = ['Pending', 'In progress', 'Resolved'];
+  if (!status || !allowedStatuses.includes(status)) {
+    throw new AppError(`Status must be one of: ${allowedStatuses.join(', ')}`, 400);
   }
 
   const updatedBug = await BugHandler.updateBugStatus(userId, projectId, bugId, status);
   if (!updatedBug) {
-    throw new AppError('Failed to update bug', 400);
+    throw new AppError('Bug not found', 400);
   }
 
   return updatedBug;
 };
-const deleteBug = async(user,projectId,bugId) =>{
-  const {id: userId , role} = user;
+
+const deleteBug = async (user, projectIdRaw, bugIdRaw) => {
+  const { id: userId, role } = user;
+  const projectId = parseInt(projectIdRaw, 10);
+  const bugId = parseInt(bugIdRaw, 10);
+
   if (role !== 'QA') {
     throw new AppError('Only QA can delete bug', 403);
+  }
+
+  if (isNaN(projectId)) {
+    throw new AppError('Invalid Project ID', 400);
+  }
+  if (isNaN(bugId)) {
+    throw new AppError('Invalid Bug ID', 400);
   }
 
   const isAssigned = await BugHandler.isUserAssignedToProject(userId, projectId);
   if (!isAssigned) {
     throw new AppError('You are not assigned to this project', 403);
   }
-  const deletedBug = await BugHandler.deleteBug(userId, projectId, bugId);
-  if (!deleteBug) {
-    throw new AppError('Failed to delete bug', 400);
-  }
-  return deletedBug;
 
+  const deletedBug = await BugHandler.deleteBug(userId, projectId, bugId);
+  if (!deletedBug) {
+    throw new AppError('Bug doesn’t exist', 400);
+  }
+
+  return deletedBug;
 };
 
-export default { getBugsByProject,createBug,updateBugStatus,deleteBug };
+export default { getBugsByProject, createBug, updateBugStatus, deleteBug };
