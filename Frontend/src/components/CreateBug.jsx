@@ -9,6 +9,10 @@ import {
   Button,
   IconButton,
   CircularProgress,
+  MenuItem,
+  Select,
+  FormControl,
+  FormHelperText,
 } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
@@ -19,45 +23,60 @@ import * as Yup from "yup"
 import axios from "axios"
 import styles from "./CreateBug.module.css"
 
+const bugTypes = ["Feature", "Bug"]
+
 function CreateBug({ open, onClose, projectId, onBugCreated }) {
   const [loading, setLoading] = useState(false)
+  const today = new Date().toISOString().split("T")[0]
+
+  const validationSchema = Yup.object({
+    title: Yup.string()
+      .required("Bug title is required")
+      .min(5, "Bug title must be at least 5 characters"),
+    description: Yup.string().trim(),
+    user_id: Yup.number()
+      .typeError("User ID must be a number")
+      .positive("User ID must be positive")
+      .required("User ID is required"),
+    deadline: Yup.string().required("Due date is required"),
+    bugType: Yup.string().required("Bug type is required"),
+  })
 
   const formik = useFormik({
     initialValues: {
       title: "",
       description: "",
       user_id: "",
+      deadline: "",
+      bugType: "",
     },
-    validationSchema: Yup.object({
-      title: Yup.string().trim().required("Bug title is required"),
-      description: Yup.string().trim(),
-      user_id: Yup.number()
-        .typeError("User ID must be a number")
-        .positive("User ID must be positive")
-        .required("User ID is required"),
-    }),
+    validationSchema,
+    validateOnChange: false,
+    validateOnBlur: true,
     onSubmit: async (values) => {
-      setLoading(true)
       try {
+        setLoading(true)
         const token = localStorage.getItem("token")
         if (!token) throw new Error("Authentication token not found")
 
         const bugData = {
           projectId: projectId,
           bugData: {
-            title: values.title,
-            type: "Feature",
+            title: values.title.trim(), // Trim spaces before sending
+            type: values.bugType,
             status: "Open",
-            description: values.description,
-            deadline: "2025-06-01", 
+            description: values.description.trim(),
+            deadline: values.deadline,
             screenshot: null,
-            assigned_to: Number.parseInt(values.user_id),
+            assigned_to: Number.parseInt(values.user_id, 10),
           },
         }
 
-        const response = await axios.post("http://localhost:3000/api/projects/bugs/createbugs", bugData, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+        const response = await axios.post(
+          "http://localhost:3000/api/projects/bugs/createbugs",
+          bugData,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
 
         if (response.data.success) {
           formik.resetForm()
@@ -66,15 +85,34 @@ function CreateBug({ open, onClose, projectId, onBugCreated }) {
           }
           onClose()
         } else {
-          throw new Error(response.data.message || "Failed to create bug")
+          alert(response.data.message || "Failed to create bug")
         }
-      } catch (err) {
-        alert(err.message || "An error occurred while creating the bug")
+      } catch (error) {
+        if (error.response && error.response.data && error.response.data.message) {
+          alert(error.response.data.message)
+        } else {
+          alert(error.message || "An error occurred while creating the bug")
+        }
       } finally {
         setLoading(false)
       }
     },
   })
+
+  const handleSubmitForm = () => {
+    formik.setTouched({
+      title: true,
+      description: true,
+      user_id: true,
+      deadline: true,
+      bugType: true,
+    })
+    formik.validateForm().then((errors) => {
+      if (Object.keys(errors).length === 0) {
+        formik.submitForm()
+      }
+    })
+  }
 
   const handleClose = () => {
     formik.resetForm()
@@ -117,10 +155,57 @@ function CreateBug({ open, onClose, projectId, onBugCreated }) {
           </Box>
 
           <Box className={styles.dueDateButton}>
-            <Button variant="outlined" className={styles.dateButton} startIcon={<CalendarTodayOutlinedIcon />}>
-              Add due date
-            </Button>
+            <Typography variant="body2" className={styles.assignLabel}>
+              Due Date
+            </Typography>
+            <TextField
+              type="date"
+              variant="outlined"
+              size="small"
+              className={styles.dateInput}
+              name="deadline"
+              value={formik.values.deadline}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.deadline && Boolean(formik.errors.deadline)}
+              helperText={formik.touched.deadline && formik.errors.deadline}
+              inputProps={{
+                min: today,
+                style: { padding: "8px 12px" },
+              }}
+              InputProps={{
+                startAdornment: <CalendarTodayOutlinedIcon className={styles.calendarIcon} />,
+              }}
+            />
           </Box>
+        </Box>
+
+        <Box className={styles.bugTypeSection} sx={{ mb: 2 }}>
+          <Typography variant="body2" className={styles.assignLabel}>
+            Bug Type
+          </Typography>
+          <FormControl fullWidth size="small" error={formik.touched.bugType && Boolean(formik.errors.bugType)}>
+            <Select
+              name="bugType"
+              value={formik.values.bugType}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              displayEmpty
+              inputProps={{ "aria-label": "Bug type" }}
+            >
+              <MenuItem value="" disabled>
+                Select bug type
+              </MenuItem>
+              {bugTypes.map((type) => (
+                <MenuItem key={type} value={type}>
+                  {type}
+                </MenuItem>
+              ))}
+            </Select>
+            {formik.touched.bugType && formik.errors.bugType && (
+              <FormHelperText>{formik.errors.bugType}</FormHelperText>
+            )}
+          </FormControl>
         </Box>
 
         <TextField
@@ -173,7 +258,7 @@ function CreateBug({ open, onClose, projectId, onBugCreated }) {
             variant="contained"
             color="primary"
             className={styles.addButton}
-            onClick={formik.handleSubmit}
+            onClick={handleSubmitForm}
             disabled={loading}
           >
             {loading ? <CircularProgress size={24} className={styles.buttonProgress} /> : "Add"}
@@ -185,3 +270,5 @@ function CreateBug({ open, onClose, projectId, onBugCreated }) {
 }
 
 export default CreateBug
+
+

@@ -23,7 +23,7 @@ const getDeveloper = catchAsync(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: 'Developers Retrived',
+    message: 'Developers Retrieved',
     data: result.data,
   });
 });

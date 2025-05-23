@@ -4,16 +4,19 @@ import AppError from '../Utils/AppError.js';
 const getBugsByProject = async (user, projectIdRaw) => {
   const { id: userId, role } = user;
   const projectId = parseInt(projectIdRaw, 10);
+
   if (!userId || !role || isNaN(projectId)) {
     throw new AppError('Invalid User or Project ID.', 400);
   }
 
+  const roleLower = role.toLowerCase();
   let bugs;
-  if (role === 'Manager') {
+
+  if (roleLower === 'manager') {
     bugs = await BugHandler.getBugsByManager(userId, projectId);
-  } else if (role === 'QA') {
+  } else if (roleLower === 'qa') {
     bugs = await BugHandler.getBugsByQA(userId, projectId);
-  } else if (role === 'Developer') {
+  } else if (roleLower === 'developer') {
     bugs = await BugHandler.getBugsByDeveloper(userId, projectId);
   } else {
     throw new AppError('Invalid role', 403);
@@ -48,10 +51,6 @@ const createBug = async (userId, projectIdRaw, bugData) => {
   }
 
   const status = bugData.status.trim();
-  if (status.length > 11) {
-    throw new AppError('Status must not exceed 11 characters.', 400);
-  }
-
   const allowedStatuses = ['Open', 'In Progress', 'Resolved'];
   if (!allowedStatuses.includes(status)) {
     throw new AppError(`Status must be one of: ${allowedStatuses.join(', ')}`, 400);
@@ -72,7 +71,7 @@ const updateBugStatus = async (user, projectIdRaw, bugIdRaw, statusRaw) => {
   const projectId = parseInt(projectIdRaw, 10);
   const bugId = parseInt(bugIdRaw, 10);
 
-  if (role !== 'Developer') {
+  if (role.toLowerCase() !== 'developer') {
     throw new AppError('Only developers can update bug status', 403);
   }
 
@@ -107,7 +106,7 @@ const deleteBug = async (user, projectIdRaw, bugIdRaw) => {
   const projectId = parseInt(projectIdRaw, 10);
   const bugId = parseInt(bugIdRaw, 10);
 
-  if (role !== 'QA') {
+  if (role.toLowerCase() !== 'qa') {
     throw new AppError('Only QA can delete bug', 403);
   }
 
@@ -131,4 +130,10 @@ const deleteBug = async (user, projectIdRaw, bugIdRaw) => {
   return deletedBug;
 };
 
-export default { getBugsByProject, createBug, updateBugStatus, deleteBug };
+export default {
+  getBugsByProject,
+  createBug,
+  updateBugStatus,
+  deleteBug,
+};
+

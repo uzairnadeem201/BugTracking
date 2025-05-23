@@ -60,7 +60,7 @@ const createProjects = catchAsync(async (req, res, next) => {
 
   const { id, role } = user;
 
-  if (role !== 'Manager') {
+  if (role.toLowerCase() !== 'manager') {
     return res.status(403).json({
       success: false,
       message: 'Not authorized to create projects',
@@ -87,7 +87,7 @@ const assignProject = catchAsync(async (req, res, next) => {
 
   const { id, role } = user;
 
-  if (role !== 'Manager') {
+  if (role.toLowerCase !== 'manager') {
     return res.status(403).json({
       success: false,
       message: 'Not authorized to create projects',

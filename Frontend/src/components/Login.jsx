@@ -25,8 +25,11 @@ function Login() {
       .email("Enter a valid email")
       .required("Email is required"),
     password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
+      .required("Password is required")
+      .test("not-only-spaces", "Password cannot be only spaces", (value) =>
+        value === undefined ? false : value.trim().length > 0
+      )
+      .min(6, "Password must be at least 6 characters"),
   })
 
   const formik = useFormik({
@@ -40,8 +43,15 @@ function Login() {
     onSubmit: async (values) => {
       setLoading(true)
       setError("")
+
+      // Trim values before sending
+      const trimmedValues = {
+        email: values.email.trim(),
+        password: values.password.trim(),
+      }
+
       try {
-        const response = await axios.post("http://localhost:3000/api/login", values)
+        const response = await axios.post("http://localhost:3000/api/login", trimmedValues)
 
         console.log("Login Response:", response.data)
 
@@ -143,7 +153,7 @@ function Login() {
           <Typography variant="body2" className={styles.accountText}>
             Don't have an account?
           </Typography>
-          <Link to="/signup" className={styles.signupLink}>
+          <Link to="/" className={styles.signupLink}>
             Create an account
           </Link>
         </div>
@@ -153,4 +163,5 @@ function Login() {
 }
 
 export default Login
+
 

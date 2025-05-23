@@ -15,7 +15,7 @@ import CloseIcon from "@mui/icons-material/Close"
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
 import axios from "axios"
 import styles from "./CreateProject.module.css"
-import { Formik, Form, Field, ErrorMessage } from "formik"
+import { Formik, Form, Field } from "formik"
 import * as Yup from "yup"
 
 function CreateProject({ open, onClose, onProjectCreated }) {
@@ -25,7 +25,10 @@ function CreateProject({ open, onClose, onProjectCreated }) {
   const fileInputRef = useRef(null)
 
   const validationSchema = Yup.object({
-    title: Yup.string().min(3, "At least 3 characters").required("Project name is required")
+    title: Yup.string()
+      .required("Project name is required")
+      .min(5, "Project name must be at least 5 characters"),
+    description: Yup.string(),
   })
 
   const handlePictureClick = () => {
@@ -66,10 +69,14 @@ function CreateProject({ open, onClose, onProjectCreated }) {
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const token = localStorage.getItem("token")
-      if (!token) return
+      if (!token) {
+        alert("Unauthorized: No token found")
+        return
+      }
 
       const projectData = {
-        ...values,
+        title: values.title.trim(),
+        description: values.description,
         picture: pictureUrl,
       }
 
@@ -83,9 +90,10 @@ function CreateProject({ open, onClose, onProjectCreated }) {
         onProjectCreated(response.data.data)
         onClose()
       } else {
-        console.error("Failed to create project:", response.data.message)
+        alert(`Failed to create project: ${response.data.message || "Unknown error"}`)
       }
     } catch (err) {
+      alert(`Error creating project: ${err.response?.data?.message || err.message}`)
       console.error("Error creating project:", err)
     } finally {
       setSubmitting(false)
@@ -105,8 +113,10 @@ function CreateProject({ open, onClose, onProjectCreated }) {
         initialValues={{ title: "", description: "" }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
+        validateOnChange={true}
+        validateOnBlur={true}
       >
-        {({ isSubmitting, isValid, touched }) => (
+        {({ isSubmitting, isValid, touched, errors }) => (
           <Form>
             <DialogContent className={styles.dialogContent}>
               <Box className={styles.formContainer}>
@@ -122,8 +132,8 @@ function CreateProject({ open, onClose, onProjectCreated }) {
                       placeholder="Enter project name"
                       variant="outlined"
                       size="small"
-                      error={touched.title && Boolean(ErrorMessage)}
-                      helperText={<ErrorMessage name="title" />}
+                      error={touched.title && Boolean(errors.title)}
+                      helperText={touched.title && errors.title}
                     />
                   </Box>
 
@@ -140,8 +150,8 @@ function CreateProject({ open, onClose, onProjectCreated }) {
                       size="small"
                       multiline
                       rows={3}
-                      error={touched.description && Boolean(ErrorMessage)}
-                      helperText={<ErrorMessage name="description" />}
+                      error={touched.description && Boolean(errors.description)}
+                      helperText={touched.description && errors.description}
                     />
                   </Box>
                 </Box>
@@ -208,4 +218,5 @@ function CreateProject({ open, onClose, onProjectCreated }) {
 }
 
 export default CreateProject
+
 

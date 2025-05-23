@@ -10,7 +10,7 @@ function RoleSelection() {
     const navigate = useNavigate()
 
   const handleRoleSelect = (role) => {
-    navigate(`/signup?role=${role}`)
+    navigate(`/signup?role=${role}`, { state: { fromRoleSelection: true }})
   }
   return (
     <div className={styles.container}>

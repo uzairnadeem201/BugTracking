@@ -40,7 +40,7 @@ const createBug = catchAsync(async (req, res) => {
   const user = req.user;              
   const {projectId,bugData} = req.body;
 
-  if (!user || user.role !== 'QA') {
+  if (!user || user.role.toLowerCase() !== 'qa') {
     throw new AppError('Only QA can create bugs', 403);
   }
   const Bug = await BugManager.createBug(user.id, projectId, bugData);

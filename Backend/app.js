@@ -20,6 +20,12 @@ app.use('/api', LoginRoute);
 app.use('/api',Jwt.verifyToken,ProjectRoute);
 app.use('/api', Jwt.verifyToken, BugRoute);
 app.use('/api',Jwt.verifyToken,UserRoute);
+app.use((req, res, next) => {
+  res.status(404).json({
+    success: false,
+    message: "API route not found",
+  });
+});
 
 app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).json({

@@ -107,5 +107,21 @@ const assignProject = async (userIdToAssign, projectId, managerId) => {
     }
   };
 };
+const getProjectByTitleAndManagerId = async (title, created_by) => {
+  console.log("Checking project title for manager...");
+  const normalizedInput = title.replace(/\s+/g, "").toLowerCase();
+  const allProjects = await Project.findAll({
+    where: { created_by },
+    attributes: ['id', 'title'],
+  });
+  const matchingProject = allProjects.find(project => {
+    const normalizedProjectTitle = project.title.replace(/\s+/g, "").toLowerCase();
+    return normalizedProjectTitle === normalizedInput;
+  });
 
-export default { getProjectsByManagerId, getProjectsByUserId , createProject,getProjectByManagerId,getProjectByUserId,assignProject};
+  return matchingProject || null;
+};
+
+
+
+export default { getProjectsByManagerId, getProjectsByUserId , createProject,getProjectByManagerId,getProjectByUserId,assignProject,getProjectByTitleAndManagerId};

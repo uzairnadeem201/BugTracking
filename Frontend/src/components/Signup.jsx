@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react"
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import {
-  TextField,
-  Button,
-  Typography,
-  InputAdornment,
-  Alert,
-} from "@mui/material"
+import { TextField, Button, Typography, InputAdornment, Alert } from "@mui/material"
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline"
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone"
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined"
@@ -27,25 +21,40 @@ function Signup() {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search)
     const roleParam = queryParams.get("role")
-    if (roleParam) {
-      setRole(roleParam)
+    if (!roleParam || !location.state?.fromRoleSelection) {
+      navigate("/login", { replace: true })
+      return
     }
-  }, [location])
+
+    setRole(roleParam)
+  }, [location, navigate])
 
   const validationSchema = Yup.object({
     name: Yup.string()
-      .min(3, "Name must be at least 3 characters")
-      .required("Name is required"),
+      .required("Name is required")
+      .test("not-only-spaces", "Name cannot be only spaces", (value) => value && value.trim().length > 0)
+      .min(3, "Name must be at least 3 characters"),
+
     phonenumber: Yup.string()
-      .matches(/^[0-9]{11}$/, "Enter a valid 11-digit phone number")
-      .required("Phone number is required"),
+      .required("Phone number is required")
+      .test("not-only-spaces", "Phone number cannot be only spaces", (value) => value && value.trim().length > 0)
+      .matches(/^[0-9]{11}$/, "Enter a valid 11-digit phone number"),
+
     email: Yup.string()
-      .email("Enter a valid email")
-      .required("Email is required"),
+      .required("Email is required")
+      .test("no-spaces", "Email must not contain spaces", (value) => value && !/\s/.test(value))
+      .email("Enter a valid email"),
+
     password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
-    role: Yup.string().required("Role is required"),
+      .required("Password is required")
+      .test("not-only-spaces", "Password cannot be only spaces", (value) =>
+        value === undefined ? false : value.trim().length > 0
+      )
+      .min(6, "Password must be at least 6 characters"),
+
+    role: Yup.string()
+      .required("Role is required")
+      .test("not-only-spaces", "Role cannot be only spaces", (value) => value && value.trim().length > 0),
   })
 
   const formik = useFormik({
@@ -59,25 +68,35 @@ function Signup() {
     enableReinitialize: true,
     validationSchema,
     validateOnBlur: true,
-    validateOnChange: false,
+    validateOnChange: true,
     onSubmit: async (values) => {
       setError("")
-      const isValid = await formik.validateForm()
 
-      if (!formik.isValid) {
-        formik.setTouched({
-          name: true,
-          phonenumber: true,
-          email: true,
-          password: true,
-        })
+      await formik.validateForm()
+      formik.setTouched({
+        name: true,
+        phonenumber: true,
+        email: true,
+        password: true,
+        role: true,
+      })
+
+      if (Object.keys(formik.errors).length > 0) {
         return
       }
 
       setLoading(true)
 
       try {
-        const response = await axios.post("http://localhost:3000/api/signup", values)
+        const trimmedValues = {
+          name: values.name.trim(),
+          phonenumber: values.phonenumber.trim(),
+          email: values.email.trim(),
+          password: values.password.trim(),
+          role: values.role.trim(),
+        }
+
+        const response = await axios.post("http://localhost:3000/api/signup", trimmedValues)
         if (response.data.success) {
           alert("User created successfully!")
           navigate("/login")
@@ -86,14 +105,8 @@ function Signup() {
         }
       } catch (err) {
         console.error("Signup error:", err)
-        setError(
-          err.response?.data?.message ||
-            "An error occurred during signup. Please try again."
-        )
-        alert(
-          err.response?.data?.message ||
-            "An error occurred during signup. Please try again."
-        )
+        setError(err.response?.data?.message || "An error occurred during signup. Please try again.")
+        alert(err.response?.data?.message || "An error occurred during signup. Please try again.")
       } finally {
         setLoading(false)
       }
@@ -110,9 +123,7 @@ function Signup() {
         <Typography variant="body1" className={styles.subtitle}>
           Please fill your information below
         </Typography>
-        {formik.values.role && (
-          <div className={styles.roleIndicator}>Signing up as: {formik.values.role}</div>
-        )}
+        {formik.values.role && <div className={styles.roleIndicator}>Signing up as: {formik.values.role}</div>}
 
         {error && (
           <Alert severity="error" className={styles.errorAlert}>
@@ -230,12 +241,7 @@ function Signup() {
           <Typography variant="body2" className={styles.accountText}>
             Already have an account?
           </Typography>
-          <Typography
-            variant="body2"
-            component={Link}
-            to="/login"
-            className={styles.loginLink}
-          >
+          <Typography variant="body2" component={Link} to="/login" className={styles.loginLink}>
             Login to your account
           </Typography>
         </div>
@@ -245,5 +251,6 @@ function Signup() {
 }
 
 export default Signup
+
 
 
