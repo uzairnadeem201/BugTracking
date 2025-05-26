@@ -1,11 +1,24 @@
-import { AppBar, Toolbar, Typography, Button, Avatar, Badge, Box, Menu, MenuItem, Divider } from "@mui/material"
-import NotificationsIcon from "@mui/icons-material/Notifications"
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Avatar,
+  Badge,
+  Box,
+  Menu,
+  MenuItem,
+  Divider,
+} from "@mui/material"
+import NotificationsIcon from "@mui/icons-material/Notifications"                                                      
 import EmailIcon from "@mui/icons-material/Email"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { useState } from "react"
 import styles from "./Header.module.css"
 import { Link, useNavigate } from "react-router-dom"
+import { FaSearch, FaClipboardList, FaTools, FaUsers } from "react-icons/fa"
+import MainIcon from "../images/MainIcon.png"
 
 function Header() {
   const navigate = useNavigate()
@@ -28,14 +41,23 @@ function Header() {
     navigate("/login")
   }
 
+  const handleLogoClick = () => {
+    navigate("/projects")
+  }
+
   return (
     <AppBar position="fixed" className={styles.appBar}>
       <Toolbar className={styles.toolbar}>
-        <div className={styles.logoContainer}>
-          <Typography variant="h6" className={styles.logo}>
-            <span className={styles.manage}>Manage</span>
-            <span className={styles.bug}>Bug</span>
-          </Typography>
+        <div
+          className={styles.logoContainer}
+          onClick={handleLogoClick}
+          style={{ cursor: "pointer" }}
+        >
+          <img
+            src={MainIcon}
+            alt="ManageBug Logo"
+            className={styles.logoImage}
+          />
         </div>
 
         <div className={styles.navLinks}>
@@ -43,26 +65,17 @@ function Header() {
             component={Link}
             to="/projects"
             className={`${styles.navButton} ${styles.active}`}
-            startIcon={<span className={styles.navIcon}>🔍</span>}
+            startIcon={<FaSearch />}
           >
             Projects
           </Button>
-          <Button
-            className={styles.navButton}
-            startIcon={<span className={styles.navIcon}>📋</span>}
-          >
+          <Button className={styles.navButton} startIcon={<FaClipboardList />}>
             Tasks
           </Button>
-          <Button
-            className={styles.navButton}
-            startIcon={<span className={styles.navIcon}>🔧</span>}
-          >
+          <Button className={styles.navButton} startIcon={<FaTools />}>
             Manage
           </Button>
-          <Button
-            className={styles.navButton}
-            startIcon={<span className={styles.navIcon}>👥</span>}
-          >
+          <Button className={styles.navButton} startIcon={<FaUsers />}>
             Users
           </Button>
         </div>
@@ -75,7 +88,9 @@ function Header() {
             <EmailIcon className={styles.icon} />
           </Badge>
           <Box className={styles.userInfo} onClick={handleUserMenuOpen}>
-            <Avatar className={styles.avatar}>{user?.name ? user.name.charAt(0).toUpperCase() : "U"}</Avatar>
+            <Avatar className={styles.avatar}>
+              {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
+            </Avatar>
             <Typography variant="body2" className={styles.userName}>
               {user?.role || "Dev."}
             </Typography>
@@ -108,4 +123,6 @@ function Header() {
 }
 
 export default Header
+
+
 

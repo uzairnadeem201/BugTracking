@@ -30,7 +30,7 @@ function CreateBug({ open, onClose, projectId, onBugCreated }) {
   const today = new Date().toISOString().split("T")[0]
 
   const validationSchema = Yup.object({
-    title: Yup.string()
+    title: Yup.string().transform((value) => value.trim())
       .required("Bug title is required")
       .min(5, "Bug title must be at least 5 characters"),
     description: Yup.string().trim(),
@@ -62,7 +62,7 @@ function CreateBug({ open, onClose, projectId, onBugCreated }) {
         const bugData = {
           projectId: projectId,
           bugData: {
-            title: values.title.trim(), // Trim spaces before sending
+            title: values.title.trim(), 
             type: values.bugType,
             status: "Open",
             description: values.description.trim(),
@@ -122,15 +122,10 @@ function CreateBug({ open, onClose, projectId, onBugCreated }) {
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth className={styles.dialog}>
       <DialogTitle className={styles.dialogTitle}>
-        Add new bug
         <IconButton aria-label="close" onClick={handleClose} className={styles.closeButton}>
           <CloseIcon />
         </IconButton>
-        <IconButton aria-label="more" className={styles.moreButton}>
-          <MoreHorizIcon />
-        </IconButton>
       </DialogTitle>
-
       <DialogContent className={styles.dialogContent}>
         <Box className={styles.assignSection}>
           <Box className={styles.assignTo}>
@@ -156,7 +151,7 @@ function CreateBug({ open, onClose, projectId, onBugCreated }) {
 
           <Box className={styles.dueDateButton}>
             <Typography variant="body2" className={styles.assignLabel}>
-              Due Date
+              ADDDue Date
             </Typography>
             <TextField
               type="date"

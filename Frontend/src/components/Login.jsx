@@ -43,10 +43,8 @@ function Login() {
     onSubmit: async (values) => {
       setLoading(true)
       setError("")
-
-      // Trim values before sending
       const trimmedValues = {
-        email: values.email.trim(),
+        email: values.email.trim().toLowerCase(),
         password: values.password.trim(),
       }
 

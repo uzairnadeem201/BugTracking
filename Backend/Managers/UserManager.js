@@ -7,30 +7,36 @@ const getDeveloper = async (user) => {
   if (!id || !role) {
     throw new AppError('Invalid User data.', 400);
   }
+
   let Developer;
-  if (role === 'Manager' || role ==='QA') {
+  const userRole = role.toLowerCase();
+
+  if (userRole === 'manager' || userRole === 'qa') {
     Developer = await UserHandler.getDeveloper();
-  } 
-  else {
+  } else {
     throw new AppError('Invalid role', 403);
   }
 
   return { data: Developer };
 };
+
 const getQA = async (user) => {
-    const { id, role } = user;
-  
-    if (!id || !role) {
-      throw new AppError('Invalid User data.', 400);
-    }
-    let Developer;
-    if (role === 'Manager'){
-      Developer = await UserHandler.getQA();
-    } 
-    else {
-      throw new AppError('Invalid role', 403);
-    }
-  
-    return { data: Developer };
-  };
-export default {getDeveloper,getQA};
+  const { id, role } = user;
+
+  if (!id || !role) {
+    throw new AppError('Invalid User data.', 400);
+  }
+
+  let Developer;
+  const userRole = role.toLowerCase();
+
+  if (userRole === 'manager') {
+    Developer = await UserHandler.getQA();
+  } else {
+    throw new AppError('Invalid role', 403);
+  }
+
+  return { data: Developer };
+};
+
+export default { getDeveloper, getQA };

@@ -7,11 +7,13 @@ import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone"
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined"
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
+import CryptoJS from "crypto-js"
 import styles from "./Signup.module.css"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import axios from "axios"
 
 function Signup() {
+  const ENCRYPTION_KEY = "key"
   const [role, setRole] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -21,40 +23,45 @@ function Signup() {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search)
     const roleParam = queryParams.get("role")
-    if (!roleParam || !location.state?.fromRoleSelection) {
-      navigate("/login", { replace: true })
-      return
-    }
-
+    const validRoles = ["Manager", "Developer", "QA"]
+    const cameFromRoleSelection = location.state?.fromRoleSelection === true
+    const isValidRole = validRoles.includes(roleParam)
+     if (!isValidRole && !cameFromRoleSelection) {
+    navigate("/", { replace: true })
+    return
+  }
     setRole(roleParam)
   }, [location, navigate])
 
   const validationSchema = Yup.object({
     name: Yup.string()
+      .transform((value) => value?.trim())
       .required("Name is required")
-      .test("not-only-spaces", "Name cannot be only spaces", (value) => value && value.trim().length > 0)
+      .test("not-only-spaces", "Name cannot be only spaces", (value) => value && value.length > 0)
       .min(3, "Name must be at least 3 characters"),
 
     phonenumber: Yup.string()
+      .transform((value) => value?.trim())
       .required("Phone number is required")
-      .test("not-only-spaces", "Phone number cannot be only spaces", (value) => value && value.trim().length > 0)
+      .test("not-only-spaces", "Phone number cannot be only spaces", (value) => value && value.length > 0)
       .matches(/^[0-9]{11}$/, "Enter a valid 11-digit phone number"),
 
     email: Yup.string()
+      .transform((value) => value?.trim())
       .required("Email is required")
       .test("no-spaces", "Email must not contain spaces", (value) => value && !/\s/.test(value))
       .email("Enter a valid email"),
 
     password: Yup.string()
+      .transform((value) => value?.trim())
       .required("Password is required")
-      .test("not-only-spaces", "Password cannot be only spaces", (value) =>
-        value === undefined ? false : value.trim().length > 0
-      )
+      .test("not-only-spaces", "Password cannot be only spaces", (value) => value && value.length > 0)
       .min(6, "Password must be at least 6 characters"),
 
     role: Yup.string()
+      .transform((value) => value?.trim())
       .required("Role is required")
-      .test("not-only-spaces", "Role cannot be only spaces", (value) => value && value.trim().length > 0),
+      .test("not-only-spaces", "Role cannot be only spaces", (value) => value && value.length > 0),
   })
 
   const formik = useFormik({
@@ -82,23 +89,24 @@ function Signup() {
       })
 
       if (Object.keys(formik.errors).length > 0) {
+        setLoading(false)
         return
       }
 
       setLoading(true)
 
       try {
-        const trimmedValues = {
-          name: values.name.trim(),
-          phonenumber: values.phonenumber.trim(),
-          email: values.email.trim(),
-          password: values.password.trim(),
-          role: values.role.trim(),
+        const encryptedPassword = CryptoJS.AES.encrypt(values.password, ENCRYPTION_KEY).toString()
+        const postData = {
+          ...values,
+          email: values.email.toLowerCase(),
+          password: encryptedPassword,
         }
 
-        const response = await axios.post("http://localhost:3000/api/signup", trimmedValues)
+        const response = await axios.post("http://localhost:3000/api/signup", postData)
+
         if (response.data.success) {
-          alert("User created successfully!")
+        
           navigate("/login")
         } else {
           setError(response.data.message || "Signup failed. Please try again.")
@@ -168,9 +176,14 @@ function Signup() {
                     <PhoneIphoneIcon className={styles.fieldIcon} />
                   </InputAdornment>
                 ),
+                inputMode: "numeric",
               }}
               value={formik.values.phonenumber}
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                // Only digits allowed
+                const digitsOnly = e.target.value.replace(/\D/g, "")
+                formik.setFieldValue("phonenumber", digitsOnly)
+              }}
               onBlur={formik.handleBlur}
               error={formik.touched.phonenumber && Boolean(formik.errors.phonenumber)}
               helperText={formik.touched.phonenumber && formik.errors.phonenumber}
@@ -251,6 +264,7 @@ function Signup() {
 }
 
 export default Signup
+
 
 
 

@@ -52,4 +52,5 @@ const getQA = catchAsync(async (req, res) => {
       data: result.data,
     });
   });
+
 export default {getDeveloper,getQA};

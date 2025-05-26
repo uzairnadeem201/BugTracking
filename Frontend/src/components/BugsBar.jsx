@@ -57,7 +57,6 @@ function BugsBar({ projectName = "Analyst UI System", breadcrumbText = "Projects
   return (
     <>
       <Box className={styles.bugsBar}>
-        {/* Breadcrumb Navigation */}
         <Box className={styles.breadcrumbContainer}>
           <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
             <Link underline="hover" color="inherit" href="/projects">
@@ -66,8 +65,6 @@ function BugsBar({ projectName = "Analyst UI System", breadcrumbText = "Projects
             <Typography color="text.primary">{projectName}</Typography>
           </Breadcrumbs>
         </Box>
-
-        {/* Title and Actions */}
         <Box className={styles.titleContainer}>
           <Typography variant="h4" className={styles.title}>
             All bugs listing
@@ -79,7 +76,6 @@ function BugsBar({ projectName = "Analyst UI System", breadcrumbText = "Projects
             <IconButton aria-label="more" className={styles.iconButton}>
               <MoreVertIcon />
             </IconButton>
-            {/* Show New Task button ONLY if userRole is QA */}
             {userRole === "QA" && (
               <Button
                 variant="contained"
@@ -92,15 +88,6 @@ function BugsBar({ projectName = "Analyst UI System", breadcrumbText = "Projects
             )}
           </Box>
         </Box>
-
-        {/* Tabs */}
-        <Box className={styles.tabsContainer}>
-          <Tabs value={0} aria-label="bug tabs">
-            <Tab label="Bugs" className={styles.tab} />
-          </Tabs>
-        </Box>
-
-        {/* Search and Filters */}
         <Box className={styles.searchFilterContainer}>
           <TextField
             placeholder="Search"
@@ -145,8 +132,6 @@ function BugsBar({ projectName = "Analyst UI System", breadcrumbText = "Projects
           </Box>
         </Box>
       </Box>
-
-      {/* Create Bug Modal */}
       <CreateBug
         open={createBugOpen}
         onClose={handleCloseCreateBug}

@@ -2,6 +2,7 @@ import SignupHandler from '../Handlers/SignupHandler.js';
 import AppError from '../Utils/AppError.js';
 import hashPassword from '../Utils/HashPassword.js';
 import validateUserInput from '../Utils/ValidateUserInput.js';
+import CryptoJS from 'crypto-js';
 
 const validRoles = ['Manager', 'QA', 'Developer'];
 
@@ -23,8 +24,17 @@ const signup = async (user) => {
   if (existingUser) {
     return { success: false, error: new AppError('Existing Email.', 409) };
   }
+  const ENCRYPTION_KEY = "key";
 
-  const hashedPassword = await hashPassword(password);
+  const encryptedPassword = password;
+  const bytes = CryptoJS.AES.decrypt(encryptedPassword, ENCRYPTION_KEY)
+  const decryptedPassword = bytes.toString(CryptoJS.enc.Utf8)
+
+  if (!decryptedPassword) {
+    return res.status(400).json({ message: "Failed to decrypt password" })
+  }
+
+  const hashedPassword = await hashPassword(decryptedPassword);
 
   const newUser = await SignupHandler.createUser({
     name,

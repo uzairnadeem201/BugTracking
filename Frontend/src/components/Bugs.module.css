@@ -1,11 +1,14 @@
 .bugsContainer {
-    padding: 16px;
+    padding: 1px;
     background-color: #f8f9fa;
+    margin-left: 7%;
+    margin-right: 7%;
+
   }
-  
+
   .tableContainer {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
-    border-radius: 8px !important;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important;
+    border-radius: 1px !important;
     overflow: hidden;
   }
   
@@ -14,13 +17,13 @@
   }
   
   .detailsCell {
-    min-width: 300px;
+    min-width: 100px;
   }
   
   .bugDetails {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
   }
   
   .statusDot {

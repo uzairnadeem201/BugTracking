@@ -7,4 +7,5 @@ router.get('/user/developer', UserController.getDeveloper);
 router.get('/user/qa',UserController.getQA);
 
 
+
 export default router;

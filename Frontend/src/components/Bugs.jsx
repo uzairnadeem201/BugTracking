@@ -282,8 +282,6 @@ function Bugs({ projectId, newBug }) {
           </TableBody>
         </Table>
       </TableContainer>
-
-      {/* Menu with role-based options */}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -309,8 +307,6 @@ function Bugs({ projectId, newBug }) {
             </MenuItem>
           </>
         )}
-
-        {/* Managers have no menu options */}
       </Menu>
     </Box>
   )

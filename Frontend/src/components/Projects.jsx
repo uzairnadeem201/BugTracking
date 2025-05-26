@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
-import { Typography, Box, Card, Grid, CircularProgress, Alert, Container } from "@mui/material"
 import { useNavigate } from "react-router-dom"
-import axios from "axios"
+import { SiAlby } from "react-icons/si"
 import styles from "./Projects.module.css"
 
 function Projects({ newProject }) {
@@ -9,12 +8,13 @@ function Projects({ newProject }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const navigate = useNavigate()
-  const defaultIcon = "📋"
+  const defaultIcon = <SiAlby size={30} color="white" />
   const defaultColor = "#4ECDC4"
 
   useEffect(() => {
     fetchProjects()
   }, [])
+
   useEffect(() => {
     if (newProject) {
       setProjects((prevProjects) => [newProject, ...prevProjects])
@@ -25,20 +25,21 @@ function Projects({ newProject }) {
     setLoading(true)
     try {
       const token = localStorage.getItem("token")
+      if (!token) throw new Error("Authentication token not found")
 
-      if (!token) {
-        throw new Error("Authentication token not found")
-      }
-      const response = await axios.get("http://localhost:3000/api/projects", {
+      const response = await fetch("http://localhost:3000/api/projects", {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       })
 
-      if (response.data.success) {
-        setProjects(response.data.data)
+      const data = await response.json()
+
+      if (data.success) {
+        setProjects(data.data)
       } else {
-        throw new Error(response.data.message || "Failed to fetch projects")
+        throw new Error(data.message || "Failed to fetch projects")
       }
     } catch (err) {
       console.error("Error fetching projects:", err)
@@ -51,75 +52,68 @@ function Projects({ newProject }) {
   const handleProjectClick = (projectId) => {
     navigate(`/projects/${projectId}/bugs`)
   }
+
   if (loading) {
     return (
-      <Box className={styles.loadingContainer}>
-        <CircularProgress size={50} />
-        <Typography variant="h6" className={styles.loadingText}>
-          Loading projects...
-        </Typography>
-      </Box>
+      <div className={styles.loadingContainer}>
+        <div className={styles.spinner}></div>
+        <p className={styles.loadingText}>Loading projects...</p>
+      </div>
     )
   }
+
   if (error) {
     return (
-      <Alert severity="error" className={styles.errorAlert}>
-        {error}
-      </Alert>
+      <div className={styles.errorAlert}>
+        <p className={styles.errorText}>{error}</p>
+      </div>
     )
   }
+
   if (projects.length === 0) {
     return (
-      <Box className={styles.emptyContainer}>
-        <Typography variant="h5" className={styles.emptyText}>
-          No projects yet
-        </Typography>
-        <Typography variant="body1" className={styles.emptySubtext}>
-          Projects you create or are assigned to will appear here
-        </Typography>
-      </Box>
+      <div className={styles.emptyContainer}>
+        <h2 className={styles.emptyText}>No projects yet</h2>
+        <p className={styles.emptySubtext}>Projects you create or are assigned to will appear here</p>
+      </div>
     )
   }
 
   return (
-    <Container maxWidth="xl" disableGutters>
-      <Grid container spacing={4} className={styles.projectsGrid}>
+    <div className={styles.projectsContainer}>
+      <div className={styles.projectsGrid}>
         {projects.map((project) => {
-          const tasksDone = Math.floor(Math.random() * 30) + 1
-          const tasksTotal = Math.floor(Math.random() * 50) + 30
+          const tasksDone = 0
+          const tasksTotal = 0
 
           return (
-            <Grid item xs={12} sm={6} md={4} key={project.id}>
-              <Card className={styles.projectCard} onClick={() => handleProjectClick(project.id)}>
-                {project.picture ? (
-                  <Box className={styles.projectIconContainer}>
-                    <img
-                      src={project.picture || "/placeholder.svg"}
-                      alt={project.title}
-                      className={styles.projectIconImage}
-                    />
-                  </Box>
-                ) : (
-                  <Box className={styles.projectIcon} style={{ backgroundColor: defaultColor }}>
-                    {defaultIcon}
-                  </Box>
-                )}
-                <Typography variant="h6" className={styles.projectTitle}>
-                  {project.title}
-                </Typography>
-                <Typography variant="body1" className={styles.projectDescription}>
-                  {project.description}
-                </Typography>
-                <Typography variant="body2" className={styles.projectTasks}>
-                  Task Done: {String(tasksDone).padStart(2, "0")}/{tasksTotal}
-                </Typography>
-              </Card>
-            </Grid>
+            <div key={project.id} className={styles.projectCard} onClick={() => handleProjectClick(project.id)}>
+              {project.picture ? (
+                <div className={styles.projectIconContainer}>
+                  <img
+                    src={project.picture || "/placeholder.svg"}
+                    alt={project.title}
+                    className={styles.projectIconImage}
+                  />
+                </div>
+              ) : (
+                <div className={styles.projectIcon} style={{ backgroundColor: defaultColor }}>
+                  {defaultIcon}
+                </div>
+              )}
+              <h3 className={styles.projectTitle}>{project.title}</h3>
+              <p className={styles.projectDescription}>{project.description}</p>
+              <p className={styles.projectTasks}>
+                Task Done: {String(tasksDone).padStart(2, "0")}/{tasksTotal}
+              </p>
+            </div>
           )
         })}
-      </Grid>
-    </Container>
+      </div>
+    </div>
   )
 }
 
 export default Projects
+
+

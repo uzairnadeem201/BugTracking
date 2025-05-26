@@ -3,6 +3,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+  margin-left: 9%;
+  margin-right: 9%;
   padding-bottom: 16px;
   border-bottom: 1px solid #e9ecef;
   flex-wrap: wrap;

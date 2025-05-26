@@ -13,6 +13,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import RefreshIcon from "@mui/icons-material/Refresh"
 import CreateProject from "./CreateProject"
 import styles from "./ProjectBar.module.css"
+import ProjectIcon from "../images/ProjectIcon.png"
+
 
 function ProjectBar({ onProjectCreated }) {
   const [userRole, setUserRole] = useState("")
@@ -94,7 +96,11 @@ function ProjectBar({ onProjectCreated }) {
             </Button>
 
             <IconButton className={styles.refreshButton}>
-              <RefreshIcon />
+               <img
+                  src={ProjectIcon}
+                  alt="Project Icon"
+                  className={styles.customIcon}
+                />
             </IconButton>
           </Box>
         </Box>

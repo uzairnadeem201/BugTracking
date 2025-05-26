@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   TextField,
   Button,
   Box,
@@ -25,11 +24,13 @@ function CreateProject({ open, onClose, onProjectCreated }) {
   const fileInputRef = useRef(null)
 
   const validationSchema = Yup.object({
-    title: Yup.string()
-      .required("Project name is required")
-      .min(5, "Project name must be at least 5 characters"),
-    description: Yup.string(),
-  })
+  title: Yup.string()
+    .transform((value) => value.trim())
+    .required("Project name is required")
+    .min(5, "Project name must be at least 5 characters"),
+  description: Yup.string()
+})
+
 
   const handlePictureClick = () => {
     fileInputRef.current.click()
@@ -74,9 +75,13 @@ function CreateProject({ open, onClose, onProjectCreated }) {
         return
       }
 
-      const projectData = {
+      const trimmedValues = {
         title: values.title.trim(),
-        description: values.description,
+        description: values.description?.trim(),
+      }
+
+      const projectData = {
+        ...trimmedValues,
         picture: pictureUrl,
       }
 
@@ -196,7 +201,7 @@ function CreateProject({ open, onClose, onProjectCreated }) {
               </Box>
             </DialogContent>
 
-            <DialogActions className={styles.dialogActions}>
+            <Box className={styles.dialogActions}>
               <Button
                 type="submit"
                 variant="contained"
@@ -206,10 +211,14 @@ function CreateProject({ open, onClose, onProjectCreated }) {
               >
                 Add
               </Button>
-              <Button variant="outlined" onClick={handleCancel} className={styles.cancelButton}>
+              <Button
+                variant="outlined"
+                onClick={handleCancel}
+                className={styles.cancelButton}
+              >
                 Cancel
               </Button>
-            </DialogActions>
+            </Box>
           </Form>
         )}
       </Formik>

@@ -1,5 +1,5 @@
 .dialog {
-  border-radius: 12px;
+  border-radius: 24px;
 }
 
 .dialogTitle {
@@ -7,7 +7,7 @@
   font-weight: 600 !important;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #eee;
+  border-bottom: 4px solid #eee;
 }
 
 .closeButton {
@@ -33,7 +33,7 @@
 
 .assignSection {
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   align-items: center;
   margin-bottom: 8px;
 }
