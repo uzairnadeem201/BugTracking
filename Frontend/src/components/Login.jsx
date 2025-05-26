@@ -13,9 +13,11 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined"
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
 import styles from "./Login.module.css"
+import CryptoJS from "crypto-js"
 import axios from "axios"
 
 function Login() {
+  const ENCRYPTION_KEY = "key"
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const navigate = useNavigate()
@@ -43,10 +45,13 @@ function Login() {
     onSubmit: async (values) => {
       setLoading(true)
       setError("")
+      const encryptedPassword = CryptoJS.AES.encrypt(values.password.trim(), ENCRYPTION_KEY).toString();
       const trimmedValues = {
         email: values.email.trim().toLowerCase(),
-        password: values.password.trim(),
+        password: encryptedPassword,
       }
+      
+
 
       try {
         const response = await axios.post("http://localhost:3000/api/login", trimmedValues)
