@@ -39,16 +39,19 @@
   
   .signupButton {
     background-color: #0284c7 !important;
+    width: 32% !important;
+    text-align: left !important;
     color: white !important;
-    padding: 0.75rem 1.5rem !important;
-    border-radius: 8px !important;
+    padding: 0.75rem 1rem !important;
+    border-radius: 12px !important;
     text-transform: none !important;
     font-size: 1rem !important;
     margin-top: 1rem !important;
-    margin-bottom: 2rem !important;
+    margin-bottom: 1rem !important;
   }
   
   .loginContainer {
+    margin-top: 3%;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -64,8 +67,6 @@
     font-weight: 500;
     cursor: pointer;
   }
-  
-  /* Role indicator for debugging - can be removed or styled differently */
   .roleIndicator {
     background-color: #f1f5f9;
     padding: 0.5rem;
@@ -73,14 +74,12 @@
     border-radius: 4px;
     font-size: 0.875rem;
     color: #64748b;
-    display: none; /* Hidden in production */
+    display: none;
   }
   
   .errorAlert {
     margin-bottom: 1rem !important;
   }
-  
-  /* Media query for mobile responsiveness */
   @media (max-width: 768px) {
     .container {
       width: 100%;

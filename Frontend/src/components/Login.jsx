@@ -15,6 +15,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
 import styles from "./Login.module.css"
 import CryptoJS from "crypto-js"
 import axios from "axios"
+import Divider from "@mui/material/Divider"
 
 function Login() {
   const ENCRYPTION_KEY = "key"
@@ -23,7 +24,7 @@ function Login() {
   const navigate = useNavigate()
 
   const validationSchema = Yup.object({
-    email: Yup.string()
+    email: Yup.string().transform((value) => value?.trim())
       .email("Enter a valid email")
       .required("Email is required"),
     password: Yup.string()
@@ -62,14 +63,12 @@ function Login() {
           localStorage.setItem("token", response.data.token)
           localStorage.setItem("user", JSON.stringify(response.data.user))
           navigate("/projects")
-          alert("Login successful!")
         } else {
           setError(response.data.message || "Login failed. Please check your credentials.")
         }
       } catch (err) {
         console.error("Login error:", err)
         setError(err.response?.data?.message || "An error occurred during login. Please try again.")
-        alert(err.response?.data?.message || "An error occurred during login. Please try again.")
       } finally {
         setLoading(false)
       }
@@ -151,6 +150,7 @@ function Login() {
             {loading ? "Logging in..." : "Login"}
           </Button>
         </form>
+        <Divider/>
 
         <div className={styles.signupContainer}>
           <Typography variant="body2" className={styles.accountText}>

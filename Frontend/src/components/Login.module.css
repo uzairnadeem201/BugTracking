@@ -66,15 +66,16 @@
     border-radius: 8px !important;
     text-transform: none !important;
     font-size: 1rem !important;
-    width: 100% !important;
+    width: 32% !important;
     margin-bottom: 2rem !important;
   }
   
   .signupContainer {
+    margin-top: 5%;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+    align-items: left;
+    justify-content: left;
+    gap: 2em;
   }
   
   .accountText {

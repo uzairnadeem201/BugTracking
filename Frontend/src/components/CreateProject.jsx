@@ -109,9 +109,6 @@ function CreateProject({ open, onClose, onProjectCreated }) {
     <Dialog open={open} onClose={handleCancel} maxWidth="sm" fullWidth className={styles.dialog}>
       <DialogTitle className={styles.dialogTitle}>
         Add new Project
-        <IconButton aria-label="close" onClick={handleCancel} className={styles.closeButton}>
-          <CloseIcon />
-        </IconButton>
       </DialogTitle>
 
       <Formik
@@ -153,7 +150,6 @@ function CreateProject({ open, onClose, onProjectCreated }) {
                       placeholder="Enter details here"
                       variant="outlined"
                       size="small"
-                      multiline
                       rows={3}
                       error={touched.description && Boolean(errors.description)}
                       helperText={touched.description && errors.description}

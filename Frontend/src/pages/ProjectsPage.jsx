@@ -1,23 +1,33 @@
 import { useState } from "react"
-import Header from "../components/Header"
-import Footer from "../components/Footer"
 import ProjectBar from "../components/ProjectBar"
 import Projects from "../components/Projects"
+import Header from "../components/Header"
+import Footer from "../components/Footer"
 
 function ProjectsPage() {
   const [newProject, setNewProject] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("")
 
   const handleProjectCreated = (project) => {
     setNewProject(project)
+    setSearchTerm("")
   }
 
+  const handleSearch = (term) => {
+    setSearchTerm(term)
+  }
+
+
   return (
-    <>
-      <Header />
-      <ProjectBar onProjectCreated={handleProjectCreated} />
-      <Projects newProject={newProject} />
+    <div>
+      <Header/>
+      <ProjectBar onProjectCreated={handleProjectCreated} onSearch={handleSearch} />
+      <Projects
+        newProject={newProject}
+        searchTerm={searchTerm}
+      />
       <Footer />
-    </>
+    </div>
   )
 }
 

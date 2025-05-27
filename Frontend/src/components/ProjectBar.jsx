@@ -1,24 +1,16 @@
 import { useState, useEffect } from "react"
-import {
-  Typography,
-  TextField,
-  Button,
-  InputAdornment,
-  Box,
-  IconButton,
-} from "@mui/material"
+import { Typography, TextField, Button, InputAdornment, Box, IconButton } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 import AddIcon from "@mui/icons-material/Add"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
-import RefreshIcon from "@mui/icons-material/Refresh"
 import CreateProject from "./CreateProject"
 import styles from "./ProjectBar.module.css"
 import ProjectIcon from "../images/ProjectIcon.png"
 
-
-function ProjectBar({ onProjectCreated }) {
+function ProjectBar({ onProjectCreated, onSearch}) {
   const [userRole, setUserRole] = useState("")
   const [createModalOpen, setCreateModalOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
     const userString = localStorage.getItem("user")
@@ -34,6 +26,14 @@ function ProjectBar({ onProjectCreated }) {
     }
   }, [])
 
+  const handleSearchChange = (event) => {
+    const value = event.target.value
+    setSearchTerm(value)
+    if (onSearch) {
+      onSearch(value)
+    }
+  }
+
   const handleAddProject = () => {
     setCreateModalOpen(true)
   }
@@ -47,6 +47,7 @@ function ProjectBar({ onProjectCreated }) {
       onProjectCreated(newProject)
     }
   }
+
 
   return (
     <>
@@ -66,6 +67,8 @@ function ProjectBar({ onProjectCreated }) {
             variant="outlined"
             size="small"
             className={styles.searchField}
+            value={searchTerm}
+            onChange={handleSearchChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -76,12 +79,7 @@ function ProjectBar({ onProjectCreated }) {
           />
 
           {userRole === "Manager" && (
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              className={styles.addButton}
-              onClick={handleAddProject}
-            >
+            <Button variant="contained" startIcon={<AddIcon />} className={styles.addButton} onClick={handleAddProject}>
               Add New Project
             </Button>
           )}
@@ -95,22 +93,14 @@ function ProjectBar({ onProjectCreated }) {
               My Project
             </Button>
 
-            <IconButton className={styles.refreshButton}>
-               <img
-                  src={ProjectIcon}
-                  alt="Project Icon"
-                  className={styles.customIcon}
-                />
+            <IconButton className={styles.IconButton}>
+              <img src={ProjectIcon || "/placeholder.svg"} alt="Project Icon" className={styles.customIcon} />
             </IconButton>
           </Box>
         </Box>
       </Box>
 
-      <CreateProject
-        open={createModalOpen}
-        onClose={handleCloseModal}
-        onProjectCreated={handleProjectCreated}
-      />
+      <CreateProject open={createModalOpen} onClose={handleCloseModal} onProjectCreated={handleProjectCreated} />
     </>
   )
 }

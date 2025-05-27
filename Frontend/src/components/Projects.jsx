@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { SiAlby } from "react-icons/si"
+import axios from "axios"
 import styles from "./Projects.module.css"
 
-function Projects({ newProject }) {
+function Projects({ newProject, searchTerm}) {
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
   const navigate = useNavigate()
   const defaultIcon = <SiAlby size={30} color="white" />
   const defaultColor = "#4ECDC4"
@@ -17,36 +19,63 @@ function Projects({ newProject }) {
 
   useEffect(() => {
     if (newProject) {
-      setProjects((prevProjects) => [newProject, ...prevProjects])
+      setProjects((prev) => [newProject, ...prev])
     }
   }, [newProject])
 
-  const fetchProjects = async () => {
-    setLoading(true)
+  useEffect(() => {
+    if (searchTerm !== undefined) {
+      handleSearch(searchTerm)
+    }
+  }, [searchTerm])
+
+  const fetchProjects = async (search = null) => {
+    const showLoading = !search
+    if (showLoading) {
+      setLoading(true)
+    }
+
+    setError(null)
+
     try {
       const token = localStorage.getItem("token")
       if (!token) throw new Error("Authentication token not found")
 
-      const response = await fetch("http://localhost:3000/api/projects", {
+      const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
-      })
+        params: {},
+      }
 
-      const data = await response.json()
+      if (search && search.trim() !== "") {
+        config.params.search = search.trim()
+      }
 
-      if (data.success) {
-        setProjects(data.data)
+      const response = await axios.get("http://localhost:3000/api/projects", config)
+
+      if (response.data.success) {
+        setProjects(response.data.data)
       } else {
-        throw new Error(data.message || "Failed to fetch projects")
+        throw new Error(response.data.message || "Failed to fetch projects")
       }
     } catch (err) {
       console.error("Error fetching projects:", err)
-      setError(err.message || "Failed to load projects")
+      setError(err.response?.data?.message || err.message || "Failed to load projects")
+      setProjects([])
     } finally {
-      setLoading(false)
+      if (showLoading) {
+        setLoading(false)
+      }
     }
+  }
+
+  const handleSearch = async (search) => {
+    await fetchProjects(search)
+  }
+
+  const handleRefresh = () => {
+    fetchProjects()
   }
 
   const handleProjectClick = (projectId) => {
@@ -66,15 +95,18 @@ function Projects({ newProject }) {
     return (
       <div className={styles.errorAlert}>
         <p className={styles.errorText}>{error}</p>
+        <button onClick={handleRefresh} className={styles.retryButton}>
+          Try Again
+        </button>
       </div>
     )
   }
 
   if (projects.length === 0) {
+    const isSearchResult = searchTerm && searchTerm.trim() !== ""
     return (
       <div className={styles.emptyContainer}>
-        <h2 className={styles.emptyText}>No projects yet</h2>
-        <p className={styles.emptySubtext}>Projects you create or are assigned to will appear here</p>
+        <h2 className={styles.emptyText}>{isSearchResult ? "No projects found" : "No projects yet"}</h2>
       </div>
     )
   }
@@ -115,5 +147,7 @@ function Projects({ newProject }) {
 }
 
 export default Projects
+
+
 
 

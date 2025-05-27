@@ -36,7 +36,7 @@
 }
 
 .searchField {
-  width: 240px;
+  width: 450px;
   background-color: white;
   border-radius: 4px;
 }
@@ -73,7 +73,7 @@
   border-radius: 4px !important;
 }
 
-.refreshButton {
+.IconButton {
   background-color: #0084ff !important;
   color: white !important;
   width: 36px !important;

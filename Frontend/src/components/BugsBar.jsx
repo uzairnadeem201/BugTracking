@@ -7,9 +7,7 @@ import {
   Box,
   IconButton,
   Breadcrumbs,
-  Tabs,
-  Tab,
-  Divider,
+  Divider
 } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 import AddIcon from "@mui/icons-material/Add"
@@ -19,14 +17,22 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext"
 import ViewListIcon from "@mui/icons-material/ViewList"
 import ViewModuleIcon from "@mui/icons-material/ViewModule"
 import ViewCompactIcon from "@mui/icons-material/ViewCompact"
-import FilterListIcon from "@mui/icons-material/FilterList"
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import Link from "@mui/material/Link"
+
 import styles from "./BugsBar.module.css"
 import CreateBug from "./CreateBug"
 
-function BugsBar({ projectName = "Analyst UI System", breadcrumbText = "Projects", projectId, onBugCreated }) {
+function BugsBar({
+  projectName = "Analyst UI System",
+  breadcrumbText = "Projects",
+  projectId,
+  onBugCreated,
+  onSearch,
+}) {
   const [createBugOpen, setCreateBugOpen] = useState(false)
   const [userRole, setUserRole] = useState("")
+  const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
     const userString = localStorage.getItem("user")
@@ -39,6 +45,14 @@ function BugsBar({ projectName = "Analyst UI System", breadcrumbText = "Projects
       }
     }
   }, [])
+
+  const handleSearchChange = (event) => {
+    const value = event.target.value
+    setSearchTerm(value)
+    if (onSearch) {
+      onSearch(value)
+    }
+  }
 
   const handleNewTask = () => {
     setCreateBugOpen(true)
@@ -88,12 +102,15 @@ function BugsBar({ projectName = "Analyst UI System", breadcrumbText = "Projects
             )}
           </Box>
         </Box>
+        <Divider className={styles.divider} />
         <Box className={styles.searchFilterContainer}>
           <TextField
-            placeholder="Search"
+            placeholder="Search bugs..."
             variant="outlined"
             size="small"
             className={styles.searchField}
+            value={searchTerm}
+            onChange={handleSearchChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -102,22 +119,17 @@ function BugsBar({ projectName = "Analyst UI System", breadcrumbText = "Projects
               ),
             }}
           />
-
-          <Box className={styles.filterContainer}>
-            <Button variant="outlined" className={styles.filterButton} startIcon={<FilterListIcon />}>
-              Subtasks
-            </Button>
-
-            <Button variant="outlined" className={styles.filterButton}>
-              Me
-            </Button>
-
-            <Button variant="outlined" className={styles.filterButton}>
-              Assignees
-            </Button>
-
-            <Divider orientation="vertical" flexItem className={styles.divider} />
-
+            <Box className={styles.buttonGroup}>
+              <Button variant="outlined" className={styles.filterButton} endIcon={<KeyboardArrowDownIcon />}>
+                Subtasks
+              </Button>
+              <Button variant="outlined" className={styles.filterButton} endIcon={<KeyboardArrowDownIcon />}>
+                Me
+              </Button>
+              <Button variant="outlined" className={styles.filterButton} endIcon={<KeyboardArrowDownIcon />}>
+                Assignees
+              </Button>
+            </Box>
             <Box className={styles.viewToggleContainer}>
               <IconButton className={`${styles.viewButton} ${styles.activeView}`}>
                 <ViewListIcon />
@@ -129,7 +141,7 @@ function BugsBar({ projectName = "Analyst UI System", breadcrumbText = "Projects
                 <ViewModuleIcon />
               </IconButton>
             </Box>
-          </Box>
+            
         </Box>
       </Box>
       <CreateBug
@@ -143,5 +155,6 @@ function BugsBar({ projectName = "Analyst UI System", breadcrumbText = "Projects
 }
 
 export default BugsBar
+
 
 

@@ -10,6 +10,7 @@ function BugsPage() {
   const { projectId } = useParams()
   const [projectName, setProjectName] = useState("")
   const [newBug, setNewBug] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
     const fetchProjectDetails = async () => {
@@ -30,18 +31,29 @@ function BugsPage() {
 
   const handleBugCreated = (bug) => {
     setNewBug(bug)
+    setSearchTerm("")
+  }
+
+  const handleSearch = (term) => {
+    setSearchTerm(term)
   }
 
   return (
     <>
       <Header />
-      <BugsBar projectName={projectName} projectId={projectId} onBugCreated={handleBugCreated} />
-      <Bugs projectId={projectId} newBug={newBug} />
+      <BugsBar
+        projectName={projectName}
+        projectId={projectId}
+        onBugCreated={handleBugCreated}
+        onSearch={handleSearch}
+      />
+      <Bugs projectId={projectId} newBug={newBug} searchTerm={searchTerm} />
       <Footer />
     </>
   )
 }
 
 export default BugsPage
+
 
 
