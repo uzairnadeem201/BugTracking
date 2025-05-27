@@ -1,42 +1,35 @@
 import UserHandler from '../Handlers/UserHandler.js';
 import AppError from '../Utils/AppError.js';
 
-const getDeveloper = async (user) => {
+const getDevelopersByProject = async (user, projectId) => {
   const { id, role } = user;
+  if (!id || !role) throw new AppError('Invalid User data.', 400);
 
-  if (!id || !role) {
-    throw new AppError('Invalid User data.', 400);
-  }
-
-  let Developer;
   const userRole = role.toLowerCase();
-
-  if (userRole === 'manager' || userRole === 'qa') {
-    Developer = await UserHandler.getDeveloper();
-  } else {
+  if (userRole !== 'manager' && userRole !== 'qa') {
     throw new AppError('Invalid role', 403);
   }
 
-  return { data: Developer };
+  const developers = await UserHandler.getUsersByProjectAndRole(projectId, 'Developer');
+  return { data: developers };
 };
 
-const getQA = async (user) => {
+const getQAsByProject = async (user, projectId) => {
   const { id, role } = user;
+  if (!id || !role) throw new AppError('Invalid User data.', 400);
 
-  if (!id || !role) {
-    throw new AppError('Invalid User data.', 400);
-  }
-
-  let Developer;
   const userRole = role.toLowerCase();
 
-  if (userRole === 'manager') {
-    Developer = await UserHandler.getQA();
-  } else {
+  if (userRole !== 'manager') {
     throw new AppError('Invalid role', 403);
   }
 
-  return { data: Developer };
+  const qa = await UserHandler.getUsersByProjectAndRole(projectId, 'QA');
+  return { data: qa };
 };
 
-export default { getDeveloper, getQA };
+export default {
+  getDevelopersByProject,
+  getQAsByProject,
+};
+

@@ -1,7 +1,7 @@
 import BugHandler from '../Handlers/BugHandler.js';
 import AppError from '../Utils/AppError.js';
 
-const getBugsByProject = async (user, projectIdRaw) => {
+const getBugsByProject = async (user, projectIdRaw, searchTerm = null) => {
   const { id: userId, role } = user;
   const projectId = parseInt(projectIdRaw, 10);
 
@@ -13,11 +13,11 @@ const getBugsByProject = async (user, projectIdRaw) => {
   let bugs;
 
   if (roleLower === 'manager') {
-    bugs = await BugHandler.getBugsByManager(userId, projectId);
+    bugs = await BugHandler.getBugsByManager(userId, projectId, searchTerm);
   } else if (roleLower === 'qa') {
-    bugs = await BugHandler.getBugsByQA(userId, projectId);
+    bugs = await BugHandler.getBugsByQA(userId, projectId, searchTerm);
   } else if (roleLower === 'developer') {
-    bugs = await BugHandler.getBugsByDeveloper(userId, projectId);
+    bugs = await BugHandler.getBugsByDeveloper(userId, projectId, searchTerm);
   } else {
     throw new AppError('Invalid role', 403);
   }
@@ -55,6 +55,14 @@ const createBug = async (userId, projectIdRaw, bugData) => {
   if (!allowedStatuses.includes(status)) {
     throw new AppError(`Status must be one of: ${allowedStatuses.join(', ')}`, 400);
   }
+  if (bugData.screenshot && typeof bugData.screenshot === 'string') {
+  const base64String = bugData.screenshot.split(',').pop();
+  
+    bugData.screenshot = Buffer.from(base64String, 'base64');
+    if (!Buffer.isBuffer(bugData.screenshot) || bugData.screenshot.length === 0) {
+    throw new AppError('Invalid screenshot image format', 400);
+  }
+}
 
   const bug = {
     ...bugData,
@@ -124,7 +132,7 @@ const deleteBug = async (user, projectIdRaw, bugIdRaw) => {
 
   const deletedBug = await BugHandler.deleteBug(userId, projectId, bugId);
   if (!deletedBug) {
-    throw new AppError('Bug doesn’t exist', 400);
+    throw new AppError('Bug doesn\'t exist', 400);
   }
 
   return deletedBug;

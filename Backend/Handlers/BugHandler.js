@@ -1,18 +1,26 @@
 import { Bug, Project, sequelize } from '../Models/index.js';
 import { Op, fn, col, where } from 'sequelize';
 
-const getBugsByManager = async (managerId, projectId) => {
+const getBugsByManager = async (managerId, projectId, searchTerm = null) => {
   const project = await Project.findOne({
     where: { id: projectId, created_by: managerId }
   });
   if (!project) return [];
 
+  const whereClause = { project_id: projectId };
+
+  if (searchTerm && searchTerm.trim() !== '') {
+    whereClause[Op.or] = [
+      { title: { [Op.iLike]: `%${searchTerm.trim()}%` } }
+    ];
+  }
+
   return await Bug.findAll({
-    where: { project_id: projectId }
+    where: whereClause
   });
 };
 
-const getBugsByQA = async (userId, projectId) => {
+const getBugsByQA = async (userId, projectId, searchTerm = null) => {
   const userProject = await sequelize.query(
     'SELECT 1 FROM users_projects WHERE user_id = :userId AND project_id = :projectId',
     {
@@ -23,15 +31,23 @@ const getBugsByQA = async (userId, projectId) => {
 
   if (userProject.length === 0) return [];
 
+  const whereClause = {
+    project_id: projectId,
+    created_by: userId
+  };
+
+  if (searchTerm && searchTerm.trim() !== '') {
+    whereClause[Op.or] = [
+      { title: { [Op.iLike]: `%${searchTerm.trim()}%` } }
+    ];
+  }
+
   return await Bug.findAll({
-    where: {
-      project_id: projectId,
-      created_by: userId
-    }
+    where: whereClause
   });
 };
 
-const getBugsByDeveloper = async (userId, projectId) => {
+const getBugsByDeveloper = async (userId, projectId, searchTerm = null) => {
   const userProject = await sequelize.query(
     'SELECT 1 FROM users_projects WHERE user_id = :userId AND project_id = :projectId',
     {
@@ -42,11 +58,19 @@ const getBugsByDeveloper = async (userId, projectId) => {
 
   if (userProject.length === 0) return [];
 
+  const whereClause = {
+    project_id: projectId,
+    assigned_to: userId
+  };
+
+  if (searchTerm && searchTerm.trim() !== '') {
+    whereClause[Op.or] = [
+      { title: { [Op.iLike]: `%${searchTerm.trim()}%` } }
+    ];
+  }
+
   return await Bug.findAll({
-    where: {
-      project_id: projectId,
-      assigned_to: userId
-    }
+    where: whereClause
   });
 };
 

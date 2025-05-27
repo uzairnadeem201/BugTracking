@@ -7,8 +7,10 @@ const getBugsByProject = catchAsync(async (req, res) => {
   const user = req.user;
   const rawProjectId = req.params.id;
   const projectId = parseInt(rawProjectId, 10);
+  const { search } = req.query;
+  
   console.log(projectId)
-  console.log(projectId,user);
+  console.log(projectId, user);
 
   if (!user) {
     return res.status(400).json({
@@ -20,25 +22,26 @@ const getBugsByProject = catchAsync(async (req, res) => {
     throw new AppError('Invalid or missing project ID.', 400);
   }
 
-  const result = await BugManager.getBugsByProject(user, projectId);
+  const result = await BugManager.getBugsByProject(user, projectId, search);
 
   if (!result || result.data.length === 0) {
     return res.status(200).json({
       success: true,
-      message: 'No bugs found',
+      message: search ? 'No bugs found matching your search' : 'No bugs found',
       data: [],
     });
   }
 
   res.status(200).json({
     success: true,
-    message: 'Bugs retrieved successfully',
+    message: search ? 'Search results retrieved' : 'Bugs retrieved successfully',
     data: result.data,
   });
 });
+
 const createBug = catchAsync(async (req, res) => {
   const user = req.user;              
-  const {projectId,bugData} = req.body;
+  const {projectId, bugData} = req.body;
 
   if (!user || user.role.toLowerCase() !== 'qa') {
     throw new AppError('Only QA can create bugs', 403);
@@ -51,12 +54,13 @@ const createBug = catchAsync(async (req, res) => {
     data: Bug,
   });
 });
+
 const updateBugStatus = catchAsync(async (req, res) => {
   const user = req.user;
-  const { projectId , bugId , status } = req.body;
+  const { projectId, bugId, status } = req.body;
   console.log(projectId);
 
-  const result = await BugManager.updateBugStatus(user, projectId,bugId, status);
+  const result = await BugManager.updateBugStatus(user, projectId, bugId, status);
 
   res.status(200).json({
     success: true,
@@ -64,16 +68,16 @@ const updateBugStatus = catchAsync(async (req, res) => {
     data: result,
   });
 });
-const deleteBug = catchAsync(async(req,res)=>{
+
+const deleteBug = catchAsync(async(req, res) => {
   const user = req.user;
   const {projectId, bugId} = req.body;
-  const result = await BugManager.deleteBug(user,projectId,bugId);
+  const result = await BugManager.deleteBug(user, projectId, bugId);
   res.status(200).json({
     success: true,
     message: 'Bug deleted successfully',
     data: result,
   });
-
 });
 
-export default { getBugsByProject, createBug , updateBugStatus,deleteBug };
+export default { getBugsByProject, createBug, updateBugStatus, deleteBug };

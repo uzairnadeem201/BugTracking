@@ -1,16 +1,25 @@
-import { User } from '../Models/index.js';
+import { sequelize } from '../Models/index.js';
+import { QueryTypes } from 'sequelize';
 
-const getDeveloper = async () => {
-  return await User.findAll({
-    where: { role: 'Developer' },
-    attributes: ['id', 'name', 'email']
-  });
+const getUsersByProjectAndRole = async (projectId, role) => {
+  const users = await sequelize.query(
+    `
+    SELECT u.id, u.name, u.email
+    FROM users u
+    JOIN users_projects up ON u.id = up.user_id
+    WHERE up.project_id = :projectId
+      AND u.role = :role
+    `,
+    {
+      replacements: { projectId, role },
+      type: QueryTypes.SELECT,
+    }
+  );
+
+  return users;
 };
-const getQA = async () => {
-    return await User.findAll({
-      where: { role: 'QA' },
-      attributes: ['id', 'name', 'email']
-    });
-  };
 
-export default {getDeveloper,getQA};
+export default {
+  getUsersByProjectAndRole,
+};
+
