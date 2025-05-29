@@ -3,10 +3,10 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #f8f9fa;
     border-top: 1px solid #e9ecef;
-    padding: 16px 24px;
+    padding: 16px 7%;
     z-index: 1000;
+    background-color: white;
   }
   
   .footerContent {
@@ -44,21 +44,20 @@
     min-width: 70px !important;
     height: 32px;
   }
-  
-  .pagination {
+    .pagination {
     display: flex;
     align-items: center;
   }
   
   .pagination .MuiPaginationItem-root {
-    color: #6c757d;
+    color: #185b96;
     min-width: 32px;
     height: 32px;
   }
   
   .pagination .Mui-selected {
     background-color: #0084ff !important;
-    color: white !important;
+    color: rgb(255, 255, 255) !important;
   }
   
   @media (max-width: 768px) {

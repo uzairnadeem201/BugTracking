@@ -3,6 +3,7 @@ import ProjectBar from "../components/ProjectBar"
 import Projects from "../components/Projects"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
+import styles from "./ProjectsPage.module.css"
 
 function ProjectsPage() {
   const [newProject, setNewProject] = useState(null)
@@ -19,7 +20,7 @@ function ProjectsPage() {
 
 
   return (
-    <div>
+    <div className={styles.pageContainer}>
       <Header/>
       <ProjectBar onProjectCreated={handleProjectCreated} onSearch={handleSearch} />
       <Projects

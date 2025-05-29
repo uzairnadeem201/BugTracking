@@ -73,7 +73,7 @@
 
 .projectTasks {
   font-size: 14px;
-  color: #6b7280;
+  color: #0c0c0c;
   margin: 0;
   font-weight: 500;
 }
@@ -161,4 +161,10 @@
   font-size: 16px;
   color: #6b7280;
   margin: 0;
+}
+.taskdone{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color:#6b7280
 }

@@ -6,16 +6,28 @@
   margin-left: 9%;
   margin-right: 9%;
   padding-bottom: 16px;
-  border-bottom: 1px solid #e9ecef;
+  border-top: 1px solid #dcdcdc;
+   border-bottom: 1px solid #dcdcdc;
+   border-left: 6px solid #08703c;
+   padding-left: 10px;
   flex-wrap: wrap;
   gap: 16px;
-  margin-top: 80px;
+  margin-top: 65px;
+  padding-top: 2%;
+
 }
 
 .titleSection {
   display: flex;
   flex-direction: column;
 }
+.searchField {
+  width: 450px;
+  background-color: #e2e2e2 !important;
+  border-radius: 4px;
+}
+
+
 
 .title {
   font-weight: 600 !important;

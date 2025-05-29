@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import config from './Config.js';  // note the .js extension in ESM
+import config from './Config.js'; 
 
 const env = process.env.NODE_ENV || 'development';
 

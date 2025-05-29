@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import {
   Typography,
   TextField,
@@ -7,21 +7,24 @@ import {
   Box,
   IconButton,
   Breadcrumbs,
-  Divider
-} from "@mui/material"
-import SearchIcon from "@mui/icons-material/Search"
-import AddIcon from "@mui/icons-material/Add"
-import MoreVertIcon from "@mui/icons-material/MoreVert"
-import SettingsIcon from "@mui/icons-material/Settings"
-import NavigateNextIcon from "@mui/icons-material/NavigateNext"
-import ViewListIcon from "@mui/icons-material/ViewList"
-import ViewModuleIcon from "@mui/icons-material/ViewModule"
-import ViewCompactIcon from "@mui/icons-material/ViewCompact"
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
-import Link from "@mui/material/Link"
+  Divider,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import AddIcon from "@mui/icons-material/Add";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import SettingsIcon from "@mui/icons-material/Settings";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import ViewListIcon from "@mui/icons-material/ViewList";
+import ViewModuleIcon from "@mui/icons-material/ViewModule";
+import ViewCompactIcon from "@mui/icons-material/ViewCompact";
+import GridViewIcon from "@mui/icons-material/GridView";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import BugsIcon from "../images/Badge.png";
+import Link from "@mui/material/Link";
 
-import styles from "./BugsBar.module.css"
-import CreateBug from "./CreateBug"
+import styles from "./BugsBar.module.css";
+import CreateBug from "./CreateBug";
 
 function BugsBar({
   projectName = "Analyst UI System",
@@ -30,49 +33,57 @@ function BugsBar({
   onBugCreated,
   onSearch,
 }) {
-  const [createBugOpen, setCreateBugOpen] = useState(false)
-  const [userRole, setUserRole] = useState("")
-  const [searchTerm, setSearchTerm] = useState("")
+  const [createBugOpen, setCreateBugOpen] = useState(false);
+  const [userRole, setUserRole] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeView, setActiveView] = useState(0);
 
   useEffect(() => {
-    const userString = localStorage.getItem("user")
+    const userString = localStorage.getItem("user");
     if (userString) {
       try {
-        const userData = JSON.parse(userString)
-        if (userData.role) setUserRole(userData.role)
+        const userData = JSON.parse(userString);
+        if (userData.role) setUserRole(userData.role);
       } catch (error) {
-        console.error("Error parsing user data from localStorage:", error)
+        console.error("Error parsing user data from localStorage:", error);
       }
     }
-  }, [])
+  }, []);
 
   const handleSearchChange = (event) => {
-    const value = event.target.value
-    setSearchTerm(value)
+    const value = event.target.value;
+    setSearchTerm(value);
     if (onSearch) {
-      onSearch(value)
+      onSearch(value);
     }
-  }
+  };
 
   const handleNewTask = () => {
-    setCreateBugOpen(true)
-  }
+    setCreateBugOpen(true);
+  };
 
   const handleCloseCreateBug = () => {
-    setCreateBugOpen(false)
-  }
+    setCreateBugOpen(false);
+  };
 
   const handleBugCreated = (newBug) => {
     if (onBugCreated) {
-      onBugCreated(newBug)
+      onBugCreated(newBug);
     }
-  }
+  };
+
+  const handleViewChange = (viewIndex) => {
+    setActiveView(viewIndex);
+  };
 
   return (
     <>
       <Box className={styles.bugsBar}>
         <Box className={styles.breadcrumbContainer}>
-          <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
+          <Breadcrumbs
+            separator={<NavigateNextIcon fontSize="small" />}
+            aria-label="breadcrumb"
+          >
             <Link underline="hover" color="inherit" href="/projects">
               {breadcrumbText}
             </Link>
@@ -80,16 +91,34 @@ function BugsBar({
           </Breadcrumbs>
         </Box>
         <Box className={styles.titleContainer}>
-          <Typography variant="h4" className={styles.title}>
-            All bugs listing
-          </Typography>
+          <Box className={styles.BugsIcon}>
+            <Typography variant="h4" className={styles.title}>
+              All bugs listing
+            </Typography>
+            <img
+              src={BugsIcon || "/placeholder.svg"}
+              alt="Bugs"
+              style={{ marginTop: "18px", height: "24px", display: "block" }}
+            />
+          </Box>
+
           <Box className={styles.actionButtons}>
-            <IconButton aria-label="settings" className={styles.iconButton}>
+            <Button
+              aria-label="settings"
+              className={styles.iconButton}
+              variant="outlined"
+              size="small"
+            >
               <SettingsIcon />
-            </IconButton>
-            <IconButton aria-label="more" className={styles.iconButton}>
-              <MoreVertIcon />
-            </IconButton>
+            </Button>
+            <Button
+              aria-label="more"
+              className={styles.iconButton}
+              variant="outlined"
+              size="small"
+            >
+              <MoreHorizIcon />
+            </Button>
             {userRole === "QA" && (
               <Button
                 variant="contained"
@@ -97,7 +126,7 @@ function BugsBar({
                 className={styles.newTaskButton}
                 onClick={handleNewTask}
               >
-                New Task
+                New Task Bug
               </Button>
             )}
           </Box>
@@ -119,29 +148,66 @@ function BugsBar({
               ),
             }}
           />
-            <Box className={styles.buttonGroup}>
-              <Button variant="outlined" className={styles.filterButton} endIcon={<KeyboardArrowDownIcon />}>
-                Subtasks
-              </Button>
-              <Button variant="outlined" className={styles.filterButton} endIcon={<KeyboardArrowDownIcon />}>
-                Me
-              </Button>
-              <Button variant="outlined" className={styles.filterButton} endIcon={<KeyboardArrowDownIcon />}>
-                Assignees
-              </Button>
-            </Box>
-            <Box className={styles.viewToggleContainer}>
-              <IconButton className={`${styles.viewButton} ${styles.activeView}`}>
-                <ViewListIcon />
-              </IconButton>
-              <IconButton className={styles.viewButton}>
+          <Box className={styles.buttonGroup}>
+            <Button
+              variant="outlined"
+              className={styles.filterButton}
+              endIcon={<KeyboardArrowDownIcon />}
+            >
+              Subtasks
+            </Button>
+            <Button
+              variant="outlined"
+              className={styles.filterButton}
+              endIcon={<KeyboardArrowDownIcon />}
+            >
+              Me
+            </Button>
+            <Button
+              variant="outlined"
+              className={styles.filterButton}
+              endIcon={<KeyboardArrowDownIcon />}
+            >
+              Assignees
+            </Button>
+          </Box>
+          <Box className={styles.viewToggleContainer}>
+              <IconButton
+                className={`${styles.viewButton} ${styles.middleButton} ${
+                  activeView === 1 ? styles.activeView : ""
+                }`}
+                onClick={() => handleViewChange(1)}
+              >
                 <ViewCompactIcon />
               </IconButton>
-              <IconButton className={styles.viewButton}>
+              <IconButton
+                className={`${styles.viewButton} ${styles.middleButton} ${
+                  activeView === 2 ? styles.activeView : ""
+                }`}
+                onClick={() => handleViewChange(2)}
+              >
                 <ViewModuleIcon />
               </IconButton>
-            </Box>
-            
+              <Box className={styles.viewToggleBox}>
+                 <IconButton
+                className={`${styles.viewButton} ${styles.lastButton} ${
+                  activeView === 3 ? styles.activeView : ""
+                }`}
+                onClick={() => handleViewChange(3)}
+              >
+                <GridViewIcon />
+              </IconButton>
+              <IconButton
+                className={`${styles.viewButton} ${styles.firstButton} ${
+                  activeView === 0 ? styles.activeView : ""
+                }`}
+                onClick={() => handleViewChange(0)}
+              >
+                <ViewListIcon />
+              </IconButton>
+              </Box>
+             
+          </Box>
         </Box>
       </Box>
       <CreateBug
@@ -151,10 +217,7 @@ function BugsBar({
         onBugCreated={handleBugCreated}
       />
     </>
-  )
+  );
 }
 
-export default BugsBar
-
-
-
+export default BugsBar;

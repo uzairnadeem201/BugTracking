@@ -10,7 +10,6 @@ import {
   IconButton,
   CircularProgress,
 } from "@mui/material"
-import CloseIcon from "@mui/icons-material/Close"
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
 import axios from "axios"
 import styles from "./CreateProject.module.css"

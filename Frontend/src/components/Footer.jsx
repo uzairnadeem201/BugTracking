@@ -1,10 +1,16 @@
-import { Typography, Pagination, Select, MenuItem, Box } from "@mui/material"
-import styles from "./Footer.module.css"
+import { Typography, Pagination, Select, MenuItem, Box } from "@mui/material";
+import styles from "./Footer.module.css";
 
-function Footer({ totalEntries = 50, entriesPerPage = 10, currentPage = 1, onPageChange, onEntriesPerPageChange }) {
-  const totalPages = Math.ceil(totalEntries / entriesPerPage)
-  const startEntry = (currentPage - 1) * entriesPerPage + 1
-  const endEntry = Math.min(currentPage * entriesPerPage, totalEntries)
+function Footer({
+  totalEntries = 50,
+  entriesPerPage = 10,
+  currentPage = 1,
+  onPageChange,
+  onEntriesPerPageChange,
+}) {
+  const totalPages = Math.ceil(totalEntries / entriesPerPage);
+  const startEntry = (currentPage - 1) * entriesPerPage + 1;
+  const endEntry = Math.min(currentPage * entriesPerPage, totalEntries);
   return (
     <Box className={styles.footer}>
       <div className={styles.footerContent}>
@@ -38,11 +44,26 @@ function Footer({ totalEntries = 50, entriesPerPage = 10, currentPage = 1, onPag
             className={styles.pagination}
             siblingCount={1}
             boundaryCount={1}
+            sx={{
+              "& .MuiPaginationItem-root.Mui-selected": {
+                backgroundColor: "#0084ff",
+                color: "#ffffff",
+              },
+              '& .MuiPaginationItem-root[data-page="1"].Mui-selected': {
+                backgroundColor: "#0084ff",
+                color: "#ffffff",
+              },
+              "& .MuiPaginationItem-previousNext": {
+                color: "#fffff",
+                borderColor: "#808080",
+                backgroundColor:"#808080"
+              },
+            }}
           />
         </Box>
       </div>
     </Box>
-  )
+  );
 }
 
-export default Footer
+export default Footer;

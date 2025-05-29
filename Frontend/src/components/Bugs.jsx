@@ -357,7 +357,7 @@ function Bugs({ projectId, newBug, searchTerm }) {
         onClose={handleActionClose}
         className={styles.statusMenu}
       >
-        {userRole === "QA" && (
+        {userRole.toLowerCase()=== "qa" && (
           <MenuItem
             onClick={handleDeleteBug}
             className={styles.menuItem}
@@ -377,7 +377,7 @@ function Bugs({ projectId, newBug, searchTerm }) {
           </MenuItem>
         )}
 
-        {userRole === "Developer" && (
+        {userRole.toLowerCase() === "developer" && (
           <>
             <MenuItem
               className={styles.menuItem}

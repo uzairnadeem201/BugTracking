@@ -1,17 +1,19 @@
-import { Box, Typography, Paper} from "@mui/material"
-import InfoIcon from "@mui/icons-material/Info"
-import BusinessIcon from "@mui/icons-material/Business"
-import BugReportIcon from "@mui/icons-material/BugReport"
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
-import styles from "./RoleSelection.module.css"
-import { Link, useNavigate } from "react-router-dom"
+import { Box, Typography, Paper } from "@mui/material";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ManagerIcon from "../images/user.png";
+import DeveloperIcon from "../images/briefcase.png";
+import QAIcon from "../images/freelance.png";
+import PersonIcon from "@mui/icons-material/Person";
+import styles from "./RoleSelection.module.css";
+import { Link, useNavigate } from "react-router-dom";
 
 function RoleSelection() {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleRoleSelect = (role) => {
-    navigate(`/signup?role=${role}`, { state: { fromRoleSelection: true }})
-  }
+    navigate(`/signup?role=${role}`, { state: { fromRoleSelection: true } });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -29,62 +31,75 @@ function RoleSelection() {
         </Typography>
 
         <Typography variant="body1" className={styles.subtitle}>
-          To begin this journey, tell us what type of account you'd be opening
+          To begin this journey, tell us what type of account <br /> you'd be opening.
         </Typography>
-
-        <Paper elevation={0} className={styles.optionCard} onClick={() => handleRoleSelect("Manager")}>
+        <Paper
+          elevation={0}
+          className={styles.optionCard}
+          onClick={() => handleRoleSelect("Manager")}
+        >
           <Box className={styles.iconContainer}>
-            <InfoIcon />
+            <PersonIcon className={styles.managerIcon} />
           </Box>
-
           <div className={styles.optionText}>
             <Typography variant="h6" className={styles.optionTitle}>
               Manager
             </Typography>
             <Typography variant="body2" className={styles.optionDescription}>
-              Sign-in as a manager to manage the tasks and bugs
+              Signup as a manager to manage <br /> the tasks and bugs
             </Typography>
           </div>
-
-          <ArrowForwardIcon color="primary" />
+          <div className={styles.arrowIcon}>
+            <ArrowForwardIcon color="primary" />
+          </div>
         </Paper>
-
-        <Paper elevation={0} className={styles.optionCard} onClick={() => handleRoleSelect("Developer")}>
+        <Paper
+          elevation={0}
+          className={styles.optionCard}
+          onClick={() => handleRoleSelect("Developer")}
+        >
           <Box className={styles.iconContainer}>
-            <BusinessIcon />
+            <img
+              src={DeveloperIcon}
+              alt="Developer"
+              className={styles.iconImage}
+            />
           </Box>
-
           <div className={styles.optionText}>
             <Typography variant="h6" className={styles.optionTitle}>
               Developer
             </Typography>
             <Typography variant="body2" className={styles.optionDescription}>
-              Sign-in as a Developer to assign the relevant task to QA
+              Signup as a Developer to <br /> assign the relevant task to QA
             </Typography>
           </div>
-
-          <ArrowForwardIcon color="primary" />
+          <div className={styles.arrowIcon}>
+            <ArrowForwardIcon color="primary" />
+          </div>
         </Paper>
-
-        <Paper elevation={0} className={styles.optionCard} onClick={() => handleRoleSelect("QA")}>
+        <Paper
+          elevation={0}
+          className={styles.optionCard}
+          onClick={() => handleRoleSelect("QA")}
+        >
           <Box className={styles.iconContainer}>
-            <BugReportIcon />
+            <img src={QAIcon} alt="QA" className={styles.iconImage} />
           </Box>
-
           <div className={styles.optionText}>
             <Typography variant="h6" className={styles.optionTitle}>
               QA
             </Typography>
             <Typography variant="body2" className={styles.optionDescription}>
-              Sign-in as a QA to create the bugs and report in tasks
+              Signup as a QA to create the <br /> bugs and report in tasks
             </Typography>
           </div>
-
-          <ArrowForwardIcon color="primary" />
+          <div className={styles.arrowIcon}>
+            <ArrowForwardIcon color="primary" />
+          </div>
         </Paper>
       </div>
     </div>
-  )
+  );
 }
 
-export default RoleSelection
+export default RoleSelection;

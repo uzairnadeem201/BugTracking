@@ -1,91 +1,88 @@
 .container {
-    width: 70%;
-    margin-left: 30%;
-    padding: 2rem;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .formContainer {
-    max-width: 500px;
-    width: 100%;
-    padding: 2rem 0;
-  }
-  
-  .title {
-    color: #1e3a8a;
-    font-weight: 600 !important;
-    margin-bottom: 0.5rem !important;
-  }
-  
-  .subtitle {
-    color: #64748b;
-    margin-bottom: 2rem !important;
-  }
-  
-  .formField {
-    margin-bottom: 1rem;
-  }
-  
-  .input {
-    background-color: #f8fafc;
-  }
-  
-  .fieldIcon {
-    color: #94a3b8;
-  }
-  
-  .signupButton {
-    background-color: #0284c7 !important;
-    width: 32% !important;
-    text-align: left !important;
-    color: white !important;
-    padding: 0.75rem 1rem !important;
-    border-radius: 12px !important;
-    text-transform: none !important;
-    font-size: 1rem !important;
-    margin-top: 1rem !important;
-    margin-bottom: 1rem !important;
-  }
-  
-  .loginContainer {
-    margin-top: 3%;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .accountText {
-    color: #64748b;
-  }
-  
-  .loginLink {
-    color: #0284c7;
-    text-decoration: none;
-    font-weight: 500;
-    cursor: pointer;
-  }
-  .roleIndicator {
-    background-color: #f1f5f9;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    color: #64748b;
-    display: none;
-  }
-  
-  .errorAlert {
-    margin-bottom: 1rem !important;
-  }
-  @media (max-width: 768px) {
-    .container {
-      width: 100%;
-      margin-left: 0;
-      padding: 1.5rem;
-      margin-top: 30vh;
-    }
-  }
+  width: 70%;
+  margin-left: 30%;
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.formContainer {
+  max-width: 500px;
+  width: 100%;
+  padding: 2rem 0;
+}
+
+.title {
+  color: #1e3a8a;
+  font-weight: 600 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.subtitle {
+  color: #64748b;
+  margin-bottom: 2rem !important;
+}
+
+.formField {
+  margin-bottom: 1rem;
+}
+
+.input {
+  background-color: #88898a;
+}
+
+
+.fieldIcon {
+  color: #94a3b8;
+}
+
+
+.signupButton {
+  background-color: #0284c7 !important;
+  width: 32% !important;
+  gap: 16px;
+  text-align: left !important;
+  color: white !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 12px !important;
+  text-transform: none !important;
+  font-size: 1rem !important;
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.errorAlert {
+  margin-bottom: 1rem;
+}
+
+.loginContainer {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accountText {
+  color: #64748b;
+}
+
+.loginLink {
+  color: #0284c7;
+  text-decoration: none;
+  gap:50px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.loginLink:hover {
+  text-decoration: underline;
+}
+.loginContainer {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
   

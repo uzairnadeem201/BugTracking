@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import Header from "../components/Header"
-import Footer from "../components/Footer"
+import BugsFooter from "../components/BugsFooter.jsx"
 import BugsBar from "../components/BugsBar"
 import Bugs from "../components/Bugs"
 import axios from "axios"
@@ -48,7 +48,7 @@ function BugsPage() {
         onSearch={handleSearch}
       />
       <Bugs projectId={projectId} newBug={newBug} searchTerm={searchTerm} />
-      <Footer />
+      <BugsFooter />
     </>
   )
 }

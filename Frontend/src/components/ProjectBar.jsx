@@ -1,53 +1,59 @@
-import { useState, useEffect } from "react"
-import { Typography, TextField, Button, InputAdornment, Box, IconButton } from "@mui/material"
-import SearchIcon from "@mui/icons-material/Search"
-import AddIcon from "@mui/icons-material/Add"
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
-import CreateProject from "./CreateProject"
-import styles from "./ProjectBar.module.css"
-import ProjectIcon from "../images/ProjectIcon.png"
+import { useState, useEffect } from "react";
+import {
+  Typography,
+  TextField,
+  Button,
+  InputAdornment,
+  Box,
+  IconButton,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import AddIcon from "@mui/icons-material/Add";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import CreateProject from "./CreateProject";
+import styles from "./ProjectBar.module.css";
+import ProjectIcon from "../images/ProjectIcon.png";
 
-function ProjectBar({ onProjectCreated, onSearch}) {
-  const [userRole, setUserRole] = useState("")
-  const [createModalOpen, setCreateModalOpen] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
+function ProjectBar({ onProjectCreated, onSearch }) {
+  const [userRole, setUserRole] = useState("");
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    const userString = localStorage.getItem("user")
+    const userString = localStorage.getItem("user");
     if (userString) {
       try {
-        const userData = JSON.parse(userString)
+        const userData = JSON.parse(userString);
         if (userData.role) {
-          setUserRole(userData.role)
+          setUserRole(userData.role);
         }
       } catch (error) {
-        console.error("Error parsing user data:", error)
+        console.error("Error parsing user data:", error);
       }
     }
-  }, [])
+  }, []);
 
   const handleSearchChange = (event) => {
-    const value = event.target.value
-    setSearchTerm(value)
+    const value = event.target.value;
+    setSearchTerm(value);
     if (onSearch) {
-      onSearch(value)
+      onSearch(value);
     }
-  }
+  };
 
   const handleAddProject = () => {
-    setCreateModalOpen(true)
-  }
+    setCreateModalOpen(true);
+  };
 
   const handleCloseModal = () => {
-    setCreateModalOpen(false)
-  }
+    setCreateModalOpen(false);
+  };
 
   const handleProjectCreated = (newProject) => {
     if (onProjectCreated) {
-      onProjectCreated(newProject)
+      onProjectCreated(newProject);
     }
-  }
-
+  };
 
   return (
     <>
@@ -75,36 +81,54 @@ function ProjectBar({ onProjectCreated, onSearch}) {
                   <SearchIcon className={styles.searchIcon} />
                 </InputAdornment>
               ),
+              
             }}
           />
 
-          {userRole === "Manager" && (
-            <Button variant="contained" startIcon={<AddIcon />} className={styles.addButton} onClick={handleAddProject}>
+          {userRole.toLowerCase() === "manager" && (
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              className={styles.addButton}
+              onClick={handleAddProject}
+            >
               Add New Project
             </Button>
           )}
 
           <Box className={styles.dropdownsContainer}>
-            <Button className={styles.sortButton} endIcon={<KeyboardArrowDownIcon />}>
+            <Button
+              className={styles.sortButton}
+              endIcon={<KeyboardArrowDownIcon />}
+            >
               Sort by
             </Button>
 
-            <Button className={styles.projectButton} endIcon={<KeyboardArrowDownIcon />}>
+            <Button
+              className={styles.projectButton}
+              endIcon={<KeyboardArrowDownIcon />}
+            >
               My Project
             </Button>
 
             <IconButton className={styles.IconButton}>
-              <img src={ProjectIcon || "/placeholder.svg"} alt="Project Icon" className={styles.customIcon} />
+              <img
+                src={ProjectIcon || "/placeholder.svg"}
+                alt="Project Icon"
+                className={styles.customIcon}
+              />
             </IconButton>
           </Box>
         </Box>
       </Box>
 
-      <CreateProject open={createModalOpen} onClose={handleCloseModal} onProjectCreated={handleProjectCreated} />
+      <CreateProject
+        open={createModalOpen}
+        onClose={handleCloseModal}
+        onProjectCreated={handleProjectCreated}
+      />
     </>
-  )
+  );
 }
 
-export default ProjectBar
-
-
+export default ProjectBar;

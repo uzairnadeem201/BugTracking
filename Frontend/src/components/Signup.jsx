@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -7,17 +7,77 @@ import {
   Typography,
   InputAdornment,
   Alert,
+  Divider,
 } from "@mui/material";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Divider from "@mui/material/Divider";
 import CryptoJS from "crypto-js";
 import styles from "./Signup.module.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+
+function FloatingLabelInput({
+  label,
+  name,
+  value,
+  onChange,
+  onBlur,
+  error,
+  helperText,
+  InputProps,
+  type = "text",
+  required = false,
+}) {
+  const [focused, setFocused] = useState(false);
+  const trimmedValue = (value || "").trim();
+  const showLabel = focused || trimmedValue.length > 0;
+
+  return (
+    <TextField
+      fullWidth
+      variant="outlined"
+      name={name}
+      value={value}
+      onChange={onChange}
+      onBlur={(e) => {
+        setFocused(false);
+        onBlur && onBlur(e);
+      }}
+      onFocus={() => setFocused(true)}
+      label={showLabel ? label : ""}
+      placeholder={showLabel ? "" : label}
+      error={error}
+      helperText={helperText}
+      type={type}
+      required={required}
+      InputProps={{
+        ...InputProps,
+        style: {
+          ...(InputProps?.style || {}),
+          backgroundColor: showLabel ? "#ffffff" : "#f1f3f5",
+          transition: "background-color 0.3s ease",
+        },
+      }}
+      sx={{
+        "& .MuiOutlinedInput-root": {
+          "& fieldset": {
+            borderColor: "#ccc",
+            transition: "border-color 0.3s",
+          },
+          "&:hover fieldset": {
+            borderColor: "#1976d2",
+          },
+          "&.Mui-focused fieldset": {
+            borderColor: "#1976d2",
+            borderWidth: 2,
+          },
+        },
+      }}
+    />
+  );
+}
 
 function Signup() {
   const ENCRYPTION_KEY = "key";
@@ -105,7 +165,6 @@ function Signup() {
     validateOnChange: true,
     onSubmit: async (values) => {
       setError("");
-
       await formik.validateForm();
       formik.setTouched({
         name: true,
@@ -127,6 +186,7 @@ function Signup() {
           values.password,
           ENCRYPTION_KEY
         ).toString();
+
         const postData = {
           ...values,
           name: values.name.trim(),
@@ -172,11 +232,6 @@ function Signup() {
         <Typography variant="body1" className={styles.subtitle}>
           Please fill your information below
         </Typography>
-        {formik.values.role && (
-          <div className={styles.roleIndicator}>
-            Signing up as: {formik.values.role}
-          </div>
-        )}
 
         {error && (
           <Alert severity="error" className={styles.errorAlert}>
@@ -186,12 +241,14 @@ function Signup() {
 
         <form onSubmit={formik.handleSubmit} noValidate>
           <div className={styles.formField}>
-            <TextField
-              fullWidth
+            <FloatingLabelInput
               name="name"
-              placeholder="Name"
-              variant="outlined"
-              className={styles.input}
+              label="Name"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -199,30 +256,14 @@ function Signup() {
                   </InputAdornment>
                 ),
               }}
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
               required
             />
           </div>
 
           <div className={styles.formField}>
-            <TextField
-              fullWidth
+            <FloatingLabelInput
               name="phonenumber"
-              placeholder="Mobile number"
-              variant="outlined"
-              className={styles.input}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <PhoneIphoneIcon className={styles.fieldIcon} />
-                  </InputAdornment>
-                ),
-                inputMode: "numeric",
-              }}
+              label="Mobile number"
               value={formik.values.phonenumber}
               onChange={(e) => {
                 const digitsOnly = e.target.value.replace(/\D/g, "");
@@ -235,17 +276,27 @@ function Signup() {
               helperText={
                 formik.touched.phonenumber && formik.errors.phonenumber
               }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PhoneIphoneIcon className={styles.fieldIcon} />
+                  </InputAdornment>
+                ),
+                inputMode: "numeric",
+              }}
               required
             />
           </div>
 
           <div className={styles.formField}>
-            <TextField
-              fullWidth
+            <FloatingLabelInput
               name="email"
-              placeholder="E-mail"
-              variant="outlined"
-              className={styles.input}
+              label="E-mail"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -253,24 +304,21 @@ function Signup() {
                   </InputAdornment>
                 ),
               }}
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
               type="email"
               required
             />
           </div>
 
           <div className={styles.formField}>
-            <TextField
-              fullWidth
+            <FloatingLabelInput
               name="password"
+              label="Password"
               type="password"
-              placeholder="Password"
-              variant="outlined"
-              className={styles.input}
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -278,11 +326,6 @@ function Signup() {
                   </InputAdornment>
                 ),
               }}
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
               required
             />
           </div>
@@ -291,27 +334,35 @@ function Signup() {
             type="submit"
             variant="contained"
             className={styles.signupButton}
-            endIcon={<ArrowForwardIcon />}
             disabled={loading}
+            endIcon={
+              <Typography
+                variant="h6"
+                component="span"
+                style={{ fontWeight: "bold", color: "inherit" }}
+              >
+                &gt;
+              </Typography>
+            }
           >
-            {loading ? "Signing Up..." : "Sign Up"}
+            {loading ? "Signing up..." : "Sign Up"}
           </Button>
-        </form>
-        <Divider />
 
-        <div className={styles.loginContainer}>
-          <Typography variant="body2" className={styles.accountText}>
-            Already have an account?
-          </Typography>
-          <Typography
-            variant="body2"
-            component={Link}
-            to="/login"
-            className={styles.loginLink}
-          >
-            Login to your account
-          </Typography>
-        </div>
+          <Divider className={styles.divider} />
+
+          <div className={styles.loginContainer}>
+            <Typography variant="body2" color="text.secondary">
+              Already have an account?{" "}
+            </Typography>
+            <Link
+              to={`/login?role=${role}`}
+              state={{ fromSignup: true }}
+              className={styles.loginLink}
+            >
+              Login to your account
+            </Link>
+          </div>
+        </form>
       </div>
     </div>
   );
