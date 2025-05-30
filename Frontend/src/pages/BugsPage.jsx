@@ -40,7 +40,7 @@ function BugsPage() {
 
   return (
     <>
-      <Header />
+      <Header background="#ffffff" />
       <BugsBar
         projectName={projectName}
         projectId={projectId}

@@ -20,7 +20,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { FaSearch, FaClipboardList, FaTools, FaUsers } from "react-icons/fa"
 import MainIcon from "../images/MainIcon.png"
 
-function Header() {
+function Header({ background = "white" }) {
   const navigate = useNavigate()
   const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null)
   const userString = localStorage.getItem("user")
@@ -46,7 +46,7 @@ function Header() {
   }
 
   return (
-    <AppBar position="fixed" className={styles.appBar}>
+    <AppBar position="fixed" className={styles.appBar} elevation={0} style={{ backgroundColor: background }}>
       <Toolbar className={styles.toolbar}>
         <div
           className={styles.logoContainer}

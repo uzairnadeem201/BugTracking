@@ -5,8 +5,6 @@ function Footer({
   totalEntries = 50,
   entriesPerPage = 10,
   currentPage = 1,
-  onPageChange,
-  onEntriesPerPageChange,
 }) {
   const totalPages = Math.ceil(totalEntries / entriesPerPage);
   const startEntry = (currentPage - 1) * entriesPerPage + 1;

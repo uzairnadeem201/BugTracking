@@ -10,10 +10,10 @@ import {
   IconButton,
   CircularProgress,
 } from "@mui/material"
-import CloudUploadIcon from "@mui/icons-material/CloudUpload"
 import axios from "axios"
 import styles from "./CreateProject.module.css"
 import { Formik, Form, Field } from "formik"
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import * as Yup from "yup"
 
 function CreateProject({ open, onClose, onProjectCreated }) {
@@ -186,9 +186,9 @@ function CreateProject({ open, onClose, onProjectCreated }) {
                     </>
                   ) : (
                     <>
-                      <CloudUploadIcon className={styles.uploadIcon} />
+                      <AddPhotoAlternateIcon className={styles.uploadIcon} />
                       <Typography variant="body2" className={styles.uploadText}>
-                        Upload project photo
+                        Upload project <br/> photo
                       </Typography>
                     </>
                   )}

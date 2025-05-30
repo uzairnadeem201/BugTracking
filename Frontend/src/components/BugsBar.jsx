@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import SettingsIcon from "@mui/icons-material/Settings";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
@@ -79,6 +78,7 @@ function BugsBar({
   return (
     <>
       <Box className={styles.bugsBar}>
+        {/* Breadcrumbs */}
         <Box className={styles.breadcrumbContainer}>
           <Breadcrumbs
             separator={<NavigateNextIcon fontSize="small" />}
@@ -90,6 +90,8 @@ function BugsBar({
             <Typography color="text.primary">{projectName}</Typography>
           </Breadcrumbs>
         </Box>
+
+        {/* Title & Action Buttons */}
         <Box className={styles.titleContainer}>
           <Box className={styles.BugsIcon}>
             <Typography variant="h4" className={styles.title}>
@@ -101,7 +103,6 @@ function BugsBar({
               style={{ marginTop: "18px", height: "24px", display: "block" }}
             />
           </Box>
-
           <Box className={styles.actionButtons}>
             <Button
               aria-label="settings"
@@ -131,47 +132,51 @@ function BugsBar({
             )}
           </Box>
         </Box>
+
         <Divider className={styles.divider} />
+
+        {/* Search Filter Bar with nested inner Box */}
         <Box className={styles.searchFilterContainer}>
-          <TextField
-            placeholder="Search bugs..."
-            variant="outlined"
-            size="small"
-            className={styles.searchField}
-            value={searchTerm}
-            onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon className={styles.searchIcon} />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Box className={styles.buttonGroup}>
-            <Button
+          <Box className={styles.innerFilterBox}>
+            <TextField
+              placeholder="Search bugs..."
               variant="outlined"
-              className={styles.filterButton}
-              endIcon={<KeyboardArrowDownIcon />}
-            >
-              Subtasks
-            </Button>
-            <Button
-              variant="outlined"
-              className={styles.filterButton}
-              endIcon={<KeyboardArrowDownIcon />}
-            >
-              Me
-            </Button>
-            <Button
-              variant="outlined"
-              className={styles.filterButton}
-              endIcon={<KeyboardArrowDownIcon />}
-            >
-              Assignees
-            </Button>
-          </Box>
-          <Box className={styles.viewToggleContainer}>
+              size="small"
+              className={styles.searchField}
+              value={searchTerm}
+              onChange={handleSearchChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon className={styles.searchIcon} />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Box className={styles.buttonGroup}>
+              <Button
+                variant="outlined"
+                className={styles.filterButton}
+                endIcon={<KeyboardArrowDownIcon />}
+              >
+                Subtasks
+              </Button>
+              <Button
+                variant="outlined"
+                className={styles.filterButton}
+                endIcon={<KeyboardArrowDownIcon />}
+              >
+                Me
+              </Button>
+              <Button
+                variant="outlined"
+                className={styles.filterButton}
+                endIcon={<KeyboardArrowDownIcon />}
+              >
+                Assignees
+              </Button>
+            </Box>
+            <Box className={styles.viewToggleContainer}>
               <IconButton
                 className={`${styles.viewButton} ${styles.middleButton} ${
                   activeView === 1 ? styles.activeView : ""
@@ -189,24 +194,24 @@ function BugsBar({
                 <ViewModuleIcon />
               </IconButton>
               <Box className={styles.viewToggleBox}>
-                 <IconButton
-                className={`${styles.viewButton} ${styles.lastButton} ${
-                  activeView === 3 ? styles.activeView : ""
-                }`}
-                onClick={() => handleViewChange(3)}
-              >
-                <GridViewIcon />
-              </IconButton>
-              <IconButton
-                className={`${styles.viewButton} ${styles.firstButton} ${
-                  activeView === 0 ? styles.activeView : ""
-                }`}
-                onClick={() => handleViewChange(0)}
-              >
-                <ViewListIcon />
-              </IconButton>
+                <IconButton
+                  className={`${styles.viewButton} ${styles.lastButton} ${
+                    activeView === 3 ? styles.activeView : ""
+                  }`}
+                  onClick={() => handleViewChange(3)}
+                >
+                  <GridViewIcon />
+                </IconButton>
+                <IconButton
+                  className={`${styles.viewButton} ${styles.firstButton} ${
+                    activeView === 0 ? styles.activeView : ""
+                  }`}
+                  onClick={() => handleViewChange(0)}
+                >
+                  <ViewListIcon />
+                </IconButton>
               </Box>
-             
+            </Box>
           </Box>
         </Box>
       </Box>
@@ -221,3 +226,4 @@ function BugsBar({
 }
 
 export default BugsBar;
+

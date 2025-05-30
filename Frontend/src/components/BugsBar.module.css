@@ -1,13 +1,15 @@
 .bugsBar {
-  margin-top: 60px;
+  margin-top: 50px;
   padding: 16px 24px;
   background-color: #ffffff;
   margin-left: 7%;
   margin-right: 7%;
 }
 
-.breadcrumbContainer {
-  margin-bottom: 2px;
+.breadcrumbContainer > * {
+  margin-top: 5%;
+  border-top: 1px solid #ddd;
+  padding: 4px 0; 
 }
 
 .titleContainer {
@@ -54,12 +56,20 @@
 
 .searchFilterContainer {
   display: flex;
+  border-bottom: 1px solid #ddd;
   width: 100%;
   align-items: center;
   justify-content: space-between;
   margin-top: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 5px;
   position: relative;
+}
+.innerFilterBox {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1%;
 }
 
 .searchField {
@@ -88,8 +98,8 @@
 }
 
 .divider {
-  margin: 0 2px !important;
   height: 24px;
+  width: 100%;
 }
 
 .viewToggleContainer {

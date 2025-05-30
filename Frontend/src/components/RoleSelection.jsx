@@ -1,6 +1,5 @@
 import { Box, Typography, Paper } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ManagerIcon from "../images/user.png";
 import DeveloperIcon from "../images/briefcase.png";
 import QAIcon from "../images/freelance.png";
 import PersonIcon from "@mui/icons-material/Person";
@@ -17,7 +16,7 @@ function RoleSelection() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <Typography variant="body1">
+        <Typography variant="body1" className={styles.SignInText}>
           Already have an account?{" "}
           <Link to="/login" className={styles.signInLink}>
             Sign In

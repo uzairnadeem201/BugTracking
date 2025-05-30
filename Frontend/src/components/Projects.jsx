@@ -1,16 +1,22 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { MdBugReport, MdDashboard, MdDevices, MdStorage, MdCode } from "react-icons/md";
+import ProjectIcon1 from '../images/ProjectsIcon/1.png';
+import ProjectIcon2 from '../images/ProjectsIcon/2.png';
+import ProjectIcon3 from '../images/ProjectsIcon/3.png';
+import ProjectIcon4 from '../images/ProjectsIcon/4.png';
+import ProjectIcon5 from '../images/ProjectsIcon/5.png';
+import ProjectIcon6 from '../images/ProjectsIcon/6.png';
 
 import styles from "./Projects.module.css";
 
-const iconComponents = [
-  MdBugReport,
-  MdDashboard,
-  MdDevices,
-  MdStorage,
-  MdCode,
+const imageIcons = [
+  ProjectIcon1,
+  ProjectIcon2,
+  ProjectIcon3,
+  ProjectIcon4,
+  ProjectIcon5,
+  ProjectIcon6,
 ];
 
 function Projects({ newProject, searchTerm }) {
@@ -19,13 +25,12 @@ function Projects({ newProject, searchTerm }) {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const defaultColor = "#4ECDC4";
-  const projectIcons = useMemo(() => {
+  const projectImages = useMemo(() => {
     const map = new Map();
     projects.forEach((project) => {
       if (!map.has(project.id)) {
-        const index = Math.floor(Math.random() * iconComponents.length);
-        map.set(project.id, iconComponents[index]);
+        const index = Math.floor(Math.random() * imageIcons.length);
+        map.set(project.id, imageIcons[index]);
       }
     });
     return map;
@@ -112,33 +117,26 @@ function Projects({ newProject, searchTerm }) {
     <div className={styles.projectsContainer}>
       <div className={styles.projectsGrid}>
         {projects.map((project) => {
-          const Icon = projectIcons.get(project.id);
+          const image = project.picture || projectImages.get(project.id);
+
           return (
             <div
               key={project.id}
               className={styles.projectCard}
               onClick={() => handleProjectClick(project.id)}
             >
-              {project.picture ? (
-                <div className={styles.projectIconContainer}>
-                  <img
-                    src={project.picture}
-                    alt={project.title}
-                    className={styles.projectIconImage}
-                  />
-                </div>
-              ) : (
-                <div className={styles.projectIcon} style={{ backgroundColor: defaultColor }}>
-                  <Icon size={30} color="white" />
-                </div>
-              )}
+              <div className={styles.projectIconContainer}>
+                <img
+                  src={image}
+                  alt={project.title}
+                  className={styles.projectIconImage}
+                />
+              </div>
               <h3 className={styles.projectTitle}>{project.title}</h3>
               <p className={styles.projectDescription}>{project.description}</p>
               <div className={styles.taskdone}>
-                  <p>Task Done:</p>
-                  <p className={styles.projectTasks}>
-                    00/0
-                  </p>
+                <p>Task Done:</p>
+                <p className={styles.projectTasks}>00/0</p>
               </div>
             </div>
           );
@@ -149,6 +147,7 @@ function Projects({ newProject, searchTerm }) {
 }
 
 export default Projects;
+
 
 
 

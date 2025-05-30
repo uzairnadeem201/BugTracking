@@ -1,9 +1,7 @@
 .appBar {
-  background-color: #ffffff00 !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+  /* background-color: #ffffff00 !important; */
   color: #1f1e1e !important;
   height: 64px;
-  background-color: #f8f9fa !important;
   top: 0;
   left: 0;
   right: 0;

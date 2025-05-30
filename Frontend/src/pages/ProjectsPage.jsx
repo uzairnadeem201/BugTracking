@@ -21,7 +21,7 @@ function ProjectsPage() {
 
   return (
     <div className={styles.pageContainer}>
-      <Header/>
+      <Header background="#f8f9fa"/>
       <ProjectBar onProjectCreated={handleProjectCreated} onSearch={handleSearch} />
       <Projects
         newProject={newProject}

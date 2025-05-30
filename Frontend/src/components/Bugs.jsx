@@ -202,7 +202,6 @@ function Bugs({ projectId, newBug, searchTerm }) {
       case "in progress":
         return "#4dabf7";
       case "closed":
-      case "resolved":
         return "#51cf66";
       case "open":
         return "#ff9f43";
@@ -218,7 +217,6 @@ function Bugs({ projectId, newBug, searchTerm }) {
       case "in progress":
         return "#e7f5ff";
       case "closed":
-      case "resolved":
         return "#ebfbee";
       case "open":
         return "#fff4e6";
@@ -369,6 +367,7 @@ function Bugs({ projectId, newBug, searchTerm }) {
                 alignItems: "center",
                 justifyContent: "space-between",
                 width: "100%",
+                gap:"16px",
               }}
             >
               <Typography>Delete</Typography>
@@ -399,7 +398,7 @@ function Bugs({ projectId, newBug, searchTerm }) {
             >
               <Box
                 sx={{
-                  backgroundColor: "#f0f0f0",
+                  backgroundColor: "#fff5f5",
                   px: 1.5,
                   py: 0.5,
                   borderRadius: 1,
@@ -407,7 +406,7 @@ function Bugs({ projectId, newBug, searchTerm }) {
                   "&:hover": { backgroundColor: "#e0e0e0" },
                 }}
               >
-                <Typography sx={{ color: "red", fontWeight: "small" }}>
+                <Typography sx={{ color: "red",fontSize: "0.75rem", fontWeight: "small" }}>
                   Pending
                 </Typography>
               </Box>
@@ -419,7 +418,7 @@ function Bugs({ projectId, newBug, searchTerm }) {
             >
               <Box
                 sx={{
-                  backgroundColor: "#f0f0f0",
+                  backgroundColor: "#E0F7FA",
                   px: 1.5,
                   py: 0.5,
                   borderRadius: 1,
@@ -427,19 +426,19 @@ function Bugs({ projectId, newBug, searchTerm }) {
                   "&:hover": { backgroundColor: "#e0e0e0" },
                 }}
               >
-                <Typography sx={{ color: "blue", fontWeight: "small" }}>
+                <Typography sx={{ color: "blue",fontSize: "0.75rem", fontWeight: "small" }}>
                   In progress
                 </Typography>
               </Box>
             </MenuItem>
 
             <MenuItem
-              onClick={() => handleStatusChange("Resolved")}
+              onClick={() => handleStatusChange("Closed")}
               className={styles.menuItem}
             >
               <Box
                 sx={{
-                  backgroundColor: "#f0f0f0",
+                  backgroundColor: "#E6F4EA",
                   px: 1.5,
                   py: 0.5,
                   borderRadius: 1,
@@ -447,8 +446,8 @@ function Bugs({ projectId, newBug, searchTerm }) {
                   "&:hover": { backgroundColor: "#e0e0e0" },
                 }}
               >
-                <Typography sx={{ color: "green", fontWeight: "small" }}>
-                  Resolved
+                <Typography sx={{ color: "green",fontSize: "0.75rem", fontWeight: "100" }}>
+                  Closed
                 </Typography>
               </Box>
             </MenuItem>
