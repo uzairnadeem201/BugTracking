@@ -92,6 +92,287 @@
   transform: translateX(0);
 }
 
+/*Tablet Query*/
+	@media (min-width: 768px) and (max-width: 1023px){
+     .container {
+    width: 100%;
+    margin-left: 0;
+    padding: 1.5rem; 
+    box-sizing: border-box;
+    min-height: auto;
+  }
+  
+  .header {
+  display: flex;
+  justify-content: flex-end;
+  color: #414141;
+  margin-bottom: 1rem;
+}
+  .signInLink {
+  font-weight: 600;
+  font-size: 1.5rem !important;
+  color: #1976d2;
+  text-decoration: none;
+}
+.SignInText{
+  font-size: 1.5rem !important;
+}
+
+
+.formContainer {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.title {
+  margin-bottom: .75rem !important;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 3.5rem !important;
+
+}
+
+.subtitle {
+  margin-bottom: 100px;
+  font-size: 1.5rem !important;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 1rem !important;
+}
+
+.optionCard {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+
+.iconContainer {
+  background-color: rgba(25, 118, 210, 0.1);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1976d2;
+  margin-right: 1rem;
+}
+
+.optionText {
+  flex: 1;
+}
+
+.optionTitle {
+  margin-bottom: 0.25rem;
+  font-size:1.75rem !important;
+}
+
+.optionDescription {
+  color: rgba(0, 0, 0, 0.6);
+  font-size:1.25rem !important;
+}
+
+.arrowIcon {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(5px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+ }
+
+
+
+/*Mobile Query*/
+
+
+  @media (max-width: 767px){
+    .container {
+    width: 100%;
+    margin-left: 0;
+    padding: 1.5rem; 
+    box-sizing: border-box;
+    min-height: auto;
+  }
+  
+  .header {
+  display: flex;
+  justify-content: flex-end;
+  color: #414141;
+  margin-bottom: 1rem;
+}
+  .signInLink {
+  font-weight: 600;
+  font-size: 1.25rem !important;
+  color: #1976d2;
+  text-decoration: none;
+}
+.SignInText{
+  font-size: 1.25rem !important;
+}
+
+
+.formContainer {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.title {
+  margin-bottom: .75rem !important;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 3rem !important;
+
+}
+
+.subtitle {
+  margin-bottom: 100px;
+  font-size: 1.1rem !important;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 1rem !important;
+}
+
+.optionCard {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+
+.iconContainer {
+  background-color: rgba(25, 118, 210, 0.1);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1976d2;
+  margin-right: 1rem;
+}
+
+.optionText {
+  flex: 1;
+}
+
+.optionTitle {
+  margin-bottom: 0.25rem;
+  font-size:1.5rem !important;
+}
+
+.optionDescription {
+  color: rgba(0, 0, 0, 0.6);
+  font-size:1.05rem !important;
+}
+
+.arrowIcon {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(5px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+}
+
+/*small Mobile*/
+  @media (max-width: 400px){
+    .container {
+    width: 100%;
+    margin-left: 0;
+    padding: 1.5rem; 
+    box-sizing: border-box;
+    min-height: auto;
+  }
+  
+  .header {
+  display: flex;
+  justify-content: flex-end;
+  color: #414141;
+  margin-bottom: .5rem;
+}
+  .signInLink {
+  font-weight: 600;
+  font-size: .85rem !important;
+  color: #1976d2;
+  text-decoration: none;
+}
+.SignInText{
+  font-size: 0.85rem !important;
+}
+
+.formContainer {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.title {
+  margin-bottom: .75rem !important;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 2rem !important;
+
+}
+
+.subtitle {
+  margin-bottom: 100px;
+  font-size: .75rem !important;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: .5rem !important;
+}
+
+.optionCard {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+
+.iconContainer {
+  background-color: rgba(25, 118, 210, 0.1);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1976d2;
+  margin-right: 1rem;
+}
+
+.optionText {
+  flex: 1;
+}
+
+.optionTitle {
+  margin-bottom: 0.25rem;
+}
+
+.optionDescription {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: .85rem !important;
+}
+
+.arrowIcon {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(5px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+}
+
+
 
 
 

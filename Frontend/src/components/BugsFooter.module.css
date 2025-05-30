@@ -27,3 +27,60 @@
 .select {
   min-width: 60px;
 }
+
+/*Mobile Query*/
+@media (max-width: 767px) {
+   .container {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #e9ecef;
+  padding: 16px;
+  padding-left: 8%;
+  padding-right: 8%;
+  z-index: 1000;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width:100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+
+.select {
+  width: 5px !important;
+}
+  
+}
+
+/*small Mobile*/
+@media (max-width: 400px) {
+  .container {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #e9ecef;
+  padding: 16px;
+  padding-left: 2%;
+  padding-right: 2%;
+  z-index: 1000;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width:100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  font-size: 10px !important;
+}
+
+  
+}
+  

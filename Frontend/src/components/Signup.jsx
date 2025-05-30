@@ -351,7 +351,7 @@ function Signup() {
           <Divider className={styles.divider} />
 
           <div className={styles.loginContainer}>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.secondary" className={styles.accountText}>
               Already have an account?{" "}
             </Typography>
             <Link

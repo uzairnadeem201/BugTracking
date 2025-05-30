@@ -62,15 +62,144 @@
     background-color: #0084ff !important;
     color: rgb(255, 255, 255) !important;
   }
-  
-  @media (max-width: 768px) {
-    .footerContent {
-      flex-direction: column;
-      gap: 16px;
-    }
-  
-    .paginationContainer {
-      width: 100%;
-      justify-content: space-between;
-    }
+
+
+/*Tablet Query*/
+@media (min-width: 768px) and (max-width: 1023px) {
+  .footer {
+    padding: 12px 5%;
+    padding-right: 6%;
+    position: relative;
   }
+  
+  .footerContent {
+    padding-left: 10px;
+    padding-right: 15px;
+  }
+  
+  .paginationContainer {
+    gap: 16px;
+  }
+  
+  .entriesInfo {
+    font-size: 0.8rem;
+  }
+  
+  .displayLabel {
+    font-size: 0.8rem;
+  }
+  
+  .entriesSelect {
+    min-width: 60px !important;
+    height: 30px;
+  }
+  
+  .pagination .MuiPaginationItem-root {
+    min-width: 30px;
+    height: 30px;
+    font-size: 0.875rem;
+  }
+}
+
+/*Mobile Query*/
+@media (max-width: 767px) {
+  .footer {
+    padding: 10px 3%;
+    position: relative;
+  }
+  
+  .footerContent {
+    flex-direction: column;
+    gap: 12px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  
+  .entriesInfo {
+    font-size: 0.8rem;
+    order: 1;
+    text-align: center;
+  }
+  
+  .paginationContainer {
+    gap: 12px;
+    order: 2;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .displayOptions {
+    gap: 6px;
+    display: none;
+  }
+  
+  .displayLabel {
+    font-size: 0.8rem;
+  }
+  
+  .entriesSelect {
+    min-width: 55px !important;
+    height: 28px;
+  }
+  
+  .pagination .MuiPaginationItem-root {
+    min-width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+}
+
+/*small Mobile*/
+@media (max-width: 400px) {
+  .footer {
+    padding: 8px 2%;
+    position: relative;
+  }
+  
+  .footerContent {
+    flex-direction: column;
+    gap: 8px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  
+  .entriesInfo {
+    font-size: 0.75rem !important;
+    text-align: center;
+    order: 1;
+  }
+  
+  .paginationContainer {
+    flex-direction: column;
+    gap: 6px;
+    order: 2;
+    align-items: center;
+  }
+  
+  .displayOptions {
+    display: none;
+    gap: 4px;
+    order: 1;
+  }
+  
+  .displayLabel {
+    font-size: 0.75rem;
+  }
+  
+  .entriesSelect {
+    min-width: 50px !important;
+    height: 26px;
+    font-size: 0.75rem;
+  }
+  
+  .pagination {
+    order: 2;
+  }
+  
+  .pagination .MuiPaginationItem-root {
+    min-width: 26px;
+    height: 26px;
+    font-size: 0.75rem;
+  }
+}
+  

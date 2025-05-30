@@ -92,26 +92,184 @@
   height: 36px !important;
   border-radius: 50% !important;
 }
+/* Tablet Query */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .projectBar {
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 50px;
+    padding-top: 1.5%;
+    gap: 12px;
+  }
+  
+  .actionsSection {
+    gap: 12px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .searchField {
+    width: 280px;
+  }
+  
+  .addButton {
+    padding: 6px 12px !important;
+    font-size: 0.875rem !important;
+  }
+  
+  .dropdownsContainer {
+    gap: 6px;
+  }
+  
+  .sortButton,
+  .projectButton {
+    padding: 5px 10px !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .IconButton {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  
+  .customIcon {
+    width: 18px;
+    height: 18px;
+  }
+}
 
-@media (max-width: 768px) {
+/* Mobile Query */
+@media (max-width: 767px) {
   .projectBar {
     flex-direction: column;
     align-items: flex-start;
+    margin-left: 4%;
+    margin-right: 4%;
+    margin-top: 40px;
+    padding-top: 1%;
+    gap: 16px;
   }
-
+  
+  .titleSection {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  
+  .title {
+    font-size: 1.25rem !important;
+  }
+  
+  .subtitle {
+    font-size: 0.8rem !important;
+  }
+  
   .actionsSection {
     width: 100%;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 12px;
   }
-
+  
   .searchField {
     width: 100%;
   }
-
+  
+  .addButton {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 16px !important;
+  }
+  
   .dropdownsContainer {
     width: 100%;
     justify-content: space-between;
+    gap: 8px;
+  }
+  
+  .sortButton,
+  .projectButton {
+    flex: 1;
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .IconButton {
+    width: 36px !important;
+    height: 36px !important;
+    flex-shrink: 0;
   }
 }
+
+/* Small Mobile */
+@media (max-width: 400px) {
+  .projectBar {
+    margin: 65px 3% 0 3%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Top Row */
+  .topRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .titleSection {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .title {
+    font-size: 1.1rem !important;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 0.75rem !important;
+    color: #6b7280;
+  }
+
+  .IconButton {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .customIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Search */
+  .searchField {
+    width: 100%;
+    padding: 8px;
+    font-size: 0.9rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+  }
+
+  /* Button Row */
+  .actionsSection {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .projectButton,
+  .sortButton {
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 0.75rem !important;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background-color: #f9fafb;
+  }
+}
+
+
+
