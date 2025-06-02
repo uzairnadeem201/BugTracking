@@ -31,7 +31,7 @@
 /*Mobile Query*/
 @media (max-width: 767px) {
    .container {
-  position: relative;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;

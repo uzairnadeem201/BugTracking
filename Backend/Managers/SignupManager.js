@@ -4,7 +4,7 @@ import hashPassword from '../Utils/HashPassword.js';
 import validateUserInput from '../Utils/ValidateUserInput.js';
 import CryptoJS from 'crypto-js';
 
-const validRoles = ['Manager', 'QA', 'Developer'];
+const validRoles = ['manager', 'qa', 'developer'];
 
 const signup = async (user) => {
   const result = validateUserInput(user);
@@ -16,7 +16,7 @@ const signup = async (user) => {
     };
   }
   const { name, email, phonenumber, password, role } = user;
-  if (!validRoles.includes(role)) {
+  if (!validRoles.includes(role.toLowerCase())) {
     return { success: false, error: new AppError('Invalid role selected.', 400) };
   }
 

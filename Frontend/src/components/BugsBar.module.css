@@ -158,32 +158,136 @@
   height: auto;
   margin-top: 8px;
 }
+/* Tablet Query */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .bugsBar {
+    margin-left: 4%;
+    margin-right: 4%;
+    padding: 14px 20px;
+  }
+  
+  .title {
+    font-size: 1.6rem !important;
+  }
+  
+  .searchField {
+    width: 200px;
+  }
+  
+  .buttonGroup {
+    gap: 5%;
+  }
+  
+  .BugsIcon {
+    gap: 15px;
+  }
+}
 
-@media (max-width: 768px) {
+/* Mobile Query */
+@media (max-width: 767px) {
+  .bugsBar {
+    margin-top: 60px;
+    margin-left: 3%;
+    margin-right: 3%;
+    padding: 12px 16px;
+  }
+  
+  .breadcrumbContainer > * {
+    margin-top: 4%;
+  }
+  
+  .BugsIcon {
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+  
   .titleContainer {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 5px;
   }
-
+  
+  .title {
+    font-size: 1.5rem !important;
+    margin-bottom: 10px;
+  }
+  
   .actionButtons {
     width: 100%;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
-
+  
   .searchFilterContainer {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 10px;
   }
-
+  
+  .innerFilterBox {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
   .searchField {
     width: 100%;
+    margin-bottom: 10px;
   }
-
-  .filterContainer {
+  
+  .buttonGroup {
     width: 100%;
-    overflow-x: auto;
-    padding-bottom: 8px;
+    justify-content: space-between;
+    gap: 5%;
+  }
+  
+  .viewToggleContainer {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 400px) {
+  .bugsBar {
+    margin-top: -.75%;
+    margin-left: 4%;
+    margin-right: 4%;
+    padding: 10px 12px;
+  }
+  
+  .BugsIcon {
+    gap: 10px;
+    margin-bottom: 2px;
+  }
+  
+  .title {
+    font-size: 1.3rem !important;
+  }
+  
+  .iconButton {
+    width: 20px;
+    height: 32px;
+    padding: 6px;
+  }
+  
+  .newTaskButton {
+    padding: 4px 12px !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .filterButton {
+    padding: 4px 8px !important;
+    font-size: 0.85rem !important;
+  }
+  
+  .viewButton {
+    min-width: 28px !important;
+    height: 28px !important;
+  }
+  
+ .BugsIcon {
+    gap: 15px;
+    margin-bottom: 4px;
   }
 }

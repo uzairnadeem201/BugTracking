@@ -96,8 +96,8 @@ const updateBugStatus = async (user, projectIdRaw, bugIdRaw, statusRaw) => {
   }
 
   const status = statusRaw?.trim();
-  const allowedStatuses = ['Pending', 'In progress', 'Closed'];
-  if (!status || !allowedStatuses.includes(status)) {
+  const allowedStatuses = ['pending', 'in progress', 'closed'];
+  if (!status || !allowedStatuses.includes(status.toLowerCase())) {
     throw new AppError(`Status must be one of: ${allowedStatuses.join(', ')}`, 400);
   }
 

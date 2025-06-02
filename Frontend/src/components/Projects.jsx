@@ -23,6 +23,7 @@ function Projects({ newProject, searchTerm }) {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const navigate = useNavigate();
 
   const projectImages = useMemo(() => {
@@ -45,12 +46,23 @@ function Projects({ newProject, searchTerm }) {
       setProjects((prev) => [newProject, ...prev]);
     }
   }, [newProject]);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
 
   useEffect(() => {
-    if (searchTerm !== undefined) {
-      fetchProjects(searchTerm);
+    const trimmedTerm = debouncedSearchTerm?.trim();
+    if (!trimmedTerm && !debouncedSearchTerm) {
+      fetchProjects();
     }
-  }, [searchTerm]);
+    if (trimmedTerm && trimmedTerm.length > 0) {
+      fetchProjects(trimmedTerm);
+    }
+  }, [debouncedSearchTerm]);
 
   const fetchProjects = async (search = null) => {
     const showLoading = !search;
@@ -107,7 +119,7 @@ function Projects({ newProject, searchTerm }) {
     return (
       <div className={styles.emptyContainer}>
         <h2 className={styles.emptyText}>
-          {searchTerm?.trim() ? "No projects found" : "No projects yet"}
+          {debouncedSearchTerm?.trim() ? "No projects found" : "No projects yet"}
         </h2>
       </div>
     );
@@ -147,6 +159,7 @@ function Projects({ newProject, searchTerm }) {
 }
 
 export default Projects;
+
 
 
 

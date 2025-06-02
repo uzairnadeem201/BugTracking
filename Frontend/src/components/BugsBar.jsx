@@ -78,7 +78,6 @@ function BugsBar({
   return (
     <>
       <Box className={styles.bugsBar}>
-        {/* Breadcrumbs */}
         <Box className={styles.breadcrumbContainer}>
           <Breadcrumbs
             separator={<NavigateNextIcon fontSize="small" />}
@@ -90,8 +89,6 @@ function BugsBar({
             <Typography color="text.primary">{projectName}</Typography>
           </Breadcrumbs>
         </Box>
-
-        {/* Title & Action Buttons */}
         <Box className={styles.titleContainer}>
           <Box className={styles.BugsIcon}>
             <Typography variant="h4" className={styles.title}>
@@ -120,7 +117,7 @@ function BugsBar({
             >
               <MoreHorizIcon />
             </Button>
-            {userRole === "QA" && (
+            {userRole.toLowerCase() === "qa" && (
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
@@ -134,8 +131,6 @@ function BugsBar({
         </Box>
 
         <Divider className={styles.divider} />
-
-        {/* Search Filter Bar with nested inner Box */}
         <Box className={styles.searchFilterContainer}>
           <Box className={styles.innerFilterBox}>
             <TextField

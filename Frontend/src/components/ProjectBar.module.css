@@ -97,44 +97,56 @@
   .projectBar {
     margin-left: 5%;
     margin-right: 5%;
-    margin-top: 50px;
+    margin-top: 65px;
     padding-top: 1.5%;
-    gap: 12px;
+    gap: 10%;
   }
-  
   .actionsSection {
-    gap: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: start;
+    flex-wrap: nowrap;
     width: 100%;
-    justify-content: flex-start;
   }
-  
+
   .searchField {
-    width: 280px;
+    width: 40%;
+    flex-shrink: 0;
+
   }
-  
-  .addButton {
-    padding: 6px 12px !important;
-    font-size: 0.875rem !important;
-  }
-  
-  .dropdownsContainer {
-    gap: 6px;
-  }
-  
   .sortButton,
   .projectButton {
-    padding: 5px 10px !important;
+    padding: 3px 4px !important;
     font-size: 0.8rem !important;
+    flex-shrink: 0;
   }
-  
+
+
+  .addButton {
+    padding: 3px 4px !important;
+    font-size: 0.8rem !important;
+    size: 10%;
+    flex-shrink: 0;
+    margin-right: 30%;
+  }
+
+  .dropdownsContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
   .IconButton {
     width: 32px !important;
     height: 32px !important;
+    flex-shrink: 0;
   }
-  
+
   .customIcon {
-    width: 18px;
-    height: 18px;
+    width: 25px;
+    height: 25px;
   }
 }
 
@@ -145,7 +157,7 @@
     align-items: flex-start;
     margin-left: 4%;
     margin-right: 4%;
-    margin-top: 40px;
+    /* margin-top: 5% !important; */
     padding-top: 1%;
     gap: 16px;
   }
@@ -208,8 +220,6 @@
     flex-direction: column;
     gap: 12px;
   }
-
-  /* Top Row */
   .topRow {
     display: flex;
     justify-content: space-between;
@@ -241,8 +251,6 @@
     width: 16px;
     height: 16px;
   }
-
-  /* Search */
   .searchField {
     width: 100%;
     padding: 8px;
@@ -250,8 +258,6 @@
     border: 1px solid #d1d5db;
     border-radius: 6px;
   }
-
-  /* Button Row */
   .actionsSection {
     display: flex;
     gap: 8px;

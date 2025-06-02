@@ -176,3 +176,556 @@
   width: 100%;
   margin-top: 8px;
 }
+/* Tablet Query */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .dialog {
+  border-radius: 24px;
+  /* max-width: 480px;
+  max-height: 80vh; */
+  overflow: hidden;
+  position: relative;
+}
+
+.dialogTitle {
+  padding: 16px 24px !important;
+  height: 8px !important;
+  font-weight: 200 !important;
+  display: flex;
+  align-items: center;
+  background-color: rgb(194, 193, 193);
+}
+
+.closeButton {
+  position: absolute !important;
+  right: 16px !important;
+  top: 2px !important;
+  border: 5px !important;
+  color: #0c0c0c !important;
+}
+
+.moreButton {
+  position: absolute !important;
+  right: 48px !important;
+  top: 12px !important;
+  color: #666 !important;
+}
+
+/* .dialogContent {
+   padding: 12px 20px 20px 20px !important;  
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(80vh - 120px); 
+  overflow-y: auto; 
+} */
+
+.assignSection {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 6px;
+  gap: 80px; 
+}
+
+.assignTo {
+  display: flex;
+  flex-direction: row;
+  gap: 7px; 
+}
+
+.assignLabel {
+  color: #000000;
+  font-size: 1rem !important;
+}
+
+.userIdInput {
+  width: 150px;
+  background-color: #f8f9fa;
+}
+
+.dueDateButton {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.dateButton {
+  color: #666 !important;
+  border-color: #ddd !important;
+  text-transform: none !important;
+  padding: 4px 12px !important;
+  border-radius: 20px !important;
+  font-size: 0.875rem !important;
+}
+
+.titleInput {
+  font-size: 2rem !important;
+  margin-top: 4px !important;
+}
+
+.titleInput input::placeholder {
+  color: #ccc;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.detailsLabel {
+  color: #333;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.detailsInput {
+  margin-top: 4px !important;
+}
+
+.detailsInput textarea::placeholder {
+  color: #ccc;
+}
+
+.uploadArea {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-height: 150px;
+  transition: border-color 0.2s;
+}
+
+.uploadArea:hover {
+  border-color: #0d6efd;
+}
+
+.uploadIcon {
+  color: #999;
+  font-size: 1.6rem !important;
+  margin-right: 12px;
+  margin-bottom: 6px;
+}
+
+.uploadText {
+  color: #666;
+  text-align: center;
+}
+
+.browseLink {
+  color: #0d6efd;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.actionContainer {
+  display: flex;
+  width: 110%;         
+  justify-content: flex-end;
+  margin-left: -6%;     
+  margin-top: 16px;
+  padding-top: 12px;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.08);
+  background-color: #fff;
+  bottom: 0;
+  z-index: 1;
+}
+
+.addButton {
+  background-color: #0d6efd !important;
+  color: white !important;
+  text-transform: none !important;
+  margin-right: 3% !important;
+  padding: 6px 18px !important;
+  border-radius: 4px !important;
+  font-weight: 500 !important;
+  width: 100px;
+}
+
+.buttonProgress {
+  color: white;
+}
+
+.addBugTitle {
+  padding: 8px 30px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.borderedField {
+  border: 0.5px solid #ccc;
+  border-radius: 6px;
+  padding: 2px !important;
+  width: 100%;
+  margin-top: 8px;
+}
+  
+}
+
+/* Mobile Query */
+@media (max-width: 767px) {
+  .dialog {
+  border-radius: 24px;
+  /* max-width: 480px;
+  max-height: 80vh; */
+  overflow: hidden;
+  position: relative;
+}
+
+.dialogTitle {
+  padding: 16px 24px !important;
+  height: 8px !important;
+  font-weight: 200 !important;
+  display: flex;
+  align-items: center;
+  background-color: rgb(194, 193, 193);
+}
+
+.closeButton {
+  position: absolute !important;
+  right: 16px !important;
+  top: 2px !important;
+  border: 5px !important;
+  color: #0c0c0c !important;
+}
+
+.moreButton {
+  position: absolute !important;
+  right: 48px !important;
+  top: 12px !important;
+  color: #666 !important;
+}
+
+/* .dialogContent {
+   padding: 12px 20px 20px 20px !important;  
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(80vh - 120px); 
+  overflow-y: auto; 
+} */
+
+.assignSection {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 6px;
+  gap: 40px; 
+}
+
+.assignTo {
+  display: flex;
+  flex-direction: row;
+  gap: 7px; 
+}
+
+.assignLabel {
+  color: #000000;
+  font-size: 0.75rem !important;
+}
+
+.userIdInput {
+  width: 150px;
+  background-color: #f8f9fa;
+}
+
+.dueDateButton {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.dateButton {
+  color: #666 !important;
+  border-color: #ddd !important;
+  text-transform: none !important;
+  padding: 4px 12px !important;
+  border-radius: 20px !important;
+  font-size: 0.875rem !important;
+}
+
+.titleInput {
+  font-size: 2rem !important;
+  margin-top: 4px !important;
+}
+
+.titleInput input::placeholder {
+  color: #ccc;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.detailsLabel {
+  color: #333;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.detailsInput {
+  margin-top: 4px !important;
+}
+
+.detailsInput textarea::placeholder {
+  color: #ccc;
+}
+
+.uploadArea {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-height: 150px;
+  transition: border-color 0.2s;
+}
+
+.uploadArea:hover {
+  border-color: #0d6efd;
+}
+
+.uploadIcon {
+  color: #999;
+  font-size: 1.6rem !important;
+  margin-right: 12px;
+  margin-bottom: 6px;
+}
+
+.uploadText {
+  color: #666;
+  text-align: center;
+}
+
+.browseLink {
+  color: #0d6efd;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.actionContainer {
+  display: flex;
+  width: 130%;         
+  justify-content: flex-end;
+  margin-left: -20%;     
+  margin-top: 16px;
+  padding-top: 12px;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.08);
+  background-color: #fff;
+  bottom: 0;
+  z-index: 1;
+}
+
+.addButton {
+  background-color: #0d6efd !important;
+  color: white !important;
+  text-transform: none !important;
+  margin-right: 3% !important;
+  padding: 6px 18px !important;
+  border-radius: 4px !important;
+  font-weight: 500 !important;
+  width: 100px;
+}
+
+.buttonProgress {
+  color: white;
+}
+
+.addBugTitle {
+  padding: 8px 30px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.borderedField {
+  border: 0.5px solid #ccc;
+  border-radius: 6px;
+  padding: 2px !important;
+  width: 100%;
+  margin-top: 8px;
+}
+  
+  
+}
+
+/* Small Mobile */
+@media (max-width: 400px) {
+  .dialog {
+  border-radius: 24px;
+  /* max-width: 480px;
+  max-height: 80vh; */
+  overflow: hidden;
+  position: relative;
+}
+
+.dialogTitle {
+  padding: 16px 24px !important;
+  height: 8px !important;
+  font-weight: 200 !important;
+  display: flex;
+  align-items: center;
+  background-color: rgb(194, 193, 193);
+}
+
+.closeButton {
+  position: absolute !important;
+  right: 16px !important;
+  top: 2px !important;
+  border: 5px !important;
+  color: #0c0c0c !important;
+}
+
+.moreButton {
+  position: absolute !important;
+  right: 48px !important;
+  top: 12px !important;
+  color: #666 !important;
+}
+
+/* .dialogContent {
+   padding: 12px 20px 20px 20px !important;  
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(80vh - 120px); 
+  overflow-y: auto; 
+} */
+
+.assignSection {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 6px;
+  gap: 40px; 
+}
+
+.assignTo {
+  display: flex;
+  flex-direction: row;
+  gap: 7px; 
+}
+
+.assignLabel {
+  color: #000000;
+  font-size: 0.69rem !important;
+}
+
+.userIdInput {
+  width: 150px;
+  background-color: #f8f9fa;
+}
+
+.dueDateButton {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.dateButton {
+  color: #666 !important;
+  border-color: #ddd !important;
+  text-transform: none !important;
+  padding: 4px 12px !important;
+  border-radius: 20px !important;
+  font-size: 0.875rem !important;
+}
+
+.titleInput {
+  font-size: 2rem !important;
+  margin-top: 4px !important;
+}
+
+.titleInput input::placeholder {
+  color: #ccc;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.detailsLabel {
+  color: #333;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.detailsInput {
+  margin-top: 4px !important;
+}
+
+.detailsInput textarea::placeholder {
+  color: #ccc;
+}
+
+.uploadArea {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-height: 150px;
+  transition: border-color 0.2s;
+}
+
+.uploadArea:hover {
+  border-color: #0d6efd;
+}
+
+.uploadIcon {
+  color: #999;
+  font-size: 1.6rem !important;
+  margin-right: 12px;
+  margin-bottom: 6px;
+}
+
+.uploadText {
+  color: #666;
+  text-align: center;
+}
+
+.browseLink {
+  color: #0d6efd;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.actionContainer {
+  display: flex;
+  width: 130%;         
+  justify-content: flex-end;
+  margin-left: -20%;     
+  margin-top: 16px;
+  padding-top: 12px;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.08);
+  background-color: #fff;
+  bottom: 0;
+  z-index: 1;
+}
+
+.addButton {
+  background-color: #0d6efd !important;
+  color: white !important;
+  text-transform: none !important;
+  margin-right: 3% !important;
+  padding: 6px 18px !important;
+  border-radius: 4px !important;
+  font-weight: 500 !important;
+  width: 100px;
+}
+
+.buttonProgress {
+  color: white;
+}
+
+.addBugTitle {
+  padding: 8px 30px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.borderedField {
+  border: 0.5px solid #ccc;
+  border-radius: 6px;
+  padding: 2px !important;
+  width: 100%;
+  margin-top: 8px;
+}
+ 
+  
+}

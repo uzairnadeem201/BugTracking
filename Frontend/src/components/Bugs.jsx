@@ -18,6 +18,7 @@ import {
   Alert,
   Menu,
   MenuItem,
+  Card,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import axios from "axios";
@@ -32,6 +33,7 @@ function Bugs({ projectId, newBug, searchTerm }) {
   const [statusLoading, setStatusLoading] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedBug, setSelectedBug] = useState(null);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
   const userRole = (() => {
     try {
@@ -55,12 +57,23 @@ function Bugs({ projectId, newBug, searchTerm }) {
       setBugs((prevBugs) => [newBug, ...prevBugs]);
     }
   }, [newBug]);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
 
   useEffect(() => {
-    if (searchTerm !== undefined && projectId) {
-      handleSearch(searchTerm);
+    const trimmedTerm = debouncedSearchTerm?.trim();
+    if (!trimmedTerm && !debouncedSearchTerm) {
+      fetchBugs(projectId);
     }
-  }, [searchTerm, projectId]);
+    if (trimmedTerm && trimmedTerm.length > 0) {
+      handleSearch(trimmedTerm);
+    }
+  }, [debouncedSearchTerm, projectId]);
 
   const fetchBugs = async (id, search = null) => {
     const showLoading = !search;
@@ -349,6 +362,84 @@ function Bugs({ projectId, newBug, searchTerm }) {
           </TableBody>
         </Table>
       </TableContainer>
+      <Box className={styles.cardView}>
+        {bugs.map((bug) => (
+          <Card key={bug.id} className={styles.bugCard}>
+            <Box className={styles.cardHeader}>
+              <Box className={styles.cardTitle}>
+                <Box
+                  className={styles.statusDot}
+                  style={{ backgroundColor: getStatusColor(bug.status) }}
+                ></Box>
+                <Typography variant="body1" className={styles.cardTitleText}>
+                  {bug.title}
+                </Typography>
+              </Box>
+              <IconButton
+                size="small"
+                className={styles.actionButton}
+                onClick={(e) => handleActionClick(e, bug)}
+                disabled={statusLoading && updatingBugRef.current === bug.id}
+              >
+                <MoreVertIcon fontSize="small" />
+              </IconButton>
+            </Box>
+            
+            <Box className={styles.cardContent}>
+              <Box className={styles.cardRow}>
+                <Typography variant="body2" className={styles.cardLabel}>
+                  STATE
+                </Typography>
+                <Typography variant="body2" className={styles.cardValue}>
+                  {bug.type}
+                </Typography>
+              </Box>
+              
+              <Box className={styles.cardRow}>
+                <Typography variant="body2" className={styles.cardLabel}>
+                  STATUS
+                </Typography>
+                {updatingBugRef.current === bug.id && statusLoading ? (
+                  <CircularProgress size={16} />
+                ) : (
+                  <Chip
+                    label={bug.status}
+                    size="small"
+                    className={styles.statusChip}
+                    style={{
+                      backgroundColor: getStatusBgColor(bug.status),
+                      color: getStatusColor(bug.status),
+                    }}
+                  />
+                )}
+              </Box>
+              
+              <Box className={styles.cardRow}>
+                <Typography variant="body2" className={styles.cardLabel}>
+                  DUE DATE
+                </Typography>
+                <Typography variant="body2" className={styles.cardValue}>
+                  {bug.deadline
+                    ? new Date(bug.deadline).toLocaleDateString()
+                    : "-"}
+                </Typography>
+              </Box>
+            </Box>
+            
+            <Box className={styles.cardFooter}>
+              <Box>
+                <Typography variant="body2" className={styles.cardLabel}>
+                  ASSIGNED TO
+                </Typography>
+                <AvatarGroup max={2} className={styles.cardAvatarGroup}>
+                  <Avatar className={styles.avatar}>U1</Avatar>
+                  <Avatar className={styles.avatar}>U2</Avatar>
+                </AvatarGroup>
+              </Box>
+            </Box>
+          </Card>
+        ))}
+      </Box>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}

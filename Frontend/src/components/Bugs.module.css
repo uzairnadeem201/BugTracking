@@ -3,90 +3,89 @@
     background-color: #f8f9fa;
     margin-left: 8.5%;
     margin-right: 8.5%;
+}
 
-  }
-
-  .tableContainer {
+.tableContainer {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important;
     border-radius: 1px !important;
     overflow: hidden;
-  }
-  
-  .bugRow:hover {
+}
+
+.bugRow:hover {
     background-color: #f1f3f5;
-  }
-  
-  .detailsCell {
+}
+
+.detailsCell {
     min-width: 100px;
-  }
-  
-  .bugDetails {
+}
+
+.bugDetails {
     display: flex;
     align-items: center;
     gap: 8px;
-  }
-  
-  .statusDot {
+}
+
+.statusDot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
     flex-shrink: 0;
-  }
-  
-  .bugTitle {
+}
+
+.bugTitle {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 280px;
-  }
-  
-  .typeCell {
+}
+
+.typeCell {
     min-width: 100px;
-  }
-  
-  .statusCell {
+}
+
+.statusCell {
     min-width: 120px;
-  }
-  
-  .statusChip {
+}
+
+.statusChip {
     font-size: 0.75rem !important;
     height: 24px !important;
     font-weight: 500 !important;
-  }
-  
-  .dateCell {
+}
+
+.dateCell {
     min-width: 100px;
-  }
-  
+}
+
 .assignedCell {
-  width: 100px;
-  text-align: center;
-  vertical-align: middle; 
-  padding-top: 8px;
-  padding-bottom: 8px;
+    width: 100px;
+    text-align: center;
+    vertical-align: middle; 
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .avatarGroup {
-  justify-content: center; 
+    justify-content: center; 
 }
 
 .avatar {
-  width: 32px !important;
-  height: 32px !important;
-  font-size: 0.8rem !important;
-  border: 1px solid #ddd;
-  background-color: #f5f5f5;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.8rem !important;
+    border: 1px solid #ddd;
+    background-color: #f5f5f5;
 }
-  
-  .actionCell {
+
+.actionCell {
     width: 60px;
-  }
-  
-  .actionButton {
+}
+
+.actionButton {
     color: #6c757d;
-  }
-  
-  .loadingContainer {
+}
+
+.loadingContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -96,19 +95,19 @@
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     margin: 24px;
-  }
-  
-  .loadingText {
+}
+
+.loadingText {
     margin-top: 24px;
     color: #6c757d;
     font-size: 1.1rem;
-  }
-  
-  .errorAlert {
+}
+
+.errorAlert {
     margin: 24px;
-  }
-  
-  .emptyContainer {
+}
+
+.emptyContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -119,40 +118,264 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     text-align: center;
     margin: 24px;
-  }
-  
-  .emptyText {
+}
+
+.emptyText {
     color: #333;
     margin-bottom: 12px !important;
     font-size: 1.4rem !important;
-  }
-  
-  .emptySubtext {
+}
+
+.emptySubtext {
     color: #6c757d;
     font-size: 1.1rem !important;
-  }
-  
-  .statusMenu {
+}
+
+.statusMenu {
     margin-top: 8px;
-  }
-  
-  .menuTitle {
+}
+
+.menuTitle {
     padding: 8px 16px;
     color: #6c757d;
     font-weight: 300 !important;
-  }
-  
-  .menuItem {
-    min-width: 10px;
+}
 
-  }
-  
-  @media (max-width: 768px) {
+.menuItem {
+    min-width: 10px;
+}
+
+.cardView {
+    display: none;
+}
+
+.bugCard {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.cardTitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 85%;
+}
+
+.cardTitleText {
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cardRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cardLabel {
+    color: #6c757d;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+}
+
+.cardValue {
+    font-size: 0.9rem !important;
+}
+
+.cardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.cardAvatarGroup {
+    justify-content: flex-start;
+}
+
+/* Tablet Query */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .bugsContainer {
+        margin-left: 2%;
+        margin-right: 2%;
+        padding: 0;
+    }
+    
     .tableContainer {
-      overflow-x: auto;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
-  
+    .tableContainer table {
+        font-size: 0.85rem;
+    }
+    .detailsCell {
+        min-width: 120px;
+        max-width: 120px;
+        padding: 8px 6px !important;
+    }
+    
     .bugTitle {
-      max-width: 150px;
+        max-width: 100px;
+        font-size: 0.8rem !important;
     }
-  }
+    
+    .typeCell {
+        min-width: 70px;
+        max-width: 70px;
+        padding: 8px 4px !important;
+    }
+    
+    .statusCell {
+        min-width: 90px;
+        max-width: 90px;
+        padding: 8px 4px !important;
+    }
+    
+    .statusChip {
+        font-size: 0.65rem !important;
+        height: 20px !important;
+        padding: 0 6px !important;
+    }
+    
+    .dateCell {
+        min-width: 80px;
+        max-width: 80px;
+        padding: 8px 4px !important;
+        font-size: 0.75rem !important;
+    }
+    
+    .assignedCell {
+        width: 70px;
+        max-width: 70px;
+        padding: 6px 4px !important;
+    }
+    
+    .avatar {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 0.65rem !important;
+    }
+    
+    .actionCell {
+        width: 40px;
+        max-width: 40px;
+        padding: 8px 2px !important;
+    }
+    
+    .actionButton {
+        padding: 4px !important;
+    }
+    .tableContainer thead th {
+        font-size: 0.7rem !important;
+        font-weight: 600 !important;
+        padding: 8px 6px !important;
+        white-space: nowrap;
+    }
+    .tableContainer tbody td {
+        padding: 6px 4px !important;
+        font-size: 0.75rem !important;
+    }
+    .tableContainer .MuiTableCell-paddingCheckbox {
+        padding: 6px 4px !important;
+        width: 30px;
+    }
+    
+    .loadingContainer,
+    .emptyContainer {
+        padding: 48px;
+        margin: 16px;
+    }
+}
+
+/* Mobile Query */
+@media (max-width: 767px) {
+    .bugsContainer {
+        margin-left: 3%;
+        margin-right: 3%;
+        padding: 0;
+    }
+    
+    /* Hide table view on mobile */
+    .tableContainer {
+        display: none;
+    }
+    
+    /* Show card view on mobile */
+    .cardView {
+        display: block;
+        margin-top: 16px;
+    }
+    
+    .loadingContainer,
+    .emptyContainer {
+        padding: 32px 16px;
+        margin: 12px;
+    }
+    
+    .loadingText {
+        font-size: 1rem;
+    }
+    
+    .emptyText {
+        font-size: 1.1rem !important;
+    }
+    
+    .emptySubtext {
+        font-size: 0.9rem !important;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 400px) {
+    .bugsContainer {
+        margin-left: 2%;
+        margin-right: 2%;
+    }
+    
+    .cardTitleText {
+        font-size: 0.9rem !important;
+    }
+    
+    .cardLabel {
+        font-size: 0.75rem !important;
+    }
+    
+    .cardValue {
+        font-size: 0.85rem !important;
+    }
+    
+    .avatar {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.7rem !important;
+    }
+    
+    .loadingContainer,
+    .emptyContainer {
+        padding: 24px 12px;
+        margin: 8px;
+    }
+}

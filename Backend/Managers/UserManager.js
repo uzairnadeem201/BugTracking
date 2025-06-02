@@ -9,8 +9,9 @@ const getDevelopersByProject = async (user, projectId) => {
   if (userRole !== 'manager' && userRole !== 'qa') {
     throw new AppError('Invalid role', 403);
   }
+  var developer = 'Developer';
 
-  const developers = await UserHandler.getUsersByProjectAndRole(projectId, 'Developer');
+  const developers = await UserHandler.getUsersByProjectAndRole(projectId, developer);
   return { data: developers };
 };
 
@@ -23,8 +24,9 @@ const getQAsByProject = async (user, projectId) => {
   if (userRole !== 'manager') {
     throw new AppError('Invalid role', 403);
   }
+  var QA = 'QA';
 
-  const qa = await UserHandler.getUsersByProjectAndRole(projectId, 'QA');
+  const qa = await UserHandler.getUsersByProjectAndRole(projectId, QA );
   return { data: qa };
 };
 
