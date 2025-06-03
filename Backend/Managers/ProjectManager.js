@@ -1,25 +1,40 @@
 import ProjectHandler from "../Handlers/ProjectHandler.js"
 import AppError from "../Utils/AppError.js"
 
-const getProjects = async (user, search = null) => {
+const getProjects = async (user, search = null, page = 1, limit = 10) => {
   const { id, role } = user
 
   if (!id || !role) {
     throw new AppError("Invalid User data.", 400)
   }
 
-  let projects
+  let result
   const roleLower = role.toLowerCase()
 
   if (roleLower === "manager") {
-    projects = await ProjectHandler.getProjectsByManagerId(id, search)
+    result = await ProjectHandler.getProjectsByManagerId(id, search, page, limit)
   } else if (roleLower === "qa" || roleLower === "developer") {
-    projects = await ProjectHandler.getProjectsByUserId(id, search)
+    result = await ProjectHandler.getProjectsByUserId(id, search, page, limit)
   } else {
     throw new AppError("Invalid role", 403)
   }
 
-  return { data: projects }
+  // Calculate pagination metadata
+  const totalPages = Math.ceil(result.total / limit)
+  const hasNext = page < totalPages
+  const hasPrev = page > 1
+
+  return {
+    data: result.projects,
+    pagination: {
+      total: result.total,
+      page,
+      limit,
+      totalPages,
+      hasNext,
+      hasPrev,
+    },
+  }
 }
 
 const getOneProject = async (user, projectId) => {

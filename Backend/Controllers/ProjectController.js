@@ -3,7 +3,7 @@ import ProjectManager from "../Managers/ProjectManager.js"
 
 const getProjects = catchAsync(async (req, res, next) => {
   const user = req.user
-  const { search } = req.query
+  const { search, page = 1, limit = 10 } = req.query
 
   if (!user) {
     return res.status(400).json({
@@ -12,13 +12,32 @@ const getProjects = catchAsync(async (req, res, next) => {
     })
   }
 
-  const result = await ProjectManager.getProjects(user, search)
+  // Validate pagination parameters
+  const pageNum = parseInt(page)
+  const limitNum = parseInt(limit)
+
+  if (pageNum < 1 || limitNum < 1 || limitNum > 100) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid pagination parameters. Page must be >= 1, limit must be between 1-100",
+    })
+  }
+
+  const result = await ProjectManager.getProjects(user, search, pageNum, limitNum)
 
   if (!result || result.data.length === 0) {
     return res.status(200).json({
       success: true,
       message: search ? "No projects found matching your search" : "No projects yet",
       data: [],
+      pagination: {
+        total: 0,
+        page: pageNum,
+        limit: limitNum,
+        totalPages: 0,
+        hasNext: false,
+        hasPrev: false,
+      },
     })
   }
 
@@ -26,6 +45,7 @@ const getProjects = catchAsync(async (req, res, next) => {
     success: true,
     message: search ? "Search results retrieved" : "Projects retrieved",
     data: result.data,
+    pagination: result.pagination,
   })
 })
 

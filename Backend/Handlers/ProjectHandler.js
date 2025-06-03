@@ -2,7 +2,7 @@ import { User, Project, UsersProjects, sequelize } from "../Models/index.js"
 import { Op } from "sequelize"
 import AppError from "../Utils/AppError.js"
 
-const getProjectsByManagerId = async (managerId, searchTerm = null) => {
+const getProjectsByManagerId = async (managerId, searchTerm = null, page = 1, limit = 10) => {
   const whereClause = { created_by: managerId }
 
   if (searchTerm && searchTerm.trim() !== "") {
@@ -12,10 +12,21 @@ const getProjectsByManagerId = async (managerId, searchTerm = null) => {
     ]
   }
 
-  return await Project.findAll({ where: whereClause })
+  const offset = (page - 1) * limit
+
+  const result = await Project.findAndCountAll({
+    where: whereClause,
+    limit: parseInt(limit),
+    offset: parseInt(offset),
+  })
+
+  return {
+    projects: result.rows,
+    total: result.count,
+  }
 }
 
-const getProjectsByUserId = async (userId, searchTerm = null) => {
+const getProjectsByUserId = async (userId, searchTerm = null, page = 1, limit = 10) => {
   const userProjects = await sequelize.query("SELECT project_id FROM users_projects WHERE user_id = :userId", {
     replacements: { userId },
     type: sequelize.QueryTypes.SELECT,
@@ -23,7 +34,12 @@ const getProjectsByUserId = async (userId, searchTerm = null) => {
 
   const projectIds = userProjects.map((row) => row.project_id)
 
-  if (projectIds.length === 0) return []
+  if (projectIds.length === 0) {
+    return {
+      projects: [],
+      total: 0,
+    }
+  }
 
   const whereClause = { id: projectIds }
 
@@ -34,9 +50,18 @@ const getProjectsByUserId = async (userId, searchTerm = null) => {
     ]
   }
 
-  return await Project.findAll({
+  const offset = (page - 1) * limit
+
+  const result = await Project.findAndCountAll({
     where: whereClause,
+    limit: parseInt(limit),
+    offset: parseInt(offset),
   })
+
+  return {
+    projects: result.rows,
+    total: result.count,
+  }
 }
 
 const getProjectByManagerId = async (projectId, managerId) => {
