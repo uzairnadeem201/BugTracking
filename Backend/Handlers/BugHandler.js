@@ -1,11 +1,16 @@
 import { Bug, Project, sequelize } from '../Models/index.js';
 import { Op, fn, col, where } from 'sequelize';
 
-const getBugsByManager = async (managerId, projectId, searchTerm = null) => {
+const getBugsByManager = async (managerId, projectId, searchTerm = null, page = 1, limit = 10) => {
   const project = await Project.findOne({
     where: { id: projectId, created_by: managerId }
   });
-  if (!project) return [];
+  if (!project) {
+    return {
+      bugs: [],
+      total: 0,
+    };
+  }
 
   const whereClause = { project_id: projectId };
 
@@ -15,12 +20,21 @@ const getBugsByManager = async (managerId, projectId, searchTerm = null) => {
     ];
   }
 
-  return await Bug.findAll({
-    where: whereClause
+  const offset = (page - 1) * limit;
+
+  const result = await Bug.findAndCountAll({
+    where: whereClause,
+    limit: parseInt(limit),
+    offset: parseInt(offset),
   });
+
+  return {
+    bugs: result.rows,
+    total: result.count,
+  };
 };
 
-const getBugsByQA = async (userId, projectId, searchTerm = null) => {
+const getBugsByQA = async (userId, projectId, searchTerm = null, page = 1, limit = 10) => {
   const userProject = await sequelize.query(
     'SELECT 1 FROM users_projects WHERE user_id = :userId AND project_id = :projectId',
     {
@@ -29,7 +43,12 @@ const getBugsByQA = async (userId, projectId, searchTerm = null) => {
     }
   );
 
-  if (userProject.length === 0) return [];
+  if (userProject.length === 0) {
+    return {
+      bugs: [],
+      total: 0,
+    };
+  }
 
   const whereClause = {
     project_id: projectId,
@@ -42,12 +61,21 @@ const getBugsByQA = async (userId, projectId, searchTerm = null) => {
     ];
   }
 
-  return await Bug.findAll({
-    where: whereClause
+  const offset = (page - 1) * limit;
+
+  const result = await Bug.findAndCountAll({
+    where: whereClause,
+    limit: parseInt(limit),
+    offset: parseInt(offset),
   });
+
+  return {
+    bugs: result.rows,
+    total: result.count,
+  };
 };
 
-const getBugsByDeveloper = async (userId, projectId, searchTerm = null) => {
+const getBugsByDeveloper = async (userId, projectId, searchTerm = null, page = 1, limit = 10) => {
   const userProject = await sequelize.query(
     'SELECT 1 FROM users_projects WHERE user_id = :userId AND project_id = :projectId',
     {
@@ -56,7 +84,12 @@ const getBugsByDeveloper = async (userId, projectId, searchTerm = null) => {
     }
   );
 
-  if (userProject.length === 0) return [];
+  if (userProject.length === 0) {
+    return {
+      bugs: [],
+      total: 0,
+    };
+  }
 
   const whereClause = {
     project_id: projectId,
@@ -69,9 +102,18 @@ const getBugsByDeveloper = async (userId, projectId, searchTerm = null) => {
     ];
   }
 
-  return await Bug.findAll({
-    where: whereClause
+  const offset = (page - 1) * limit;
+
+  const result = await Bug.findAndCountAll({
+    where: whereClause,
+    limit: parseInt(limit),
+    offset: parseInt(offset),
   });
+
+  return {
+    bugs: result.rows,
+    total: result.count,
+  };
 };
 
 const isProjectAssignedToUser = async (userId, projectId) => {

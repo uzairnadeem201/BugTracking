@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react"
 import {
   Box,
   Typography,
@@ -19,224 +19,220 @@ import {
   Menu,
   MenuItem,
   Card,
-} from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import axios from "axios";
-import styles from "./Bugs.module.css";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+} from "@mui/material"
+import MoreVertIcon from "@mui/icons-material/MoreVert"
+import axios from "axios"
+import styles from "./Bugs.module.css"
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline"
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined"
 
-function Bugs({ projectId, newBug, searchTerm }) {
-  const [bugs, setBugs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [statusLoading, setStatusLoading] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedBug, setSelectedBug] = useState(null);
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+function Bugs({ projectId, newBug, searchTerm, currentPage, entriesPerPage, onPaginationUpdate }) {
+  const [bugs, setBugs] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [statusLoading, setStatusLoading] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [selectedBug, setSelectedBug] = useState(null)
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm)
 
   const userRole = (() => {
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
-      return user?.role || "";
+      const user = JSON.parse(localStorage.getItem("user"))
+      return user?.role || ""
     } catch {
-      return "";
+      return ""
     }
-  })();
+  })()
 
-  const updatingBugRef = useRef(null);
+  const updatingBugRef = useRef(null)
 
-  useEffect(() => {
-    if (projectId) {
-      fetchBugs(projectId);
-    }
-  }, [projectId]);
-
-  useEffect(() => {
-    if (newBug) {
-      setBugs((prevBugs) => [newBug, ...prevBugs]);
-    }
-  }, [newBug]);
+  console.log("Bugs component props:", { projectId, searchTerm, currentPage, entriesPerPage })
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 500);
+      setDebouncedSearchTerm(searchTerm)
+    }, 500)
 
-    return () => clearTimeout(handler);
-  }, [searchTerm]);
-
+    return () => clearTimeout(handler)
+  }, [searchTerm])
   useEffect(() => {
-    const trimmedTerm = debouncedSearchTerm?.trim();
-    if (!trimmedTerm && !debouncedSearchTerm) {
-      fetchBugs(projectId);
+    if (projectId) {
+      fetchBugs()
     }
-    if (trimmedTerm && trimmedTerm.length > 0) {
-      handleSearch(trimmedTerm);
+  }, [projectId, debouncedSearchTerm, currentPage, entriesPerPage])
+  useEffect(() => {
+    if (newBug) {
+      console.log("New bug added, refetching...")
+      fetchBugs()
     }
-  }, [debouncedSearchTerm, projectId]);
+  }, [newBug])
 
-  const fetchBugs = async (id, search = null) => {
-    const showLoading = !search;
-    if (showLoading) {
-      setLoading(true);
-    }
-    setError(null);
+  const fetchBugs = async () => {
+
+    setLoading(true)
+    setError(null)
 
     try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Authentication token not found");
+      const token = localStorage.getItem("token")
+      console.log("Token exists:", !!token)
+
+      if (!token) throw new Error("Authentication token not found")
+
+      const params = {
+        page: currentPage,
+        limit: entriesPerPage,
+      }
+
+      if (debouncedSearchTerm && debouncedSearchTerm.trim()) {
+        params.search = debouncedSearchTerm.trim()
+      }
+
+      console.log("API Request params:", params)
 
       const config = {
         headers: { Authorization: `Bearer ${token}` },
-        params: {},
-      };
-
-      if (search && search.trim() !== "") {
-        config.params.search = search.trim();
+        params,
       }
 
-      const response = await axios.get(
-        `http://localhost:3000/api/projects/${id}/bugs`,
-        config
-      );
+      console.log("Making API call to:", `http://localhost:3000/api/projects/${projectId}/bugs`)
+
+      const response = await axios.get(`http://localhost:3000/api/projects/${projectId}/bugs`, config)
 
       if (response.data.success) {
-        setBugs(response.data.data);
+        console.log("Bugs data:", response.data.data)
+        console.log("Pagination data:", response.data.pagination)
+
+        setBugs(response.data.data || [])
+        if (onPaginationUpdate && response.data.pagination) {
+          onPaginationUpdate(response.data.pagination)
+        }
       } else {
-        throw new Error(response.data.message || "Failed to fetch bugs");
+        throw new Error(response.data.message || "Failed to fetch bugs")
       }
     } catch (err) {
-      setError(
-        err.response?.data?.message || err.message || "Failed to load bugs"
-      );
-      setBugs([]);
-    } finally {
-      if (showLoading) {
-        setLoading(false);
-      }
-    }
-  };
 
-  const handleSearch = async (search) => {
-    await fetchBugs(projectId, search);
-  };
+      setError(err.response?.data?.message || err.message || "Failed to load bugs")
+      setBugs([])
+      if (onPaginationUpdate) {
+        onPaginationUpdate({
+          total: 0,
+          page: 1,
+          limit: entriesPerPage,
+          totalPages: 0,
+          hasNext: false,
+          hasPrev: false,
+        })
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleActionClick = (event, bug) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedBug(bug);
-  };
+    setAnchorEl(event.currentTarget)
+    setSelectedBug(bug)
+  }
 
   const handleActionClose = () => {
-    setAnchorEl(null);
-    setSelectedBug(null);
-  };
+    setAnchorEl(null)
+    setSelectedBug(null)
+  }
 
   const handleStatusChange = async (status) => {
-    if (!selectedBug || !projectId) return;
+    if (!selectedBug || !projectId) return
 
-    setStatusLoading(true);
-    updatingBugRef.current = selectedBug.id;
+    setStatusLoading(true)
+    updatingBugRef.current = selectedBug.id
 
     try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Authentication token not found");
+      const token = localStorage.getItem("token")
+      if (!token) throw new Error("Authentication token not found")
 
       const data = {
         projectId: Number.parseInt(projectId),
         bugId: selectedBug.id,
         status,
-      };
+      }
 
-      const response = await axios.put(
-        "http://localhost:3000/api/projects/bugs/status",
-        data,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.put("http://localhost:3000/api/projects/bugs/status", data, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
 
       if (response.data.success) {
-        setBugs((prevBugs) =>
-          prevBugs.map((bug) =>
-            bug.id === selectedBug.id ? response.data.data : bug
-          )
-        );
+        setBugs((prevBugs) => prevBugs.map((bug) => (bug.id === selectedBug.id ? response.data.data : bug)))
       } else {
-        throw new Error(response.data.message || "Failed to update bug status");
+        throw new Error(response.data.message || "Failed to update bug status")
       }
     } catch (err) {
-      alert(err.message || "An error occurred while updating the bug status");
+      alert(err.message || "An error occurred while updating the bug status")
     } finally {
-      setStatusLoading(false);
-      updatingBugRef.current = null;
-      handleActionClose();
+      setStatusLoading(false)
+      updatingBugRef.current = null
+      handleActionClose()
     }
-  };
+  }
 
   const handleDeleteBug = async () => {
-    if (!selectedBug || !projectId) return;
-    setStatusLoading(true);
-    updatingBugRef.current = selectedBug.id;
+    if (!selectedBug || !projectId) return
+    setStatusLoading(true)
+    updatingBugRef.current = selectedBug.id
 
     try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Authentication token not found");
+      const token = localStorage.getItem("token")
+      if (!token) throw new Error("Authentication token not found")
 
-      const data = { projectId, bugId: selectedBug.id };
+      const data = { projectId, bugId: selectedBug.id }
 
-      const response = await axios.delete(
-        "http://localhost:3000/api/projects/bugs/delete",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          data,
-        }
-      );
+      const response = await axios.delete("http://localhost:3000/api/projects/bugs/delete", {
+        headers: { Authorization: `Bearer ${token}` },
+        data,
+      })
 
       if (response.data.success) {
-        setBugs((prevBugs) =>
-          prevBugs.filter((bug) => bug.id !== selectedBug.id)
-        );
+        setBugs((prevBugs) => prevBugs.filter((bug) => bug.id !== selectedBug.id))
+        fetchBugs()
       } else {
-        throw new Error(response.data.message || "Failed to delete bug");
+        throw new Error(response.data.message || "Failed to delete bug")
       }
     } catch (err) {
-      alert(err.message || "An error occurred while deleting the bug");
+      alert(err.message || "An error occurred while deleting the bug")
     } finally {
-      setStatusLoading(false);
-      updatingBugRef.current = null;
-      handleActionClose();
+      setStatusLoading(false)
+      updatingBugRef.current = null
+      handleActionClose()
     }
-  };
+  }
 
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
       case "pending":
-        return "#ff6b6b";
+        return "#ff6b6b"
       case "in progress":
-        return "#4dabf7";
+        return "#4dabf7"
       case "closed":
-        return "#51cf66";
+        return "#51cf66"
       case "open":
-        return "#ff9f43";
+        return "#ff9f43"
       default:
-        return "#adb5bd";
+        return "#adb5bd"
     }
-  };
+  }
 
   const getStatusBgColor = (status) => {
     switch (status.toLowerCase()) {
       case "pending":
-        return "#fff5f5";
+        return "#fff5f5"
       case "in progress":
-        return "#e7f5ff";
+        return "#e7f5ff"
       case "closed":
-        return "#ebfbee";
+        return "#ebfbee"
       case "open":
-        return "#fff4e6";
+        return "#fff4e6"
       default:
-        return "#f8f9fa";
+        return "#f8f9fa"
     }
-  };
+  }
+
+  console.log("Current state:", { loading, error, bugsCount: bugs.length })
 
   if (loading) {
     return (
@@ -246,19 +242,25 @@ function Bugs({ projectId, newBug, searchTerm }) {
           Loading bugs...
         </Typography>
       </Box>
-    );
+    )
   }
 
   if (error) {
     return (
       <Alert severity="error" className={styles.errorAlert}>
         {error}
+        <div style={{ marginTop: "10px", fontSize: "12px", color: "#666" }}>
+          <details>
+            <summary>Debug Info</summary>
+            <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
+          </details>
+        </div>
       </Alert>
-    );
+    )
   }
 
   if (bugs.length === 0) {
-    const isSearchResult = searchTerm && searchTerm.trim() !== "";
+    const isSearchResult = debouncedSearchTerm && debouncedSearchTerm.trim() !== ""
     return (
       <Box className={styles.emptyContainer}>
         <Typography variant="h5" className={styles.emptyText}>
@@ -266,11 +268,11 @@ function Bugs({ projectId, newBug, searchTerm }) {
         </Typography>
         <Typography variant="body1" className={styles.emptySubtext}>
           {isSearchResult
-            ? `No bugs match "${searchTerm}". Try a different search term.`
+            ? `No bugs match "${debouncedSearchTerm}". Try a different search term.`
             : "This project doesn't have any bugs or tasks yet"}
         </Typography>
       </Box>
-    );
+    )
   }
 
   return (
@@ -298,10 +300,7 @@ function Bugs({ projectId, newBug, searchTerm }) {
                 </TableCell>
                 <TableCell className={styles.detailsCell}>
                   <Box className={styles.bugDetails}>
-                    <Box
-                      className={styles.statusDot}
-                      style={{ backgroundColor: getStatusColor(bug.status) }}
-                    ></Box>
+                    <Box className={styles.statusDot} style={{ backgroundColor: getStatusColor(bug.status) }}></Box>
                     <Typography variant="body2" className={styles.bugTitle}>
                       {bug.title}
                     </Typography>
@@ -327,18 +326,11 @@ function Bugs({ projectId, newBug, searchTerm }) {
                 </TableCell>
                 <TableCell className={styles.dateCell}>
                   <Typography variant="body2">
-                    {bug.deadline
-                      ? new Date(bug.deadline).toLocaleDateString()
-                      : "-"}
+                    {bug.deadline ? new Date(bug.deadline).toLocaleDateString() : "-"}
                   </Typography>
                 </TableCell>
                 <TableCell className={styles.assignedCell}>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    gap={1}
-                  >
+                  <Box display="flex" flexDirection="column" alignItems="center" gap={1}>
                     <AvatarGroup max={2} className={styles.avatarGroup}>
                       <Avatar className={styles.avatar}>U1</Avatar>
                       <Avatar className={styles.avatar}>U2</Avatar>
@@ -350,9 +342,7 @@ function Bugs({ projectId, newBug, searchTerm }) {
                     size="small"
                     className={styles.actionButton}
                     onClick={(e) => handleActionClick(e, bug)}
-                    disabled={
-                      statusLoading && updatingBugRef.current === bug.id
-                    }
+                    disabled={userRole.toLowerCase() === "manager" || (statusLoading && updatingBugRef.current === bug.id)}
                   >
                     <MoreVertIcon fontSize="small" />
                   </IconButton>
@@ -367,10 +357,7 @@ function Bugs({ projectId, newBug, searchTerm }) {
           <Card key={bug.id} className={styles.bugCard}>
             <Box className={styles.cardHeader}>
               <Box className={styles.cardTitle}>
-                <Box
-                  className={styles.statusDot}
-                  style={{ backgroundColor: getStatusColor(bug.status) }}
-                ></Box>
+                <Box className={styles.statusDot} style={{ backgroundColor: getStatusColor(bug.status) }}></Box>
                 <Typography variant="body1" className={styles.cardTitleText}>
                   {bug.title}
                 </Typography>
@@ -379,12 +366,12 @@ function Bugs({ projectId, newBug, searchTerm }) {
                 size="small"
                 className={styles.actionButton}
                 onClick={(e) => handleActionClick(e, bug)}
-                disabled={statusLoading && updatingBugRef.current === bug.id}
+                disabled={userRole.toLowerCase() === "manager" || (statusLoading && updatingBugRef.current === bug.id)}
               >
                 <MoreVertIcon fontSize="small" />
               </IconButton>
             </Box>
-            
+
             <Box className={styles.cardContent}>
               <Box className={styles.cardRow}>
                 <Typography variant="body2" className={styles.cardLabel}>
@@ -394,7 +381,7 @@ function Bugs({ projectId, newBug, searchTerm }) {
                   {bug.type}
                 </Typography>
               </Box>
-              
+
               <Box className={styles.cardRow}>
                 <Typography variant="body2" className={styles.cardLabel}>
                   STATUS
@@ -413,19 +400,17 @@ function Bugs({ projectId, newBug, searchTerm }) {
                   />
                 )}
               </Box>
-              
+
               <Box className={styles.cardRow}>
                 <Typography variant="body2" className={styles.cardLabel}>
                   DUE DATE
                 </Typography>
                 <Typography variant="body2" className={styles.cardValue}>
-                  {bug.deadline
-                    ? new Date(bug.deadline).toLocaleDateString()
-                    : "-"}
+                  {bug.deadline ? new Date(bug.deadline).toLocaleDateString() : "-"}
                 </Typography>
               </Box>
             </Box>
-            
+
             <Box className={styles.cardFooter}>
               <Box>
                 <Typography variant="body2" className={styles.cardLabel}>
@@ -440,25 +425,16 @@ function Bugs({ projectId, newBug, searchTerm }) {
           </Card>
         ))}
       </Box>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleActionClose}
-        className={styles.statusMenu}
-      >
-        {userRole.toLowerCase()=== "qa" && (
-          <MenuItem
-            onClick={handleDeleteBug}
-            className={styles.menuItem}
-            sx={{ color: "red" }}
-          >
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleActionClose} className={styles.statusMenu}>
+        {userRole.toLowerCase() === "qa" && (
+          <MenuItem onClick={handleDeleteBug} className={styles.menuItem} sx={{ color: "red" }}>
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
                 width: "100%",
-                gap:"16px",
+                gap: "16px",
               }}
             >
               <Typography>Delete</Typography>
@@ -469,24 +445,16 @@ function Bugs({ projectId, newBug, searchTerm }) {
 
         {userRole.toLowerCase() === "developer" && (
           <>
-            <MenuItem
-              className={styles.menuItem}
-              disableRipple
-              sx={{ cursor: "default", pointerEvents: "none" }}
-            >
+            <MenuItem className={styles.menuItem} disableRipple sx={{ cursor: "default", pointerEvents: "none" }}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Typography variant="body2" fontWeight="bold">
                   Change Status
                 </Typography>
                 <SettingsOutlinedIcon fontSize="small" />
-                
               </Box>
             </MenuItem>
 
-            <MenuItem
-              onClick={() => handleStatusChange("Pending")}
-              className={styles.menuItem}
-            >
+            <MenuItem onClick={() => handleStatusChange("Pending")} className={styles.menuItem}>
               <Box
                 sx={{
                   backgroundColor: "#fff5f5",
@@ -497,16 +465,11 @@ function Bugs({ projectId, newBug, searchTerm }) {
                   "&:hover": { backgroundColor: "#e0e0e0" },
                 }}
               >
-                <Typography sx={{ color: "red",fontSize: "0.75rem", fontWeight: "small" }}>
-                  Pending
-                </Typography>
+                <Typography sx={{ color: "red", fontSize: "0.75rem", fontWeight: "small" }}>Pending</Typography>
               </Box>
             </MenuItem>
 
-            <MenuItem
-              onClick={() => handleStatusChange("In progress")}
-              className={styles.menuItem}
-            >
+            <MenuItem onClick={() => handleStatusChange("In progress")} className={styles.menuItem}>
               <Box
                 sx={{
                   backgroundColor: "#E0F7FA",
@@ -517,16 +480,11 @@ function Bugs({ projectId, newBug, searchTerm }) {
                   "&:hover": { backgroundColor: "#e0e0e0" },
                 }}
               >
-                <Typography sx={{ color: "blue",fontSize: "0.75rem", fontWeight: "small" }}>
-                  In progress
-                </Typography>
+                <Typography sx={{ color: "blue", fontSize: "0.75rem", fontWeight: "small" }}>In progress</Typography>
               </Box>
             </MenuItem>
 
-            <MenuItem
-              onClick={() => handleStatusChange("Closed")}
-              className={styles.menuItem}
-            >
+            <MenuItem onClick={() => handleStatusChange("Closed")} className={styles.menuItem}>
               <Box
                 sx={{
                   backgroundColor: "#E6F4EA",
@@ -537,16 +495,14 @@ function Bugs({ projectId, newBug, searchTerm }) {
                   "&:hover": { backgroundColor: "#e0e0e0" },
                 }}
               >
-                <Typography sx={{ color: "green",fontSize: "0.75rem", fontWeight: "100" }}>
-                  Closed
-                </Typography>
+                <Typography sx={{ color: "green", fontSize: "0.75rem", fontWeight: "100" }}>Closed</Typography>
               </Box>
             </MenuItem>
           </>
         )}
       </Menu>
     </Box>
-  );
+  )
 }
 
-export default Bugs;
+export default Bugs

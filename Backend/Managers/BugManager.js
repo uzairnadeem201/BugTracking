@@ -1,7 +1,7 @@
 import BugHandler from '../Handlers/BugHandler.js';
 import AppError from '../Utils/AppError.js';
 
-const getBugsByProject = async (user, projectIdRaw, searchTerm = null) => {
+const getBugsByProject = async (user, projectIdRaw, searchTerm = null, page = 1, limit = 10) => {
   const { id: userId, role } = user;
   const projectId = parseInt(projectIdRaw, 10);
 
@@ -10,19 +10,34 @@ const getBugsByProject = async (user, projectIdRaw, searchTerm = null) => {
   }
 
   const roleLower = role.toLowerCase();
-  let bugs;
+  let result;
 
   if (roleLower === 'manager') {
-    bugs = await BugHandler.getBugsByManager(userId, projectId, searchTerm);
+    result = await BugHandler.getBugsByManager(userId, projectId, searchTerm, page, limit);
   } else if (roleLower === 'qa') {
-    bugs = await BugHandler.getBugsByQA(userId, projectId, searchTerm);
+    result = await BugHandler.getBugsByQA(userId, projectId, searchTerm, page, limit);
   } else if (roleLower === 'developer') {
-    bugs = await BugHandler.getBugsByDeveloper(userId, projectId, searchTerm);
+    result = await BugHandler.getBugsByDeveloper(userId, projectId, searchTerm, page, limit);
   } else {
     throw new AppError('Invalid role', 403);
   }
 
-  return { data: bugs };
+  // Calculate pagination metadata
+  const totalPages = Math.ceil(result.total / limit);
+  const hasNext = page < totalPages;
+  const hasPrev = page > 1;
+
+  return {
+    data: result.bugs,
+    pagination: {
+      total: result.total,
+      page,
+      limit,
+      totalPages,
+      hasNext,
+      hasPrev,
+    },
+  };
 };
 
 const createBug = async (userId, projectIdRaw, bugData) => {

@@ -7,7 +7,7 @@ const getBugsByProject = catchAsync(async (req, res) => {
   const user = req.user;
   const rawProjectId = req.params.id;
   const projectId = parseInt(rawProjectId, 10);
-  const { search } = req.query;
+  const { search, page = 1, limit = 10 } = req.query;
   
   console.log(projectId)
   console.log(projectId, user);
@@ -22,13 +22,32 @@ const getBugsByProject = catchAsync(async (req, res) => {
     throw new AppError('Invalid or missing project ID.', 400);
   }
 
-  const result = await BugManager.getBugsByProject(user, projectId, search);
+  // Validate pagination parameters
+  const pageNum = parseInt(page);
+  const limitNum = parseInt(limit);
+
+  if (pageNum < 1 || limitNum < 1 || limitNum > 100) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid pagination parameters. Page must be >= 1, limit must be between 1-100',
+    });
+  }
+
+  const result = await BugManager.getBugsByProject(user, projectId, search, pageNum, limitNum);
 
   if (!result || result.data.length === 0) {
     return res.status(200).json({
       success: true,
       message: search ? 'No bugs found matching your search' : 'No bugs found',
       data: [],
+      pagination: {
+        total: 0,
+        page: pageNum,
+        limit: limitNum,
+        totalPages: 0,
+        hasNext: false,
+        hasPrev: false,
+      },
     });
   }
 
@@ -36,6 +55,7 @@ const getBugsByProject = catchAsync(async (req, res) => {
     success: true,
     message: search ? 'Search results retrieved' : 'Bugs retrieved successfully',
     data: result.data,
+    pagination: result.pagination,
   });
 });
 
