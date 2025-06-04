@@ -1,177 +1,69 @@
-import { User, Project, UsersProjects, sequelize } from "../Models/index.js"
-import { Op } from "sequelize"
-import AppError from "../Utils/AppError.js"
+import { Project, UsersProjects } from "../Models/index.js";
+import { Op } from "sequelize";
 
-const getProjectsByManagerId = async (managerId, searchTerm = null, page = 1, limit = 10) => {
-  const whereClause = { created_by: managerId }
+class ProjectHandler {
+  static async getProjectsByManagerId(managerId, whereClause = {}, limit = 10, offset = 0) {
+    const result = await Project.findAndCountAll({
+      where: {
+        created_by: managerId,
+        ...whereClause,
+      },
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
 
-  if (searchTerm && searchTerm.trim() !== "") {
-    whereClause[Op.or] = [
-      { title: { [Op.iLike]: `%${searchTerm.trim()}%` } },
-      { description: { [Op.iLike]: `%${searchTerm.trim()}%` } },
-    ]
-  }
-
-  const offset = (page - 1) * limit
-
-  const result = await Project.findAndCountAll({
-    where: whereClause,
-    limit: parseInt(limit),
-    offset: parseInt(offset),
-  })
-
-  return {
-    projects: result.rows,
-    total: result.count,
-  }
-}
-
-const getProjectsByUserId = async (userId, searchTerm = null, page = 1, limit = 10) => {
-  const userProjects = await sequelize.query("SELECT project_id FROM users_projects WHERE user_id = :userId", {
-    replacements: { userId },
-    type: sequelize.QueryTypes.SELECT,
-  })
-
-  const projectIds = userProjects.map((row) => row.project_id)
-
-  if (projectIds.length === 0) {
     return {
-      projects: [],
-      total: 0,
-    }
+      projects: result.rows,
+      total: result.count,
+    };
   }
 
-  const whereClause = { id: projectIds }
+  static async getProjectsByUserProjectIds(projectIds, whereClause = {}, limit = 10, offset = 0) {
+    const result = await Project.findAndCountAll({
+      where: {
+        id: { [Op.in]: projectIds },
+        ...whereClause,
+      },
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
 
-  if (searchTerm && searchTerm.trim() !== "") {
-    whereClause[Op.or] = [
-      { title: { [Op.iLike]: `%${searchTerm.trim()}%` } },
-      { description: { [Op.iLike]: `%${searchTerm.trim()}%` } },
-    ]
+    return {
+      projects: result.rows,
+      total: result.count,
+    };
   }
 
-  const offset = (page - 1) * limit
+  static async getUserProjectIds(userId) {
+    const userProjects = await UsersProjects.findAll({
+      where: { user_id: userId },
+      attributes: ["project_id"],
+    });
 
-  const result = await Project.findAndCountAll({
-    where: whereClause,
-    limit: parseInt(limit),
-    offset: parseInt(offset),
-  })
-
-  return {
-    projects: result.rows,
-    total: result.count,
-  }
-}
-
-const getProjectByManagerId = async (projectId, managerId) => {
-  return await Project.findOne({
-    where: {
-      id: projectId,
-      created_by: managerId,
-    },
-  })
-}
-
-const getProjectByUserId = async (projectId, userId) => {
-  const userProject = await sequelize.query(
-    "SELECT * FROM users_projects WHERE user_id = :userId AND project_id = :projectId",
-    {
-      replacements: { userId, projectId },
-      type: sequelize.QueryTypes.SELECT,
-    },
-  )
-
-  if (userProject.length === 0) return null
-
-  return await Project.findOne({
-    where: { id: projectId },
-  })
-}
-
-const createProject = async (projectData, userId) => {
-  return await Project.create({
-    ...projectData,
-    created_by: userId,
-  })
-}
-
-const assignProject = async (userIdToAssign, projectId, managerId) => {
-  console.log(projectId, managerId)
-  const project = await Project.findOne({
-    where: {
-      id: projectId,
-      created_by: managerId,
-    },
-  })
-
-  if (!project) {
-    throw new AppError("Project not found or you are not the manager.", 403)
+    return userProjects.map((up) => up.project_id);
   }
 
-  const userToAssign = await User.findOne({
-    where: {
-      id: userIdToAssign,
-      role: ["QA", "Developer"],
-    },
-  })
-
-  if (!userToAssign) {
-    throw new AppError("User not found or not eligible for assignment.", 404)
+  static async getProjectById(projectId) {
+    return await Project.findOne({
+      where: { id: projectId },
+    });
   }
 
-  const existingAssignment = await UsersProjects.findOne({
-    where: {
-      user_id: userIdToAssign,
-      project_id: projectId,
-    },
-  })
-
-  if (existingAssignment) {
-    throw new AppError("User is already assigned to this project.", 400)
+  static async createProject(projectData, userId) {
+    return await Project.create({
+      ...projectData,
+      created_by: userId,
+    });
   }
 
-  await UsersProjects.create({
-    user_id: userIdToAssign,
-    project_id: projectId,
-  })
-
-  return {
-    message: "User successfully assigned to project",
-    user: {
-      id: userToAssign.id,
-      name: userToAssign.name,
-      role: userToAssign.role,
-    },
-    project: {
-      id: project.id,
-      title: project.title,
-    },
+  static async getAllProjectTitlesByManager(created_by) {
+    return await Project.findAll({
+      where: { created_by },
+      attributes: ["id", "title"],
+    });
   }
 }
 
-const getProjectByTitleAndManagerId = async (title, created_by) => {
-  console.log("Checking project title for manager...")
-  const normalizedInput = title.replace(/\s+/g, "").toLowerCase()
-  const allProjects = await Project.findAll({
-    where: { created_by },
-    attributes: ["id", "title"],
-  })
-  const matchingProject = allProjects.find((project) => {
-    const normalizedProjectTitle = project.title.replace(/\s+/g, "").toLowerCase()
-    return normalizedProjectTitle === normalizedInput
-  })
+export default ProjectHandler;
 
-  return matchingProject || null
-}
-
-export default {
-  getProjectsByManagerId,
-  getProjectsByUserId,
-  createProject,
-  getProjectByManagerId,
-  getProjectByUserId,
-  assignProject,
-  getProjectByTitleAndManagerId,
-}
 

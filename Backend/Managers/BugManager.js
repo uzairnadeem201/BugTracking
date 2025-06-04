@@ -1,5 +1,8 @@
 import BugHandler from '../Handlers/BugHandler.js';
 import AppError from '../Utils/AppError.js';
+import BugConstants from '../constants/bugsconstants.js';
+import DataTypes from '../constants/datatypes.js';
+import isEmptyString  from '../Utils/emptystring.js';
 
 const getBugsByProject = async (user, projectIdRaw, searchTerm = null, page = 1, limit = 10) => {
   const { id: userId, role } = user;
@@ -21,8 +24,6 @@ const getBugsByProject = async (user, projectIdRaw, searchTerm = null, page = 1,
   } else {
     throw new AppError('Invalid role', 403);
   }
-
-  // Calculate pagination metadata
   const totalPages = Math.ceil(result.total / limit);
   const hasNext = page < totalPages;
   const hasPrev = page > 1;
@@ -43,41 +44,46 @@ const getBugsByProject = async (user, projectIdRaw, searchTerm = null, page = 1,
 const createBug = async (userId, projectIdRaw, bugData) => {
   const projectId = parseInt(projectIdRaw, 10);
   if (isNaN(projectId)) {
-    throw new AppError('Invalid project ID', 400);
+    throw new AppError(BugConstants.ERRORS.INVALID_PROJECT_ID, 400);
   }
 
   const isAssigned = await BugHandler.isProjectAssignedToUser(userId, projectId);
   if (!isAssigned) {
-    throw new AppError('You are not assigned to this project', 403);
+    throw new AppError(BugConstants.ERRORS.NOT_ASSIGNED, 403);
   }
 
   const titleExists = await BugHandler.doesBugTitleExist(bugData.title, projectId);
   if (titleExists) {
-    throw new AppError('Bug title must be unique within the project.', 400);
+    throw new AppError(BugConstants.ERRORS.DUPLICATE_TITLE, 400);
   }
 
-  const allowedTypes = ['Bug', 'Feature'];
-  if (!bugData.type || !allowedTypes.includes(bugData.type)) {
-    throw new AppError(`Type must be one of: ${allowedTypes.join(', ')}`, 400);
+  if (!bugData.type || !BugConstants.ALLOWED_TYPES.includes(bugData.type)) {
+    throw new AppError(
+      BugConstants.ERRORS.INVALID_TYPE(BugConstants.ALLOWED_TYPES),
+      400
+    );
   }
 
-  if (!bugData.status || typeof bugData.status !== 'string' || bugData.status.trim() === '') {
-    throw new AppError('Status is required.', 400);
+  if (!bugData.status || typeof bugData.status !== DataTypes.STRING || isEmptyString(bugData.status)) {
+    throw new AppError(BugConstants.ERRORS.STATUS_REQUIRED, 400);
   }
 
   const status = bugData.status.trim();
-  const allowedStatuses = ['Open', 'In Progress', 'Resolved'];
-  if (!allowedStatuses.includes(status)) {
-    throw new AppError(`Status must be one of: ${allowedStatuses.join(', ')}`, 400);
+  if (!BugConstants.ALLOWED_STATUSES.includes(status)) {
+    throw new AppError(
+      BugConstants.ERRORS.INVALID_STATUS(BugConstants.ALLOWED_STATUSES),
+      400
+    );
   }
+
   if (bugData.screenshot && typeof bugData.screenshot === 'string') {
-  const base64String = bugData.screenshot.split(',').pop();
-  
+    const base64String = bugData.screenshot.split(',').pop();
     bugData.screenshot = Buffer.from(base64String, 'base64');
-    if (!Buffer.isBuffer(bugData.screenshot) || bugData.screenshot.length === 0) {
-    throw new AppError('Invalid screenshot image format', 400);
+
+    if (!Buffer.isBuffer(bugData.screenshot) || bugData?.screenshot?.length === 0) {
+      throw new AppError(BugConstants.ERRORS.INVALID_SCREENSHOT, 400);
+    }
   }
-}
 
   const bug = {
     ...bugData,

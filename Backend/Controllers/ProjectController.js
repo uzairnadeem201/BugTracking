@@ -1,128 +1,67 @@
-import catchAsync from "../Utils/CatchAsync.js"
-import ProjectManager from "../Managers/ProjectManager.js"
+import ProjectManager from "../Managers/ProjectManager.js";
+import ProjectsLengthValidator from "../Utils/projectslengthvalidator.js";
 
-const getProjects = catchAsync(async (req, res, next) => {
-  const user = req.user
-  const { search, page = 1, limit = 10 } = req.query
+class ProjectController {
+  static async getProjects(req, res, next) {
+    try {
+      const user = req.user;
+      const { search, page = 1, limit = 10 } = req.query;
+      const result = await ProjectManager.getProjects(user, search, page, limit);
 
-  if (!user) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid user",
-    })
+      res.status(200).json({
+        success: true,
+        message: ProjectsLengthValidator(result)
+          ? (search ? "Search results retrieved" : "Projects retrieved")
+          : (search ? "No projects found matching your search" : "No projects yet"),
+        data: result.data,
+        pagination: result.pagination,
+      });
+    } catch (err) {
+      console.error("Get Projects Error:", err);
+      res.status(err.statusCode || 500).json({
+        success: false,
+        message: err.message || "Failed to retrieve projects",
+      });
+    }
   }
 
-  // Validate pagination parameters
-  const pageNum = parseInt(page)
-  const limitNum = parseInt(limit)
+  static async getOneProject(req, res, next) {
+    try {
+      const user = req.user;
+      const projectId = req.params.id;
 
-  if (pageNum < 1 || limitNum < 1 || limitNum > 100) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid pagination parameters. Page must be >= 1, limit must be between 1-100",
-    })
+      const result = await ProjectManager.getOneProject(user, projectId);
+
+      res.status(200).json({
+        success: true,
+        message: "Project retrieved successfully",
+        data: result.data,
+      });
+    } catch (err) {
+      console.error("Get One Project Error:", err);
+      res.status(err.statusCode || 500).json({
+        success: false,
+        message: err.message || "Failed to retrieve project",
+      });
+    }
   }
 
-  const result = await ProjectManager.getProjects(user, search, pageNum, limitNum)
+  static async createProject(req, res, next) {
+    try {
+      const result = await ProjectManager.createProject(req);
 
-  if (!result || result.data.length === 0) {
-    return res.status(200).json({
-      success: true,
-      message: search ? "No projects found matching your search" : "No projects yet",
-      data: [],
-      pagination: {
-        total: 0,
-        page: pageNum,
-        limit: limitNum,
-        totalPages: 0,
-        hasNext: false,
-        hasPrev: false,
-      },
-    })
+      res.status(201).json({
+        success: true,
+        message: "Project created successfully",
+        data: result.data,
+      });
+    } catch (err) {
+      console.error("Create Project Error:", err);
+      res.status(err.statusCode || 500).json({
+        success: false,
+        message: err.message || "Failed to create project",
+      });
+    }
   }
-
-  res.status(200).json({
-    success: true,
-    message: search ? "Search results retrieved" : "Projects retrieved",
-    data: result.data,
-    pagination: result.pagination,
-  })
-})
-
-const getOneProject = catchAsync(async (req, res, next) => {
-  const user = req.user
-  const projectId = req.params.id
-
-  if (!user || !projectId) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid request data",
-    })
-  }
-
-  const result = await ProjectManager.getOneProject(user, projectId)
-
-  res.status(200).json({
-    success: true,
-    message: "Project retrieved successfully",
-    data: result.data,
-  })
-})
-
-const createProjects = catchAsync(async (req, res, next) => {
-  const user = req.user
-
-  if (!user) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid user",
-    })
-  }
-
-  const { id, role } = user
-
-  if (role.toLowerCase() !== "manager") {
-    return res.status(403).json({
-      success: false,
-      message: "Not authorized to create projects",
-    })
-  }
-
-  const result = await ProjectManager.createProject(req.body, id)
-
-  res.status(201).json({
-    success: true,
-    message: "Project created successfully",
-    data: result.data,
-  })
-})
-
-const assignProject = catchAsync(async (req, res, next) => {
-  const user = req.user
-
-  if (!user) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid user",
-    })
-  }
-
-  const { id, role } = user
-
-  if (role.toLowerCase() !== "manager") {
-    return res.status(403).json({
-      success: false,
-      message: "Not authorized to assign projects",
-    })
-  }
-
-  const result = await ProjectManager.assignProject(req.body, id)
-
-  res.status(201).json({
-    success: true,
-    message: "Project assigned successfully",
-    data: result.data,
-  })
-})
-
-export default { getProjects, createProjects, getOneProject, assignProject }
+}
+export default ProjectController;

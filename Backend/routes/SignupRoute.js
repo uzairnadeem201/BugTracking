@@ -1,5 +1,5 @@
 import express from 'express';
-import SignupController from '../Controllers/SignupController.js';
+import SignupController from '../Controllers/signupcontroller.js';
 
 const router = express.Router();
 

@@ -84,7 +84,7 @@ const getBugsByDeveloper = async (userId, projectId, searchTerm = null, page = 1
     }
   );
 
-  if (userProject.length === 0) {
+  if (userProject.length) {
     return {
       bugs: [],
       total: 0,
@@ -145,11 +145,6 @@ const createBug = async (bug) => {
       project_id: bug.project_id
     }
   });
-
-  if (existingBug) {
-    throw new Error('Bug title must be unique within the same project.');
-  }
-
   return await Bug.create(bug);
 };
 

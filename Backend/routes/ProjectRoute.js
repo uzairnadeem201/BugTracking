@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.get('/projects', ProjectController.getProjects);
 router.get('/projects/:id',ProjectController.getOneProject);
-router.post('/projects',ProjectController.createProjects);
-router.put('/projects',ProjectController.assignProject);
+router.post('/projects',ProjectController.createProject);
+
 
 
 export default router;

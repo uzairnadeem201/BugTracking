@@ -212,10 +212,6 @@ function Signup() {
           err.response?.data?.message ||
             "An error occurred during signup. Please try again."
         );
-        alert(
-          err.response?.data?.message ||
-            "An error occurred during signup. Please try again."
-        );
       } finally {
         setLoading(false);
       }
