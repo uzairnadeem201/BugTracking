@@ -1,5 +1,5 @@
-import ProjectHandler from "../Handlers/ProjectHandler.js";
-import AppError from "../Utils/AppError.js";
+import ProjectHandler from "../Handlers/projecthandler.js";
+import AppError from "../Utils/apperror.js";
 import ProjectConstants from "../constants/projectsconstants.js";
 import projectsFooterValidation from "../Utils/projectsfootervalidation.js";
 import getProjectsPagination from "../Utils/getprojectspagination.js";
@@ -51,7 +51,7 @@ class ProjectManager {
       throw new AppError(ProjectConstants.ERROR_MESSAGES.INVALID_ROLE, 403);
     }
 
-    if (projectsFooterValidation(page, limit)) {
+    if (!projectsFooterValidation(page, limit)) {
       throw new AppError(ProjectConstants.ERROR_MESSAGES.INVALID_PAGINATION, 400);
     }
 
@@ -70,35 +70,42 @@ class ProjectManager {
     };
   }
 
-  static async getOneProject(user, projectId) {
-    const { id, role } = user;
+ static async getOneProject(user, projectId) {
+  const { id, role } = user;
 
-    if (!id || !role || !projectId) {
-      throw new AppError(ProjectConstants.ERROR_MESSAGES.INVALID_USER_DATA, 400);
-    }
-
-    const roleLower = role.toLowerCase();
-
-    if (roleLower === UserConstants.ROLES.Manager) {
-      const project = await ProjectHandler.getProjectById(projectId);
-      if (!project || project.created_by !== id) {
-        throw new AppError(ProjectConstants.ERROR_MESSAGES.PROJECT_NOT_FOUND_OR_UNAUTHORIZED, 404);
-      }
-      return { data: project };
-    } else if (
-      roleLower === UserConstants.ROLES.QA ||
-      roleLower === UserConstants.ROLES.Developer
-    ) {
-      const projectIds = await ProjectHandler.getUserProjectIds(id);
-      if (!projectIds.includes(projectId)) {
-        throw new AppError(ProjectConstants.ERROR_MESSAGES.PROJECT_NOT_FOUND_OR_UNAUTHORIZED, 404);
-      }
-      const project = await ProjectHandler.getProjectById(projectId);
-      return { data: project };
-    } else {
-      throw new AppError(ProjectConstants.ERROR_MESSAGES.INVALID_ROLE, 403);
-    }
+  if (!id || !role || !projectId) {
+    throw new AppError(ProjectConstants.ERROR_MESSAGES.INVALID_USER_DATA, 400);
   }
+
+  const roleLower = role.toLowerCase();
+
+  if (roleLower === UserConstants.ROLES.Manager) {
+    const project = await ProjectHandler.getProjectById(projectId);
+    if (!project || project.created_by !== id) {
+      throw new AppError(ProjectConstants.ERROR_MESSAGES.PROJECT_NOT_FOUND_OR_UNAUTHORIZED, 404);
+    }
+    return { data: project };
+  } 
+  
+  else if (
+    roleLower === UserConstants.ROLES.QA ||
+    roleLower === UserConstants.ROLES.Developer
+  ) {
+    const projectIds = await ProjectHandler.getUserProjectIds(id);
+    const numericProjectId = parseInt(projectId);
+    if (!projectIds.includes(numericProjectId)) {
+      throw new AppError(ProjectConstants.ERROR_MESSAGES.PROJECT_NOT_FOUND_OR_UNAUTHORIZED, 404);
+    }
+
+    const project = await ProjectHandler.getProjectById(projectId);
+    return { data: project };
+  } 
+  
+  else {
+    throw new AppError(ProjectConstants.ERROR_MESSAGES.INVALID_ROLE, 403);
+  }
+}
+
 
   static async createProject(req) {
     const user = req.user;

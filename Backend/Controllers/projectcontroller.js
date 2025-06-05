@@ -1,4 +1,4 @@
-import ProjectManager from "../Managers/ProjectManager.js";
+import ProjectManager from "../Managers/projectmanager.js";
 import ProjectsLengthValidator from "../Utils/projectslengthvalidator.js";
 
 class ProjectController {
@@ -6,13 +6,22 @@ class ProjectController {
     try {
       const user = req.user;
       const { search, page = 1, limit = 10 } = req.query;
-      const result = await ProjectManager.getProjects(user, search, page, limit);
+      const result = await ProjectManager.getProjects(
+        user,
+        search,
+        page,
+        limit
+      );
 
       res.status(200).json({
         success: true,
         message: ProjectsLengthValidator(result)
-          ? (search ? "Search results retrieved" : "Projects retrieved")
-          : (search ? "No projects found matching your search" : "No projects yet"),
+          ? search
+            ? "Search results retrieved"
+            : "Projects retrieved"
+          : search
+          ? "No projects found matching your search"
+          : "No projects yet",
         data: result.data,
         pagination: result.pagination,
       });

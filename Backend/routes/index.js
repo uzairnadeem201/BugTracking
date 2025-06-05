@@ -1,16 +1,16 @@
 import express from 'express';
-import SignupRoute from './SignupRoute.js';
-import LoginRoute from './LoginRoute.js';
-import ProjectRoute from './ProjectRoute.js';
-import BugRoute from './BugRoutes.js';
-import UserRoute from './UserRoute.js';
-import Jwt from '../Utils/JwtVerification.js';
+import SignupRoute from './signuproute.js';
+import LoginRoute from './loginroute.js';
+import ProjectRoute from './projectroute.js';
+import BugRoute from './bugroutes.js';
+import UserRoute from './userroute.js';
+import Jwt from '../Utils/jwtverification.js';
 
 const router = express.Router();
-router.use(SignupRoute);
-router.use(LoginRoute);
-router.use(Jwt.verifyToken, ProjectRoute);
-router.use(Jwt.verifyToken, BugRoute);
-router.use(Jwt.verifyToken, UserRoute);
+router.use('/signup',SignupRoute);
+router.use('/Login',LoginRoute);
+router.use('/projects',Jwt.verifyToken, ProjectRoute);
+router.use('/projects',Jwt.verifyToken, BugRoute);
+router.use('/projects',Jwt.verifyToken, UserRoute);
 
 export default router;
